@@ -2,7 +2,7 @@
 class Car {
   PVector pos, vel, acc, fric, boost, rotation, bremsVel;
   float theta, thetaVel, thetaAcc;
-  int h = 1;
+  int h = 1, cDrej, accelerate;
   boolean ice;
 
   Car(PVector p, PVector v, PVector a, boolean i, PVector b, float t) {
@@ -17,17 +17,34 @@ class Car {
     thetaAcc = 0.00025;
   }
 
-  void Update(int drej, int koer) {
+  void Update(int drej, int koer, boolean hojre, boolean venstre, boolean op, boolean ned) {
+
+    if ((hojre && venstre)||(!hojre && !venstre)) {
+      cDrej = 0;
+    } else if (hojre) {
+      cDrej = 2;
+    } else {
+      cDrej = 1;
+    }
+
+    if (op) {
+      accelerate = 1;
+    } else if (ned) {
+      accelerate = 2;
+    } else if (!op) {
+      accelerate = 0;
+    } 
+
+    print(cDrej, accelerate);
 
     rotation = new PVector(cos(theta), sin(theta));
     acc = rotation.mult(0.01);
 
-
-    Turn(drej);
+    Turn(cDrej);
 
     if (!ice) {
-      Drive(koer);
-    } else DriveIce(koer);
+      Drive(accelerate);
+    } else DriveIce(accelerate);
 
     DrawCar();
   }
@@ -70,7 +87,6 @@ class Car {
       rotation.mult(mag(vel.x, vel.y));
       vel = rotation;
       vel.limit(3);
-
       pos.add(vel);
       h = 1;
     } else if (koer == 2) {
@@ -78,8 +94,8 @@ class Car {
       rotation.normalize();
       rotation.mult(mag(vel.x, vel.y));
       pos.sub(rotation);
-      vel.limit(0.5);
-      if (thetaVel >= 0.01) thetaVel = 0.0099;
+      vel.limit(1.5);
+      if (thetaVel >= 0.025) thetaVel = 0.02499;
       h = -1;
     } else Stop(h);
   }
