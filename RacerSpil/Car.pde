@@ -1,3 +1,4 @@
+
 class Car{
   PVector pos, vel, acc, fric, boost, rotation, bremsVel;
   float theta, thetaVel, thetaAcc;
@@ -5,6 +6,7 @@ class Car{
   boolean ice;
   
   Car(PVector p, PVector v, PVector a, boolean i, PVector b, float t){
+
     pos = p;
     vel = v;
     acc = a;
@@ -14,11 +16,12 @@ class Car{
     thetaVel = 0;
     thetaAcc = 0.00025;
   }
-  
-  void Update(int drej, int koer){
-    
+
+  void Update(int drej, int koer) {
+
     rotation = new PVector(cos(theta), sin(theta));
     acc = rotation.mult(0.01);
+
     
     Turn(drej);
         
@@ -49,24 +52,28 @@ class Car{
       theta += 0;
       thetaVel = 0;
     } else if (drej == 1){
+
       thetaVel += thetaAcc;
       theta -= thetaVel;
-      if(thetaVel >= 0.03) thetaVel = 0.03;
-    } else if (drej == 2){
+      if (thetaVel >= 0.03) thetaVel = 0.03;
+    } else if (drej == 2) {
       thetaVel += thetaAcc;
       theta += thetaVel;
-      if(thetaVel >= 0.03) thetaVel = 0.03;
+      if (thetaVel >= 0.03) thetaVel = 0.03;
     }
+
   }
   
   void Drive(int koer){
     
      if(koer == 1){
+
       vel.add(acc);
       rotation.normalize();
       rotation.mult(mag(vel.x, vel.y));
       vel = rotation;
       vel.limit(3);
+
       pos.add(vel);
       h = 1;
     } else if(koer == 2){
@@ -96,6 +103,6 @@ class Car{
     rotation.mult(mag(vel.x, vel.y));
     vel = rotation;
     pos.add(vel);
+
   }
-  
 }
