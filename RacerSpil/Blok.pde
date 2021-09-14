@@ -1,32 +1,42 @@
 class Blok {
 
-  int blokkeIalt = 4;
+  int blokkeIalt = 1;
+  int[][] blokInfo = new int[blokkeIalt][5];
+
+  //constructer
+  Blok() {
+    
+    //hardkoder blokkenes info
+    //Size, Inpoint x, Inpoint y, Outpoint x, Outpoint y, outpoint retning i forhold til inpoint(0frem,1venstre,2højre,3tilbage)
+    
+    //Start blok
+    int[] temp = {1,0,80,160,80,0};
+    blokInfo[0] = temp;
+  }
 
 
 
 
 
 
+  //returnerer det tal under en bloks id der er ønsket.
+  int GetBlokInfo(int id, int a) {
+    return blokInfo[id][a];
+  }
 
-  //Start blok Info
-  int B0Info(int a) {
+  //tegner blokken, al translation og rotation gøres ikke her men i metoden der kalder denne metode
+  void DrawBlok(int id) {
+    switch (id) {
+    case 0: //Start blok
+      DrawB0();
+      break;
 
-    switch (a) {
-    case 0: //Size
-      return 1;
-    case 1: //Inpoint x
-      return 0;
-    case 2: //Inpoint y
-      return 80;
-    case 3: //Outpoint x
-      return 160;
-    case 4: //Outpoint y
-      return 80;
 
     default:
-      return -1;
+      return;
     }
   }
+
 
   //Start blok Draw
   void DrawB0() {

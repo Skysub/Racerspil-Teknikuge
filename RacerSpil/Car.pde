@@ -35,7 +35,7 @@ class Car {
       accelerate = 0;
     } 
 
-    print(cDrej, accelerate);
+
     //Sørger for at accelerationen vender i bilens retning
     rotation = new PVector(cos(theta), sin(theta));
     acc = rotation.mult(0.01);
