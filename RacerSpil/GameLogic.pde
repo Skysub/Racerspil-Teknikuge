@@ -6,7 +6,6 @@ class GameLogic {
   boolean ice = false;
   PVector carPos = new PVector(width/2, height/2), carVel = new PVector(0, 0), carAcc = new PVector(0, 0), carBoost = new PVector(0, 0);
   float theta = 0;
-  int cDrej = 0, accelerate = 0;
   Car car;
 
   GameLogic() {
@@ -23,7 +22,7 @@ class GameLogic {
   void Update() {
     bane.Draw();
 
-    car.Update(cDrej, accelerate, hojre, venstre, op, ned);
+    car.Update(hojre, venstre, op, ned);
 
 
     DrawUI();
