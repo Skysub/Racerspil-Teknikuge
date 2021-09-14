@@ -23,24 +23,8 @@ class GameLogic {
   void Update() {
     bane.Draw();
 
+    car.Update(cDrej, accelerate, hojre, venstre, op, ned);
 
-    if ((hojre && venstre)||(!hojre && !venstre)) {
-      cDrej = 0;
-    } else if (hojre) {
-      cDrej = 2;
-    } else {
-      cDrej = 1;
-    }
-
-    if (op) {
-      accelerate = 1;
-    } else if (ned) {
-      accelerate = 2;
-    } else if (!op) {
-      accelerate = 0;
-    } 
-
-    car.Update(cDrej, accelerate);
 
     DrawUI();
   }
