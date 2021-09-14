@@ -1,8 +1,8 @@
 class Bane {
-  Blok[] blokke;
+  Blok[][] blokke;
 
   Bane() {
-    blokke = new Blok[66];
+    blokke = new Blok[12][6];
   }
 
 
