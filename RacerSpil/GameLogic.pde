@@ -1,4 +1,4 @@
-class GameLogic { //<>//
+class GameLogic { //<>// //<>//
 
   Bane bane;
 
@@ -23,7 +23,7 @@ class GameLogic { //<>//
     tileTest = toggleTemp[0];
     tF = toggleTemp[1];
 
-    bane.Draw();
+    bane.Draw(tileTest);
     car.Update(cDrej, accelerate, hojre, venstre, op, ned);
     DrawUI();
   }
@@ -55,7 +55,6 @@ class GameLogic { //<>//
     if (x && !xF) {
       xF = x;
       v = !v;
-
     }
     if (xF && !x) xF = x;
     boolean[] a = {v, xF};

@@ -1,12 +1,21 @@
 class Bane {
-  Blok[][] blokke;
+  int[][][] bane;
+  boolean tileTest = false;
 
   Bane() {
-    blokke = new Blok[12][6];
+    bane = new int [12][6][2];
   }
 
 
 
-  void Draw() {
+  void Draw(boolean tT) {
+    tileTest = tT;
+    pushMatrix();
+    translate(120,0);
+    
+    
+    
+    
+    popMatrix();
   }
 }
