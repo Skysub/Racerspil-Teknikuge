@@ -41,8 +41,6 @@ class GameLogic {
 
     car.Update(cDrej, accelerate);
 
-    //car.Display();
-
     DrawUI();
   }
 

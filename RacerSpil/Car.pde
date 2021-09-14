@@ -33,14 +33,14 @@ class Car {
   }
 
   void DrawCar() {
-    background(220);
-
     pushMatrix();
+    fill(255,100,100);
     translate(pos.x, pos.y);
     rotate(theta);
     rectMode(CENTER);
     rect(0, 0, 60, 30); 
     //line(0,0, vel.x*50, vel.y*50);
+    rectMode(CORNER);
     popMatrix();
   }
 
