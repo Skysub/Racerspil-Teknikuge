@@ -8,7 +8,5 @@ class Bane {
 
 
   void Draw() {
-
-    
   }
 }
