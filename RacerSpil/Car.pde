@@ -35,7 +35,6 @@ class Car {
       accelerate = 0;
     } 
 
-    print(cDrej, accelerate);
 
     rotation = new PVector(cos(theta), sin(theta));
     acc = rotation.mult(0.01);
