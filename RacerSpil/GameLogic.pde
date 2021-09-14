@@ -1,13 +1,13 @@
 class GameLogic {
   
-  boolean hojre = false, venstre = false, op = false, ned = false;
-  PVector carPos = new PVector(width/2, height/2), carVel = new PVector(0, 0), carAcc = new PVector(0, 0), carFriction = new PVector(0, 0), carBoost = new PVector(0,0);
+  boolean hojre = false, venstre = false, op = false, ned = false, ice = false;
+  PVector carPos = new PVector(width/2, height/2), carVel = new PVector(0, 0), carAcc = new PVector(0, 0), carBoost = new PVector(0,0);
   float theta = 0;
   int cDrej = 0, accelerate = 0;
   Car car;
   
   GameLogic(){
-    car = new Car(carPos, carVel, carAcc, carFriction, carBoost, theta);
+    car = new Car(carPos, carVel, carAcc, ice, carBoost, theta);
   
   }
   
@@ -30,7 +30,6 @@ class GameLogic {
     } 
     
     car.Update(cDrej, accelerate);
-    car.Display();
     
   }
     //sørger for at controls virker
