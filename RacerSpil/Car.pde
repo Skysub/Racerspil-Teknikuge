@@ -1,4 +1,3 @@
-
 class Car {
   PVector pos, vel, acc, fric, boost, rotation, bremsVel;
   float theta, thetaVel, thetaAcc;
@@ -17,8 +16,9 @@ class Car {
     thetaAcc = 0.00025;
   }
 
-  void Update(int drej, int koer, boolean hojre, boolean venstre, boolean op, boolean ned) {
+  void Update(boolean hojre, boolean venstre, boolean op, boolean ned) {
 
+    // cDrej og accelerate sættes lig et tal der bestemmer hvilken vej der drejes, baseret på de booleans der passes fra GameLogic
     if ((hojre && venstre)||(!hojre && !venstre)) {
       cDrej = 0;
     } else if (hojre) {
@@ -36,11 +36,12 @@ class Car {
     } 
 
 
+    //Sørger for at accelerationen vender i bilens retning
     rotation = new PVector(cos(theta), sin(theta));
     acc = rotation.mult(0.01);
 
     Turn(cDrej);
-
+    //Om bilen kører på is eller ej
     if (!ice) {
       Drive(accelerate);
     } else DriveIce(accelerate);
@@ -50,23 +51,21 @@ class Car {
 
   void DrawCar() {
     pushMatrix();
-    fill(255,100,100);
+    fill(255, 100, 100);
     translate(pos.x, pos.y);
     rotate(theta);
     rectMode(CENTER);
     rect(0, 0, 60, 30); 
-    //line(0,0, vel.x*50, vel.y*50);
     rectMode(CORNER);
     popMatrix();
   }
 
   void Turn(int drej) {
-
+    //Bilen drejer, vinkelacceleration og acceleration vikrer på samme måde som med lineær. 
     if (drej == 0) {
       theta += 0;
       thetaVel = 0;
     } else if (drej == 1) {
-
       thetaVel += thetaAcc;
       theta -= thetaVel;
       if (thetaVel >= 0.03) thetaVel = 0.03;
@@ -80,21 +79,20 @@ class Car {
   void Drive(int koer) {
 
     if (koer == 1) {
-
       vel.add(acc);
       rotation.normalize();
-      rotation.mult(mag(vel.x, vel.y));
+      rotation.mult(mag(vel.x, vel.y)); //Dette gøres hver gang for at sørge for at hastigheden er samme retning som bilen
       vel = rotation;
-      vel.limit(3);
+      vel.limit(3); //Tophastighed
       pos.add(vel);
-      h = 1;
-    } else if (koer == 2) {
+      h = 1; //h er 1/-1 baseret på om bilen er i gang med at køre ligeud/bagud - bruges i Stop-metoden
+    } else if (koer == 2) { //Når bilen skal bremse
       vel.sub(acc);
       rotation.normalize();
       rotation.mult(mag(vel.x, vel.y));
       pos.sub(rotation);
       vel.limit(1.5);
-      if (thetaVel >= 0.025) thetaVel = 0.02499;
+      if (thetaVel >= 0.025) thetaVel = 0.02499; //Sørger for at bilen ikke kan dreje ligeså hurtigt rundt når den bakker
       h = -1;
     } else Stop(h);
   }
@@ -102,12 +100,13 @@ class Car {
   void DriveIce (int koer) {
     if (koer == 1) {
       vel.add(acc.mult(2));
-      vel.limit(3);
-      pos.add(vel);
+      vel.limit(3); 
+      pos.add(vel); //Forskellen på is vs asfalt er at hastigheden ikke sættes samme retning som bilen - først når accelerationen har "indhentet" den, kan bilen kører dens retning - indtil da glider den
     } else Stop(1);
   }
 
   void Stop(int h) {
+    // virker på samme måde som når bilen speeder op, bare med sub istedet for add
     vel.sub(acc.mult(h));
     rotation.normalize();
     rotation.mult(mag(vel.x, vel.y));
