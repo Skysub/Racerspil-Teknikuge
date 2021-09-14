@@ -1,14 +1,14 @@
 class GameLogic {
 
   Bane bane;
-  
+
   boolean hojre = false, venstre = false, op = false, ned = false, ice = false;
-  PVector carPos = new PVector(width/2, height/2), carVel = new PVector(0, 0), carAcc = new PVector(0, 0), carBoost = new PVector(0,0);
+  PVector carPos = new PVector(width/2, height/2), carVel = new PVector(0, 0), carAcc = new PVector(0, 0), carBoost = new PVector(0, 0);
   float theta = 0;
   int cDrej = 0, accelerate = 0;
   Car car;
-  
-  GameLogic(){
+
+  GameLogic() {
     car = new Car(carPos, carVel, carAcc, ice, carBoost, theta);
     bane = new Bane();
   }
@@ -41,7 +41,7 @@ class GameLogic {
 
     car.Update(cDrej, accelerate);
 
-    car.Display();
+    //car.Display();
 
     DrawUI();
   }

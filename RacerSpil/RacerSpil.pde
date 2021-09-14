@@ -4,10 +4,10 @@ void setup() {
   size(1920, 1080);
   frameRate(144);
   gameLogic = new GameLogic();
-  background(220);
 }
 
 void draw() {
+  background(220);
   gameLogic.Update();
 }
 
