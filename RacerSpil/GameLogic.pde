@@ -1,4 +1,4 @@
-class GameLogic { //<>// //<>//
+class GameLogic { //<>// //<>// //<>//
 
   Bane bane;
 
@@ -27,6 +27,7 @@ class GameLogic { //<>// //<>//
     car.Update(hojre, venstre, op, ned);
 
     DrawUI();
+    if(tileTest) bane.Draw(tileTest);
   }
 
   void DrawUI() {

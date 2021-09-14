@@ -36,6 +36,10 @@ class Blok {
       return;
     }
   }
+  
+  int GetBlokIalt(){
+   return 2;
+  }
 
 
   //Start blok Draw
