@@ -27,7 +27,7 @@ class GameLogic { //<>// //<>// //<>//
     car.Update(hojre, venstre, op, ned);
 
     DrawUI();
-    if(tileTest) bane.Draw(tileTest);
+    if (tileTest) bane.Draw(tileTest);
   }
 
   void DrawUI() {

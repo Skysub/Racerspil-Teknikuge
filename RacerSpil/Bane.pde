@@ -24,20 +24,21 @@ class Bane {
     pushMatrix();
     translate(0, 120);
 
-    if (!tT)DrawBane(bane);
-    else DrawBane(dBTS);
+    if (!tT)DrawBane(bane, tT);
+    else DrawBane(dBTS, tT);
 
     popMatrix();
   }
 
   //Tegner selve alle tilesne som beskrevet i bane arrayet
-  void DrawBane(int[][][] x) {
+  void DrawBane(int[][][] x, boolean tT) {
     for (int i=0; i<6; i++) {
       for (int j=0; j<12; j++) {
         pushMatrix();
         translate(-80, -80);
         rotate(x[j][i][1]*PI/2f);
-        translate(80, 80);
+        translate(80+(160*j), 80+(160*i));
+        if (tT) translate(2*j, 2*i);
         blok.DrawBlok(x[j][i][0]);
         popMatrix();
       }

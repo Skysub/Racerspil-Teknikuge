@@ -14,8 +14,8 @@ class Car {
     theta = t;
     thetaVel = 0;
     thetaAcc = 0.00025;
-    
-    backVel = new PVector(0,0);
+
+    backVel = new PVector(0, 0);
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned) {
@@ -83,15 +83,15 @@ class Car {
 
     if (koer == 1) {
       if (linearBackVel > 0.01) Stop(-2);
-      else{
-      backVel.setMag(0);
-      vel.add(acc);
-      rotation.normalize();
-      rotation.mult(mag(vel.x, vel.y)); //Dette gøres hver gang for at sørge for at hastigheden er samme retning som bilen
-      vel = rotation;
-      vel.limit(3); //Tophastighed
-      pos.add(vel);
-      h = 2; //h er 1/-1 baseret på om bilen er i gang med at køre ligeud/bagud - bruges i Stop-metoden
+      else {
+        backVel.setMag(0);
+        vel.add(acc);
+        rotation.normalize();
+        rotation.mult(mag(vel.x, vel.y)); //Dette gøres hver gang for at sørge for at hastigheden er samme retning som bilen
+        vel = rotation;
+        vel.limit(3); //Tophastighed
+        pos.add(vel);
+        h = 2; //h er 1/-1 baseret på om bilen er i gang med at køre ligeud/bagud - bruges i Stop-metoden
       }
     } else if (koer == 2) { //Når bilen skal bakke
       if (linearVel > 0.01) Stop(5);
@@ -120,19 +120,19 @@ class Car {
 
   void Stop(int h) {
     // virker på samme måde som når bilen speeder op, bare med sub istedet for add
-    if(h > 0){
-    vel.sub(acc.mult(h));
-    rotation.normalize();
-    rotation.mult(mag(vel.x, vel.y));
-    vel = rotation;
-    pos.add(vel);
+    if (h > 0) {
+      vel.sub(acc.mult(h));
+      rotation.normalize();
+      rotation.mult(mag(vel.x, vel.y));
+      vel = rotation;
+      pos.add(vel);
     }
-    if(h < 0){
-    backVel.sub(acc.mult(h));
-    rotation.normalize();
-    rotation.mult(mag(backVel.x, backVel.y));
-    backVel = rotation;
-    pos.add(backVel);
+    if (h < 0) {
+      backVel.sub(acc.mult(h));
+      rotation.normalize();
+      rotation.mult(mag(backVel.x, backVel.y));
+      backVel = rotation;
+      pos.add(backVel);
     }
   }
 }
