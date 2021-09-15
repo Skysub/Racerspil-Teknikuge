@@ -7,7 +7,7 @@ class Blok {
   Blok() {
     
     //hardkoder blokkenes info
-    //Size, Inpoint x, Inpoint y, Outpoint x, Outpoint y, outpoint retning i forhold til inpoint(0frem,1venstre,2højre,3tilbage)
+    //Size, Inpoint x, Inpoint y, Outpoint x, Outpoint y, outpoint retning i forhold til inpoint(0frem,1højre,2tilbage,3venstre)
     
     //Start blok
     int[] temp = {1,0,80,160,80,0};
@@ -31,10 +31,13 @@ class Blok {
       DrawB0();
       break;
 
-
     default:
       return;
+      
     }
+    //Reverter til default
+    stroke(20);
+    strokeWeight(1);
   }
   
   int GetBlokIalt(){
@@ -53,5 +56,6 @@ class Blok {
     line(75, 0, 75, 160);
     stroke(255);
     line(80, 0, 80, 160);
+
   }
 }

@@ -7,6 +7,14 @@ class Bane {
     blok = new Blok();
 
     bane = new int [12][6][2];
+    for (int i=0; i<6; i++) {
+      for (int j=0; j<12; j++) {
+        bane[j][i][0] = -1;
+      }
+    }
+
+
+
     dBTS = lavDebugTileSet(blok.GetBlokIalt());
   }
 
@@ -14,9 +22,9 @@ class Bane {
 
   void Draw(boolean tT) {
     pushMatrix();
-    translate(120, 0);
+    translate(0, 120);
 
-    if(!tT)DrawBane(bane);
+    if (!tT)DrawBane(bane);
     else DrawBane(dBTS);
 
     popMatrix();
@@ -24,6 +32,16 @@ class Bane {
 
   //Tegner selve alle tilesne som beskrevet i bane arrayet
   void DrawBane(int[][][] x) {
+    for (int i=0; i<6; i++) {
+      for (int j=0; j<12; j++) {
+        pushMatrix();
+        translate(-80, -80);
+        rotate(x[j][i][1]*PI/2f);
+        translate(80, 80);
+        blok.DrawBlok(x[j][i][0]);
+        popMatrix();
+      }
+    }
   }
 
 
