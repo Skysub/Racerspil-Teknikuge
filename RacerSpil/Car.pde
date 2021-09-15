@@ -24,6 +24,7 @@ class Car {
     acceleration = a;
     carWidth = cw;
     carHeight = ch;
+
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned) {
@@ -100,6 +101,7 @@ class Car {
         vel.limit(maxVel); //Tophastighed
         pos.add(vel);
         h = stopVel; //h er 1/-1 baseret på om bilen er i gang med at køre ligeud/bagud - bruges i Stop-metoden
+
       }
     } else if (koer == 2) { //Når bilen skal bakke
       if (linearVel > 0.02) Stop(bremseVel);

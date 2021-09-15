@@ -17,7 +17,6 @@ class GameLogic { //<>// //<>// //<>//
     bane = new Bane();
   }
 
-
   void Update() {
     toggleTemp = toggle(t, tF, tileTest);
     tileTest = toggleTemp[0];
@@ -50,7 +49,6 @@ class GameLogic { //<>// //<>// //<>//
     if (k == 9) tab = b;
     if (k == 10) enter = b;
   }
-
 
   //En metode der hjælper med at toggle visse booleans.
   //x er tastens aktuelle værdi, xF er tastens tidligere værdi, og v er den variabel man øsnker skal være togglable via tasten x
