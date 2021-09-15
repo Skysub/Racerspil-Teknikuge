@@ -32,9 +32,11 @@ class GameLogic { //<>// //<>// //<>//
 
     bane.Draw(tileTest);
     car.Update(hojre, venstre, op, ned);
-
+  
+    handleTimer();
     DrawUI();
     if(tileTest) bane.Draw(tileTest);
+    
   }
 
   void DrawUI() {
@@ -43,16 +45,16 @@ class GameLogic { //<>// //<>// //<>//
     textSize(50);
     fill(0,0,0);
     
-    //Runde counter findes pt ikke. Dermed vil dette blot skrive Round: 1/3
+    //skal kombineres med collision tjek med start
     text("Round: "+CurrentRound+"/"+TotalRounds, 15, 65);
     rect(312, 0, 10, 100, 0, 0, 10, 10);
     
     DrawTime(Record, RaceTime);
-    rect(635, 0, 10, 100, 0, 0, 10, 10);
-    rect(1010, 0, 10, 100, 0, 0, 10, 10);
+    rect(745, 0, 10, 100, 0, 0, 10, 10);
+    rect(1245, 0, 10, 100, 0, 0, 10, 10);
     
-    
-    
+    textSize(25);
+    text("Press TAB to open menu and view controls", 1335, 65);
   }
 
   //sørger for at controls virker
@@ -73,16 +75,21 @@ class GameLogic { //<>// //<>// //<>//
   void handleTimer(){
     if (RaceStart) {
       Racing = true;
-      if (RaceTime < Record) Record = RaceTime;
       RaceTime = 0;
+      CurrentRound = 1;
       RaceTimeStart = millis();
+      RaceStart = false;
     }
+    //måler tiden fra starten af race
     if (Racing) {
       RaceTime = millis() - RaceTimeStart;
     }
+    //logic for når race er ovre
     if (Racing && CurrentRound > TotalRounds){
       Racing = false;
+      CurrentRound = 0;
       if (RaceTime < Record) Record = RaceTime;
+      else if (Record == 0 && RaceTime != 0) Record = RaceTime;
     }
   }
   
@@ -93,18 +100,19 @@ class GameLogic { //<>// //<>// //<>//
     fill(0,0,0);
     textSize(50);
     
+    //konverterer tiden til læsbar format for racetime
     min = floor(Time/60000f);
     Time = Time - floor(Time/60000f)*60000;
     sec = floor(Time/1000f);
     Time = Time - floor(Time/1000f)*1000;
-    
     text("Time: "+min+":"+sec+"."+Time,340,65);
     
-    RecordMin = floor(Time/60000f);
-    RecordTime = RecordTime - floor(Time/60000f)*60000;
-    RecordSec = floor(Time/1000f);
-    RecordTime = RecordTime - floor(Time/1000f)*1000;
-    text("Record: "+RecordMin+":"+RecordSec+"."+RecordTime,665,65);
+    //samme som overstående men blot for rekord tiden
+    RecordMin = floor(RecordTime/60000f);
+    RecordTime = RecordTime - floor(RecordTime/60000f)*60000;
+    RecordSec = floor(RecordTime/1000f);
+    RecordTime = RecordTime - floor(RecordTime/1000f)*1000;
+    text("Record: "+RecordMin+":"+RecordSec+"."+RecordTime,775,65);
     
   }
 
