@@ -1,4 +1,4 @@
-class GameLogic { //<>// //<>// //<>// //<>//
+class GameLogic { //<>// //<>// //<>// //<>// //<>// //<>//
 
   Bane bane;
 
@@ -19,9 +19,12 @@ class GameLogic { //<>// //<>// //<>// //<>//
   int carWidth = 60, carHeight = 30;
   Car car;
 
+  //til banen
+  int seed = int(random(0,9999));
+
   GameLogic() {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, carWidth, carHeight);
-    bane = new Bane();
+    bane = new Bane(seed);
   }
 
   void Update() {
