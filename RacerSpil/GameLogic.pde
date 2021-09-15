@@ -3,7 +3,7 @@ class GameLogic { //<>// //<>// //<>//
   Bane bane;
 
   boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, enter=false; //kun til taster
-  boolean ice = false, tileTest = false; //til andre bools
+  boolean ice = false, givBoost = false, tileTest = false; //til andre bools
   boolean[] toggleTemp; 
 
   //ting til bilen
@@ -24,7 +24,7 @@ class GameLogic { //<>// //<>// //<>//
 
 
     bane.Draw(tileTest);
-    car.Update(hojre, venstre, op, ned);
+    car.Update(hojre, venstre, op, ned, givBoost);
     currentCarPos = car.Hit(); //til når der skal tjekkes kollision med bilen 
 
     DrawUI();
@@ -48,6 +48,7 @@ class GameLogic { //<>// //<>// //<>//
     if (k == 32) space = b;
     if (k == 9) tab = b;
     if (k == 10) enter = b;
+    if (k == 66) givBoost = b;
   }
 
   //En metode der hjælper med at toggle visse booleans.
