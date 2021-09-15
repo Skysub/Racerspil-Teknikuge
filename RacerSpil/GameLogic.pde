@@ -2,8 +2,10 @@ class GameLogic { //<>// //<>// //<>// //<>// //<>// //<>//
 
   Bane bane;
 
+
   boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false,tabF=false, enter=false; //kun til taster
-  boolean ice = false, tileTest = false, menu = false; //til andre bools
+  boolean ice = false, givBoost = false, tileTest = false, menu = false; //til andre bools
+
   boolean[] toggleTemp; 
   
   //Til runde counter
@@ -15,7 +17,7 @@ class GameLogic { //<>// //<>// //<>// //<>// //<>// //<>//
 
   //ting til bilen
   PVector carPos = new PVector(width/2, height/2), carBoost = new PVector(0, 0), currentCarPos;
-  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 2, bremseVel = 5, maxThetaVel = 0.03, maxThetaBackVel = 0.02, acceleration = 0.01;
+  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 2, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.01, thetaAcc = 0.014;
   int carWidth = 60, carHeight = 30;
   Car car;
 
@@ -23,8 +25,10 @@ class GameLogic { //<>// //<>// //<>// //<>// //<>// //<>//
   int seed = int(random(0,9999));
 
   GameLogic() {
-    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, carWidth, carHeight);
+
+    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
     bane = new Bane(seed);
+
   }
 
   void Update() {
@@ -40,7 +44,8 @@ class GameLogic { //<>// //<>// //<>// //<>// //<>// //<>//
 
 
     bane.Draw(tileTest);
-    car.Update(hojre, venstre, op, ned);
+
+    car.Update(hojre, venstre, op, ned, givBoost);
   
     handleTimer();
     DrawUI();
@@ -81,6 +86,7 @@ class GameLogic { //<>// //<>// //<>// //<>// //<>// //<>//
     if (k == 32) space = b;
     if (k == 9) tab = b;
     if (k == 10) enter = b;
+    if (k == 66) givBoost = b;
   }
   
   //a bit of stuff for the timer and logic for handling record time when starting a race
