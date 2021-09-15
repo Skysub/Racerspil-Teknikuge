@@ -7,12 +7,13 @@ class GameLogic { //<>// //<>// //<>//
   boolean[] toggleTemp; 
 
   //ting til bilen
-  PVector carPos = new PVector(width/2, height/2), carVel = new PVector(0, 0), carAcc = new PVector(0, 0), carBoost = new PVector(0, 0);
-  float theta = 0;
+  PVector carPos = new PVector(width/2, height/2), carBoost = new PVector(0, 0), currentCarPos;
+  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 2, bremseVel = 5, maxThetaVel = 0.03, maxThetaBackVel = 0.02, acceleration = 0.01;
+  int carWidth = 60, carHeight = 30;
   Car car;
 
   GameLogic() {
-    car = new Car(carPos, carVel, carAcc, ice, carBoost, theta);
+    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, carWidth, carHeight);
     bane = new Bane();
   }
 
@@ -24,6 +25,7 @@ class GameLogic { //<>// //<>// //<>//
 
     bane.Draw(tileTest);
     car.Update(hojre, venstre, op, ned);
+    currentCarPos = car.Hit(); //til når der skal tjekkes kollision med bilen 
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest);
