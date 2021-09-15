@@ -12,13 +12,8 @@ class Bane {
         bane[j][i][0] = -1;
       }
     }
-
-
-
     dBTS = lavDebugTileSet(blok.GetBlokIalt());
   }
-
-
 
   void Draw(boolean tT) {
     pushMatrix();
@@ -44,8 +39,6 @@ class Bane {
       }
     }
   }
-
-
 
   //Tager alle blokke fra blok klassen og lægger dem ind i en bane én efter hindanden, er lavet til at man nemt kan tjekke hvordan hver blok ser ud ved at trykke t.
   int[][][] lavDebugTileSet(int bIalt) {

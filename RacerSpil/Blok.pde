@@ -63,8 +63,6 @@ class Blok {
     blokInfo[3] = ligeud;
   }
 
-
-
   //Start blok Draw
   void DrawB0() {
     fill(250, 200, 250);
@@ -72,8 +70,8 @@ class Blok {
     stroke(20);
     square(0, 0, 160);
     fill(20);
-    rect(0,0,160,30);
-    rect(0,130,160,30);
+    rect(0, 0, 160, 30);
+    rect(0, 130, 160, 30);
     strokeWeight(5);
     line(85, 30, 85, 130);
     line(75, 30, 75, 130);
@@ -108,6 +106,5 @@ class Blok {
     rect(0, 0, 160, 160);
     fill(255);
     rect(0, 30, 160, 100);
-
   }
 }
