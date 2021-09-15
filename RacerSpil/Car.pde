@@ -1,6 +1,6 @@
 class Car {
-  PVector pos, vel, acc, fric, boost, rotation, bremsVel;
-  float theta, thetaVel, thetaAcc;
+  PVector pos, vel, acc, fric, boost, rotation, backVel;
+  float theta, thetaVel, thetaAcc, linearVel, linearBackVel;
   int h = 1, cDrej, accelerate;
   boolean ice;
 
@@ -14,6 +14,8 @@ class Car {
     theta = t;
     thetaVel = 0;
     thetaAcc = 0.00025;
+    
+    backVel = new PVector(0,0);
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned) {
@@ -61,6 +63,7 @@ class Car {
   }
 
   void Turn(int drej) {
+    if (thetaVel >= 0.03) thetaVel = 0.03;
     //Bilen drejer, vinkelacceleration og acceleration vikrer på samme måde som med lineær. 
     if (drej == 0) {
       theta += 0;
@@ -68,32 +71,42 @@ class Car {
     } else if (drej == 1) {
       thetaVel += thetaAcc;
       theta -= thetaVel;
-      if (thetaVel >= 0.03) thetaVel = 0.03;
     } else if (drej == 2) {
       thetaVel += thetaAcc;
       theta += thetaVel;
-      if (thetaVel >= 0.03) thetaVel = 0.03;
     }
   }
 
   void Drive(int koer) {
+    linearVel = mag(vel.x, vel.y);
+    linearBackVel = mag(backVel.x, backVel.y);
 
     if (koer == 1) {
+      if (linearBackVel > 0.01) Stop(-2);
+      else{
+      backVel.setMag(0);
       vel.add(acc);
       rotation.normalize();
       rotation.mult(mag(vel.x, vel.y)); //Dette gøres hver gang for at sørge for at hastigheden er samme retning som bilen
       vel = rotation;
       vel.limit(3); //Tophastighed
       pos.add(vel);
-      h = 1; //h er 1/-1 baseret på om bilen er i gang med at køre ligeud/bagud - bruges i Stop-metoden
-    } else if (koer == 2) { //Når bilen skal bremse
-      vel.sub(acc);
-      rotation.normalize();
-      rotation.mult(mag(vel.x, vel.y));
-      pos.sub(rotation);
-      vel.limit(1.5);
-      if (thetaVel >= 0.025) thetaVel = 0.02499; //Sørger for at bilen ikke kan dreje ligeså hurtigt rundt når den bakker
-      h = -1;
+      h = 2; //h er 1/-1 baseret på om bilen er i gang med at køre ligeud/bagud - bruges i Stop-metoden
+      }
+    } else if (koer == 2) { //Når bilen skal bakke
+      if (linearVel > 0.01) Stop(5);
+      else {
+        vel.setMag(0);
+        backVel.add(acc);
+        rotation.normalize();
+        rotation.mult(mag(backVel.x, backVel.y));
+        backVel = rotation;
+        pos.sub(backVel);
+        //linearVel = linearVel*-1;
+        h = -2;
+        backVel.limit(1.5);
+      }
+      if (thetaVel >= 0.02) thetaVel = 0.02; //Sørger for at bilen ikke kan dreje ligeså hurtigt rundt når den bakker
     } else Stop(h);
   }
 
@@ -107,10 +120,19 @@ class Car {
 
   void Stop(int h) {
     // virker på samme måde som når bilen speeder op, bare med sub istedet for add
+    if(h > 0){
     vel.sub(acc.mult(h));
     rotation.normalize();
     rotation.mult(mag(vel.x, vel.y));
     vel = rotation;
     pos.add(vel);
+    }
+    if(h < 0){
+    backVel.sub(acc.mult(h));
+    rotation.normalize();
+    rotation.mult(mag(backVel.x, backVel.y));
+    backVel = rotation;
+    pos.add(backVel);
+    }
   }
 }
