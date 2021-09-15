@@ -6,12 +6,12 @@ class Car {
 
   Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, int cw, int ch) {
 
-    vel = new PVector (0,0);
+    vel = new PVector (0, 0);
     backVel = new PVector(0, 0);
-    acc = new PVector (0,0);
+    acc = new PVector (0, 0);
     thetaVel = 0;
     thetaAcc = 0.00025;
-    
+
     pos = p;
     ice = i;
     theta = sr;
@@ -24,7 +24,6 @@ class Car {
     acceleration = a;
     carWidth = cw;
     carHeight = ch;
-
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned) {
@@ -91,7 +90,7 @@ class Car {
     linearBackVel = mag(backVel.x, backVel.y);
 
     if (koer == 1) {
-      if (linearBackVel > 0.01) Stop(-stopVel);
+      if (linearBackVel > 0.02) Stop(-stopVel);
       else {
         backVel.setMag(0);
         vel.add(acc);
@@ -103,7 +102,7 @@ class Car {
         h = stopVel; //h er 1/-1 baseret på om bilen er i gang med at køre ligeud/bagud - bruges i Stop-metoden
       }
     } else if (koer == 2) { //Når bilen skal bakke
-      if (linearVel > 0.01) Stop(bremseVel);
+      if (linearVel > 0.02) Stop(bremseVel);
       else {
         vel.setMag(0);
         backVel.add(acc);
@@ -142,5 +141,9 @@ class Car {
       backVel = rotation;
       pos.add(backVel);
     }
+  }
+
+  PVector Hit() {
+    return pos;
   }
 }
