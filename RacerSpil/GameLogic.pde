@@ -1,9 +1,9 @@
-class GameLogic { //<>// //<>// //<>//
+class GameLogic { //<>// //<>// //<>// //<>//
 
   Bane bane;
 
-  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, enter=false; //kun til taster
-  boolean ice = false, tileTest = false; //til andre bools
+  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false,tabF=false, enter=false; //kun til taster
+  boolean ice = false, tileTest = false, menu = false; //til andre bools
   boolean[] toggleTemp; 
 
   //ting til bilen
@@ -18,9 +18,15 @@ class GameLogic { //<>// //<>// //<>//
   }
 
   void Update() {
+    //gør at man kan toggle tilemaptest med t
     toggleTemp = toggle(t, tF, tileTest);
     tileTest = toggleTemp[0];
     tF = toggleTemp[1];
+    
+    //gør at man kan toggle menuen med tab
+    toggleTemp = toggle(tab, tabF, menu);
+    menu = toggleTemp[0];
+    tabF = toggleTemp[1];
 
 
     bane.Draw(tileTest);
