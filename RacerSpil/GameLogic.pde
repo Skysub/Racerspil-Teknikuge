@@ -1,9 +1,9 @@
-class GameLogic { //<>// //<>// //<>//
+class GameLogic { //<>// //<>// //<>// //<>//
 
   Bane bane;
 
-  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, enter=false; //kun til taster
-  boolean ice = false, tileTest = false; //til andre bools
+  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false,tabF=false, enter=false; //kun til taster
+  boolean ice = false, tileTest = false, menu = false; //til andre bools
   boolean[] toggleTemp; 
   
   //Til runde counter
@@ -14,20 +14,26 @@ class GameLogic { //<>// //<>// //<>//
   boolean RaceStart = false, Racing = false;
 
   //ting til bilen
-  PVector carPos = new PVector(width/2, height/2), carVel = new PVector(0, 0), carAcc = new PVector(0, 0), carBoost = new PVector(0, 0);
-  float theta = 0;
+  PVector carPos = new PVector(width/2, height/2), carBoost = new PVector(0, 0), currentCarPos;
+  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 2, bremseVel = 5, maxThetaVel = 0.03, maxThetaBackVel = 0.02, acceleration = 0.01;
+  int carWidth = 60, carHeight = 30;
   Car car;
 
   GameLogic() {
-    car = new Car(carPos, carVel, carAcc, ice, carBoost, theta);
+    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, carWidth, carHeight);
     bane = new Bane();
   }
 
-
   void Update() {
+    //gør at man kan toggle tilemaptest med t
     toggleTemp = toggle(t, tF, tileTest);
     tileTest = toggleTemp[0];
     tF = toggleTemp[1];
+    
+    //gør at man kan toggle menuen med tab
+    toggleTemp = toggle(tab, tabF, menu);
+    menu = toggleTemp[0];
+    tabF = toggleTemp[1];
 
 
     bane.Draw(tileTest);
@@ -35,8 +41,11 @@ class GameLogic { //<>// //<>// //<>//
   
     handleTimer();
     DrawUI();
-    if(tileTest) bane.Draw(tileTest);
-    
+
+    currentCarPos = car.Hit(); //til når der skal tjekkes kollision med bilen 
+
+    DrawUI();
+    if (tileTest) bane.Draw(tileTest);
   }
 
   void DrawUI() {
@@ -115,7 +124,6 @@ class GameLogic { //<>// //<>// //<>//
     text("Record: "+RecordMin+":"+RecordSec+"."+RecordTime,775,65);
     
   }
-
 
   //En metode der hjælper med at toggle visse booleans.
   //x er tastens aktuelle værdi, xF er tastens tidligere værdi, og v er den variabel man øsnker skal være togglable via tasten x
