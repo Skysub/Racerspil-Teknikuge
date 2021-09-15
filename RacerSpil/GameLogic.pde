@@ -26,7 +26,6 @@ class GameLogic { //<>// //<>// //<>//
 
     bane.Draw(tileTest);
     car.Update(hojre, venstre, op, ned);
-    
     currentCarPos = car.Hit(); //til når der skal tjekkes kollision med bilen 
 
     DrawUI();
