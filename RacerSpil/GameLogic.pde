@@ -8,12 +8,12 @@ class GameLogic { //<>// //<>// //<>//
 
   //ting til bilen
   PVector carPos = new PVector(width/2, height/2), carBoost = new PVector(0, 0), currentCarPos;
-  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 2, bremseVel = 5, maxThetaVel = 0.03, maxThetaBackVel = 0.02, acceleration = 0.01;
+  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 2, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.01, thetaAcc = 0.014;
   int carWidth = 60, carHeight = 30;
   Car car;
 
   GameLogic() {
-    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, carWidth, carHeight);
+    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
     bane = new Bane();
   }
 

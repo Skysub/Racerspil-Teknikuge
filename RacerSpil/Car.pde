@@ -4,13 +4,12 @@ class Car {
   int cDrej, accelerate, carWidth, carHeight;
   boolean ice;
 
-  Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, int cw, int ch) {
+  Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int cw, int ch) {
 
     vel = new PVector (0, 0);
     backVel = new PVector(0, 0);
     acc = new PVector (0, 0);
     thetaVel = 0;
-    thetaAcc = 0.00025;
 
     pos = p;
     ice = i;
@@ -22,6 +21,7 @@ class Car {
     maxThetaVel = mtv;
     maxThetaBackVel = mtbv;
     acceleration = a;
+    thetaAcc = ta;
     carWidth = cw;
     carHeight = ch;
 
@@ -73,15 +73,16 @@ class Car {
 
   void Turn(int drej) {
     if (thetaVel >= maxThetaVel) thetaVel = maxThetaVel;
+    if (linearVel == 0 || linearBackVel == 0) thetaVel = 0;
     //Bilen drejer, vinkelacceleration og acceleration vikrer på samme måde som med lineær. 
     if (drej == 0) {
       theta += 0;
       thetaVel = 0;
     } else if (drej == 1) {
-      thetaVel += thetaAcc;
+      thetaVel += thetaAcc * (linearVel + linearBackVel);
       theta -= thetaVel;
     } else if (drej == 2) {
-      thetaVel += thetaAcc;
+      thetaVel += thetaAcc* (linearVel + linearBackVel);
       theta += thetaVel;
     }
   }
