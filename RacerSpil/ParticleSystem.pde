@@ -10,8 +10,8 @@ class ParticleSystem {
     particles = new ArrayList<Particle>();
   }
 
-  void addParticle(float strength) {
-    particles.add(new Particle(origin, strength));
+  void addParticle(float strength, float theta) {
+    particles.add(new Particle(origin, strength, theta + random(-1.5, 1.5)));
   }
 
   void run(PVector location) {

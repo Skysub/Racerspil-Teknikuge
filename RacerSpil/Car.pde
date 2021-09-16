@@ -97,7 +97,7 @@ class Car {
   void Drive(int koer, boolean boost) {
     linearVel = mag(vel.x, vel.y);
     linearBackVel = mag(backVel.x, backVel.y);
-    Particles(linearVel);
+    Particles(linearVel, theta);
 
     if (boost) { 
       maxVel = 10;
@@ -171,8 +171,8 @@ class Car {
     return pos;
   }
 
-  void Particles(float s) {
-    ps.addParticle(s);
+  void Particles(float s, float t) {
+    ps.addParticle(s, t);
     ps.run(pos);
   }
 }
