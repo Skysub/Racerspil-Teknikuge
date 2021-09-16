@@ -51,7 +51,7 @@ class Bane {
       if (tRot % 4 == 0)   sted.add(new PVector(1, 0)); //0
       if ((tRot+2) % 4 == 0) sted.sub(new PVector(1, 0));//2
       blokke++;
-      if (sted == start) break;
+      if (sted.x == start.x && sted.y == start.y) break;
       if (blokke > 50) break;
 
       /*println(sted);
@@ -65,16 +65,16 @@ class Bane {
         tRot = rot+blok.GetBI(blokC, 3);
 
         if ((tRot+1) % 4 == 0) {
-          if (sted.y != 0 && !(sted.y == 3 && sted.x > 1) && !(sted.x > 9 && sted.y < 3) && (b[int(sted.x)][int(sted.y)-1][0] == -1)) break;
+          if (sted.y != 0 && !(sted.y == 3 && sted.x > 1) && !(sted.x > 9 && sted.y < 3) && ((b[int(sted.x)][int(sted.y)-1][0] == -1)|| (b[int(sted.x)][int(sted.y)-1][0] == 0))) break;
         }
         if ((tRot-1) % 4 == 0) {
-          if (sted.y != 5 && !(sted.y == 2 && sted.x < 10) && !(sted.x < 2 && sted.y > 1)&& (b[int(sted.x)][int(sted.y)+1][0] == -1)) break;
+          if (sted.y != 5 && !(sted.y == 2 && sted.x < 10) && !(sted.x < 2 && sted.y > 1)&& ((b[int(sted.x)][int(sted.y)+1][0] == -1)|| (b[int(sted.x)][int(sted.y)+1][0] == 0))) break;
         }
         if (tRot % 4 == 0) {
-          if (sted.x != 11 && !(sted.y > 2)&& (b[int(sted.x)+1][int(sted.y)][0] == -1)) break;
+          if (sted.x != 11 && !(sted.y > 2)&& ((b[int(sted.x)+1][int(sted.y)][0] == -1) || (b[int(sted.x)+1][int(sted.y)][0] == 0))) break;
         }
         if ((tRot+2) % 4 == 0) {
-          if (sted.x != 0 && !(sted.y < 3)&& (b[int(sted.x)-1][int(sted.y)][0] == -1)) break;
+          if (sted.x != 0 && !(sted.y < 3)&& ((b[int(sted.x)-1][int(sted.y)][0] == -1)|| (b[int(sted.x)-1][int(sted.y)][0] == 0))) break;
         }
         fuck++;
         if (fuck > 100)break;
