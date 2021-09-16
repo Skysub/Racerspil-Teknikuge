@@ -6,7 +6,7 @@ class Particle {
     acceleration = new PVector(-0.01,-0.01);
     location = origin.get();
     velocity = new PVector(random(-3, -1),random(-1,1));
-    lifespan = 20 * s;
+    lifespan = 16 * s;
     theta = t;
   }
 
