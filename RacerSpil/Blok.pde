@@ -9,7 +9,7 @@ class Blok {
   }
 
   //returnerer det tal under en bloks id der er ønsket.
-  int GetBlokInfo(int id, int a) {
+  int GetBI(int id, int a) {
     return blokInfo[id][a];
   }
 
@@ -44,22 +44,22 @@ class Blok {
   //Initialiserer alle blokkenes info i et info array
   void InitialiserInfo() {
     //hardkoder blokkenes info
-    //Size, Inpoint x, Inpoint y, Outpoint x, Outpoint y, outpoint retning i forhold til inpoint(0frem,1højre,2tilbage,3venstre)
+    //Size, outpoint vektor (ligeud 1,0  højre 0,-1  bagud -1,0  venstre 0,1), outpoint rotation
 
     //Start blok
-    int[] startblok = {1, 0, 80, 160, 80, 0};
+    int[] startblok = {1, 1, 0, 0};
     blokInfo[0] = startblok;
 
     //højressvings blok
-    int[] hojresving = {1, 0, 80, 80, 160, 1};
+    int[] hojresving = {1, 0, 1, 1};
     blokInfo[1] = hojresving;
 
     //Vesntresvings blok
-    int[] venstresving = {1, 0, 80, 80, 0, 3};
+    int[] venstresving = {1, 0, -1, 3};
     blokInfo[2] = venstresving;
 
     //Ligeud blok
-    int[] ligeud = {1, 0, 80, 160, 80, 0};
+    int[] ligeud = {1, 1, 0, 0};
     blokInfo[3] = ligeud;
   }
 

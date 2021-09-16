@@ -2,10 +2,12 @@ class Bane {
   int[][][] bane, dBTS;
   Blok blok;
   int ss;
+  int bIalt;
 
   Bane(int seed) {
     blok = new Blok();
-    dBTS = LavDebugTileSet(blok.GetBlokIalt());
+    bIalt = blok.GetBlokIalt();
+    dBTS = LavDebugTileSet(bIalt);
     bane = GenererBane(seed);
   }
 
@@ -31,8 +33,72 @@ class Bane {
         b[j][i][1] = 0;
       }
     }
-    PVector sted = PlacerStart(b);
+    PVector start = PlacerStart(b);
+    PVector sted = new PVector(start.x, start.y);
+    int blokF = 0, blokke = 0;
+    int blokC, rot, tRot, rotF = b[int(sted.x)][int(sted.y)][1];
+    tRot = rotF;
 
+    while (true) {
+      tRot = rotF+blok.GetBI(blokF, 3);
+      //println(sted);
+      if ((tRot+1) % 4 == 0) sted.sub(new PVector(0, 1));//3
+      if ((tRot-1) % 4 == 0) sted.add(new PVector(0, 1)); //1
+      if (tRot % 4 == 0)   sted.add(new PVector(1, 0)); //0
+      if ((tRot+2) % 4 == 0) sted.sub(new PVector(1, 0));//2
+      blokke++;
+      if (sted == start) break;
+
+
+      /*println(sted);
+       println("yes!");
+       println(blokF);
+       println();*/
+      int fuck = 0;
+      while (true) {
+        blokC = int(random(1, bIalt-1));
+        rot = rotF+blok.GetBI(blokF, 3);
+        tRot = rot+blok.GetBI(blokC, 3);
+
+        if (tRot+1 % 4 == 0) {
+          if (sted.y != 0 && !(sted.y == 3 && sted.x > 1) && !(sted.x > 9 && sted.y < 3)) break;
+        }
+        if (tRot-1 % 4 == 0) {
+          if (sted.y != 5 && !(sted.y == 2 && sted.x < 10) && !(sted.x < 2 && sted.y > 1)) break;
+        }
+        if (tRot % 4 == 0) {
+          if (sted.x != 11 && !(sted.y > 2)) break;
+        }
+        if (tRot+2 % 4 == 0) {
+          if (sted.x != 0 && !(sted.y < 3)) break;
+        }
+        fuck++;
+        if (fuck > 100)break;
+      }
+      if (fuck > 100)break;
+      blokF = blokC;
+      rot = rot % 4;
+      rotF = rot;
+      b[int(sted.x)][int(sted.y)][0] = blokF;
+      b[int(sted.x)][int(sted.y)][1] = rotF;
+    }
+    /*
+    //printer id for hvert felt
+     for (int i=0; i<6; i++) {
+     for (int j=0; j<12; j++) {
+     if (b[j][i][0] != -1)print(" "+b[j][i][0]+" ");
+     else print(b[j][i][0]+" ");
+     }
+     println();
+     }
+     
+     //printer rotation for hvret felt
+     for (int i=0; i<6; i++) {
+     for (int j=0; j<12; j++) {
+     print(b[j][i][1]+" ");
+     }
+     println();
+     }*/
     return b;
   }
 
@@ -42,18 +108,22 @@ class Bane {
       for (int j=0; j<12; j++) {
         pushMatrix();
         translate((160*j), (160*i));
-        rotate(x[j][i][1]*PI/2f);
         if (tT) translate(2*j, 2*i);
+        if (x[j][i][1] == 1) translate(160, 0);
+        if (x[j][i][1] == 2) translate(160, 160);
+        if (x[j][i][1] == 3) translate(0, 160);
+        rotate(x[j][i][1]*PI/2f);
+
         blok.DrawBlok(x[j][i][0]);
         popMatrix();
       }
     }
   }
 
-  PVector PlacerStart(int[][][] b){
+  PVector PlacerStart(int[][][] b) {
     //Vælger et tilfældigt sted til starten og rotere starten i forhold til kvadranten
-    PVector sted = new PVector(int(random(0, 11)), int(random(0, 5)));
-    b[int(sted.x)][int(sted.y)][0] = 0;
+    PVector sted = new PVector(int(random(-0.49f, 11.49f)), int(random(-0.49f, 5.49f)));
+
 
     //sørger for at start ikke er i et hjørne
     if (sted.x == 0) {
@@ -73,6 +143,8 @@ class Bane {
         sted.x--;
       }
     }
+
+    b[int(sted.x)][int(sted.y)][0] = 0;
 
     //rotering
     if (sted.x != 0 && sted.x != 11) {
@@ -97,7 +169,7 @@ class Bane {
     for (int i=0; i<6; i++) {
       for (int j=0; j<12; j++) {
         a[j][i][0] = blok;
-        a[j][i][1] = 0;
+        a[j][i][1] = 3;
         if (blok-1 == bIalt) blok = -1;
         if (blok != -1) {
           blok++;

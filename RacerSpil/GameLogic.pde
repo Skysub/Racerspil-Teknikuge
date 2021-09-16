@@ -1,4 +1,4 @@
-class GameLogic { //<>// //<>// //<>// //<>// //<>// //<>//
+class GameLogic { //<>//
 
   Bane bane;
 
@@ -15,24 +15,22 @@ class GameLogic { //<>// //<>// //<>// //<>// //<>// //<>//
   int Record, RaceTime = 60000, RaceTimeStart;
   boolean RaceStart = false, Racing = false;
 
-  //Til bilen
+  //ting til bilen
   PVector carPos = new PVector(width/2, height/2), carBoost = new PVector(0, 0), currentCarPos;
-  float startRotation = 0, maxVel = 4, maxBackVel = 1.5, stopVel = 2, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.01, thetaAcc = 0.014;
+  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 2, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.01, thetaAcc = 0.014;
   int carWidth = 60, carHeight = 30;
   Car car;
+
   
   //Ting til seed og menu
   int seed = int(random(0,9999));
   Menu gameMenu;
-
-
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration,thetaAcc, carWidth, carHeight);
 
     gameMenu = new Menu(thePApplet, seed);
     bane = new Bane(seed);
-
   }
 
   void Update() {
