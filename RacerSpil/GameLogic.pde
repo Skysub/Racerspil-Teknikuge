@@ -24,10 +24,10 @@ class GameLogic { //<>// //<>// //<>// //<>//
   Menu gameMenu;
 
 
-  GameLogic() {
+  GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, carWidth, carHeight);
     bane = new Bane();
-    gameMenu = new Menu();
+    gameMenu = new Menu(thePApplet, seed);
   }
 
   void Update() {
@@ -47,7 +47,7 @@ class GameLogic { //<>// //<>// //<>// //<>//
     handleTimer();
     DrawUI();
     
-    if (menu) gameMenu.Update(seed);
+    if (menu) gameMenu.Update();
 
     currentCarPos = car.Hit(); //til når der skal tjekkes kollision med bilen 
 

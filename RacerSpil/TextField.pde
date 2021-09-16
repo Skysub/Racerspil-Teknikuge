@@ -1,17 +1,16 @@
-// as seen on https://discourse.processing.org/t/get-user-input-with-textbox-class/16150/9
-import g4p_controls.*;
-GTextField txf1;
-String t0;
+class TextField {
+int MaxCharacters;
+ControlP5 cp5;
 String enteredSeed;
 
 
-class TextField {
-int MaxCharacters;
-
-  TextField() {
-    txf1 = new GTextField(this, 10, 10, 200, 20);
-    txf1.setPromptText("Text field 1");
-    txf1.setText("test1");
+  TextField(PApplet thePApplet, int seed) {
+    cp5 = new ControlP5(thePApplet);
+    cp5.setAutoDraw(false);
+    PFont p = createFont("Verdana", 20);
+    ControlFont font = new ControlFont(p);
+    cp5.setFont(font);
+    cp5.addTextfield("SeedTextField").setPosition(730,450).setSize(520,50).setAutoClear(false).setInputFilter(1).setText(str(seed));
   }
 
   void Update() {
@@ -19,14 +18,6 @@ int MaxCharacters;
   }
 
   void Draw() {
-    if(keyPressed && key == ENTER) {
-      enteredSeed = t0;
-    }
+      cp5.draw();
+    }  
   }
-  
-  void handleTextEvents(GEditableTextControl textcontrol, GEvent event){
-    if(txf1 == textcontrol && event == GEvent.ENTERED) {
-      t0 = txf1.getText();
-    }
-  }
-}

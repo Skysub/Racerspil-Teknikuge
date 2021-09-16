@@ -1,13 +1,13 @@
 class Menu {
 TextField textField;
 
-  Menu() {
-    textField = new TextField();
+  Menu(PApplet thePApplet, int seed) {
+    textField = new TextField(thePApplet, seed);
   }
 
-  void Update(int seed) {
+  void Update() {
     Draw();
-    textField.Update(seed);
+    textField.Update();
   }
 
   void Draw() {
@@ -20,8 +20,6 @@ TextField textField;
     
     textSize(25);
     text("Enter seed here", 890, 435);
-    fill(255,255,255);
-    rect(730,450,520,50,25);
     
     fill(0,0,0);
     rect(730,590,520,1);
