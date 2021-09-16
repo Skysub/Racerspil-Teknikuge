@@ -21,12 +21,15 @@ class GameLogic { //<>//
   int carWidth = 60, carHeight = 30;
   Car car;
 
-  //til banen
-  int seed = int(random(0, 9999));
+  
+  //Ting til seed og menu
+  int seed = int(random(0,9999));
+  Menu gameMenu;
 
-  GameLogic() {
+  GameLogic(PApplet thePApplet) {
+    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration,thetaAcc, carWidth, carHeight);
 
-    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
+    gameMenu = new Menu(thePApplet, seed);
     bane = new Bane(seed);
   }
 
@@ -41,13 +44,16 @@ class GameLogic { //<>//
     menu = toggleTemp[0];
     tabF = toggleTemp[1];
 
-
     bane.Draw(tileTest);
 
     car.Update(hojre, venstre, op, ned, givBoost);
 
     handleTimer();
     DrawUI();
+    
+    if (menu) gameMenu.Update();
+    
+    if (enter ) seed = int(gameMenu.textField.input());
 
     currentCarPos = car.Hit(); //til når der skal tjekkes kollision med bilen 
 
@@ -70,7 +76,9 @@ class GameLogic { //<>//
     rect(1245, 0, 10, 100, 0, 0, 10, 10);
 
     textSize(25);
-    text("Press TAB to open menu and view controls", 1335, 65);
+    text("Press TAB to open menu and view controls", 1335, 50);
+    textSize(17);
+    text("Current seed: "+seed, 1335, 70);
   }
 
   //sørger for at controls virker
