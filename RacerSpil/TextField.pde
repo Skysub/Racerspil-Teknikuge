@@ -1,9 +1,9 @@
 class TextField {
-int MaxCharacters;
 ControlP5 cp5;
 String enteredSeed;
 
-
+//konstruktør hvor tesktfeltet sættes op. Se http://www.sojamo.de/libraries/controlP5/reference/controlP5/Textfield.html for dokumentation
+//PApplet er en reference til selve sketchen og fåes helt tilbage fra RacerSpil ved at blive trukket igennem konstruktører hertil
   TextField(PApplet thePApplet, int seed) {
     enteredSeed = str(seed);
     cp5 = new ControlP5(thePApplet);
@@ -22,7 +22,8 @@ String enteredSeed;
   void Draw() {
       cp5.draw();
     }  
-    
+  
+  //metode til at returnere input. Input skæres af ved 9 cifre, så værdien ikke bliver for stor for en int
   String input() {
     if (enteredSeed.length()<10) return enteredSeed;
     else if (enteredSeed.length() > 10) {

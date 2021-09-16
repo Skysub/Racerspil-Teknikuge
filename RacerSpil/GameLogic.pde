@@ -49,7 +49,7 @@ class GameLogic { //<>// //<>// //<>// //<>//
     
     if (menu) gameMenu.Update();
     
-    if (enter ) seed = int(gameMenu.input());
+    if (enter ) seed = int(gameMenu.textField.input());
 
     currentCarPos = car.Hit(); //til når der skal tjekkes kollision med bilen 
 
