@@ -74,7 +74,7 @@ class Blok {
     rect(0, 130, 160, 30);
     strokeWeight(5);
     line(85, 30, 85, 130);
-    line(75, 30, 75, 130);
+    line(75, 30, 75, 100);
     stroke(255);
     line(80, 30, 80, 130);
   }
