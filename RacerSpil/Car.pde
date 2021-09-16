@@ -3,6 +3,7 @@ class Car {
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
   int cDrej, accelerate, carWidth, carHeight;
   boolean ice;
+  PImage carSprite;
 
   Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int cw, int ch) {
 
@@ -24,6 +25,7 @@ class Car {
     thetaAcc = ta;
     carWidth = cw;
     carHeight = ch;
+    carSprite = loadImage("car.png");
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost) {
@@ -64,8 +66,8 @@ class Car {
     fill(255, 100, 100);
     translate(pos.x, pos.y);
     rotate(theta);
-    rectMode(CENTER);
-    rect(0, 0, carWidth, carHeight); 
+    imageMode(CENTER);
+    image(carSprite,0,0,carWidth, carHeight);
     rectMode(CORNER);
     popMatrix();
   }
