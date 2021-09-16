@@ -1,5 +1,6 @@
 class Menu {
 TextField textField;
+String enteredSeed;
 
   Menu(PApplet thePApplet, int seed) {
     textField = new TextField(thePApplet, seed);
@@ -8,6 +9,7 @@ TextField textField;
   void Update() {
     Draw();
     textField.Update();
+    enteredSeed = textField.input();
   }
 
   void Draw() {
@@ -31,8 +33,9 @@ TextField textField;
     text("P to toggle particles", 891, 750);
     text("Mute system audio to toggle sound", 825, 790);
     text("ESC or Alt+F4 to close game", 855, 830);
-    
-    
   }
-
+  
+  String input() {
+    return enteredSeed;
+    }
 }

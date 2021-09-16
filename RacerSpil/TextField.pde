@@ -5,6 +5,7 @@ String enteredSeed;
 
 
   TextField(PApplet thePApplet, int seed) {
+    enteredSeed = str(seed);
     cp5 = new ControlP5(thePApplet);
     cp5.setAutoDraw(false);
     PFont p = createFont("Verdana", 20);
@@ -15,9 +16,19 @@ String enteredSeed;
 
   void Update() {
     Draw();
+    enteredSeed = cp5.get(Textfield.class,"SeedTextField").getText();
   }
 
   void Draw() {
       cp5.draw();
     }  
+    
+  String input() {
+    if (enteredSeed.length()<10) return enteredSeed;
+    else if (enteredSeed.length() > 10) {
+      return enteredSeed.substring(0,9);
+    }
+    else return enteredSeed;
+
+    }
   }
