@@ -39,13 +39,19 @@ class Bane {
     }
     PVector start = PlacerStart(b);
     PVector sted = new PVector(start.x, start.y);
+    PVector fStart = new PVector(start.x, start.y);
     int blokF = 0, blokke = 0;
-    int blokC, rot, tRot, rotF = b[int(sted.x)][int(sted.y)][1];
+    int blokC=0, rot=0, tRot, rotF = b[int(sted.x)][int(sted.y)][1];
     tRot = rotF;
+
+    //bestemmer før start lokation
+    if ((tRot+1) % 4 == 0) fStart.add(new PVector(0, 1));//3
+    if ((tRot-1) % 4 == 0) fStart.sub(new PVector(0, 1)); //1
+    if (tRot % 4 == 0)   fStart.sub(new PVector(1, 0)); //0
+    if ((tRot+2) % 4 == 0) fStart.add(new PVector(1, 0));//2
 
     while (true) {
       tRot = rotF+blok.GetBI(blokF, 3);
-      //println(sted);
       if ((tRot+1) % 4 == 0) sted.sub(new PVector(0, 1));//3
       if ((tRot-1) % 4 == 0) sted.add(new PVector(0, 1)); //1
       if (tRot % 4 == 0)   sted.add(new PVector(1, 0)); //0
@@ -54,30 +60,41 @@ class Bane {
       if (sted.x == start.x && sted.y == start.y) break;
       if (blokke > 50) break;
 
-      /*println(sted);
-       println("yes!");
-       println(blokF);
-       println();*/
       int fuck = 0;
-      while (true) {
-        blokC = int(random(1, bIalt));
-        rot = rotF+blok.GetBI(blokF, 3);
-        tRot = rot+blok.GetBI(blokC, 3);
+      if (sted.x == fStart.x && sted.y == fStart.y) {
+        if (b[int(start.x)][int(start.y)][1] == (tRot % 4)) { //<>//
+          blokC = 3;
+          rot = b[int(start.x)][int(start.y)][1];
+        }
+        if (b[int(start.x)][int(start.y)][1] == (tRot + 1) % 4) {
+          blokC = 1;
+          rot = b[int(start.x)][int(start.y)][1];
+        }
+        if (b[int(start.x)][int(start.y)][1] == (tRot - 1) % 4) {
+          blokC = 2;
+          rot = b[int(start.x)][int(start.y)][1];
+        }
+      } else {
+        while (true) {
+          fuck++;
+          if (fuck > 100)break;
+          blokC = int(random(1, bIalt));
+          rot = rotF+blok.GetBI(blokF, 3);
+          tRot = rot+blok.GetBI(blokC, 3);
 
-        if ((tRot+1) % 4 == 0) {
-          if (sted.y != 0 && !(sted.y == 3 && sted.x > 1) && !(sted.x > 9 && sted.y < 3) && ((b[int(sted.x)][int(sted.y)-1][0] == -1)|| (b[int(sted.x)][int(sted.y)-1][0] == 0))) break;
+          if ((tRot+1) % 4 == 0) {
+            if (sted.y != 0 && !(sted.y == 3 && sted.x > 1) && !(sted.x > 9 && sted.y < 3) && ((b[int(sted.x)][int(sted.y)-1][0] == -1)|| (b[int(sted.x)][int(sted.y)-1][0] == -2))) break;
+          }
+          if ((tRot-1) % 4 == 0) {
+            if (sted.y != 5 && !(sted.y == 2 && sted.x < 10) && !(sted.x < 2 && sted.y > 1)&& ((b[int(sted.x)][int(sted.y)+1][0] == -1)|| (b[int(sted.x)][int(sted.y)+1][0] == -2))) break;
+          }
+          if (tRot % 4 == 0) {
+            if (sted.x != 11 && !(sted.y > 2)&& ((b[int(sted.x)+1][int(sted.y)][0] == -1) || (b[int(sted.x)+1][int(sted.y)][0] == -2))) break;
+          }
+          if ((tRot+2) % 4 == 0) {
+            if (sted.x != 0 && !(sted.y < 3)&& ((b[int(sted.x)-1][int(sted.y)][0] == -1)|| (b[int(sted.x)-1][int(sted.y)][0] == -2))) break;
+          }
         }
-        if ((tRot-1) % 4 == 0) {
-          if (sted.y != 5 && !(sted.y == 2 && sted.x < 10) && !(sted.x < 2 && sted.y > 1)&& ((b[int(sted.x)][int(sted.y)+1][0] == -1)|| (b[int(sted.x)][int(sted.y)+1][0] == 0))) break;
-        }
-        if (tRot % 4 == 0) {
-          if (sted.x != 11 && !(sted.y > 2)&& ((b[int(sted.x)+1][int(sted.y)][0] == -1) || (b[int(sted.x)+1][int(sted.y)][0] == 0))) break;
-        }
-        if ((tRot+2) % 4 == 0) {
-          if (sted.x != 0 && !(sted.y < 3)&& ((b[int(sted.x)-1][int(sted.y)][0] == -1)|| (b[int(sted.x)-1][int(sted.y)][0] == 0))) break;
-        }
-        fuck++;
-        if (fuck > 100)break;
       }
       if (fuck > 100)break;
       blokF = blokC;
@@ -86,23 +103,6 @@ class Bane {
       b[int(sted.x)][int(sted.y)][0] = blokF;
       b[int(sted.x)][int(sted.y)][1] = rotF;
     }
-    /*
-    //printer id for hvert felt
-     for (int i=0; i<6; i++) {
-     for (int j=0; j<12; j++) {
-     if (b[j][i][0] != -1)print(" "+b[j][i][0]+" ");
-     else print(b[j][i][0]+" ");
-     }
-     println();
-     }
-     
-     //printer rotation for hvret felt
-     for (int i=0; i<6; i++) {
-     for (int j=0; j<12; j++) {
-     print(b[j][i][1]+" ");
-     }
-     println();
-     }*/
     return b;
   }
 
