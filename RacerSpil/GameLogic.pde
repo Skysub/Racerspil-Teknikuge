@@ -17,18 +17,18 @@ class GameLogic { //<>//
 
   //ting til bilen
   PVector carPos = new PVector(width/2, height/2), carBoost = new PVector(0, 0), currentCarPos;
-  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 2, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.01, thetaAcc = 0.014;
+  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 1, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.01, thetaAcc = 0.014;
   int carWidth = 60, carHeight = 30;
   Car car;
 
-  
+
   //Ting til seed og menu
-  int seed = int(random(0,9999));
+  int seed = int(random(0, 9999));
   int seedOld = seed;
   Menu gameMenu;
 
   GameLogic(PApplet thePApplet) {
-    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration,thetaAcc, carWidth, carHeight);
+    car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
 
     gameMenu = new Menu(thePApplet, seed);
     bane = new Bane(seed);
@@ -36,11 +36,11 @@ class GameLogic { //<>//
 
   void Update() {
     //laver en ny bane hvis seedet er ændret
-    if(seed != seedOld){
-     seedOld = seed;
-     bane.NyBane(seed);
+    if (seed != seedOld) {
+      seedOld = seed;
+      bane.NyBane(seed);
     }
-    
+
     //gør at man kan toggle tilemaptest med t
     toggleTemp = toggle(t, tF, tileTest);
     tileTest = toggleTemp[0];
@@ -57,9 +57,9 @@ class GameLogic { //<>//
 
     handleTimer();
     DrawUI();
-    
+
     if (menu) gameMenu.Update();
-    
+
     if (enter ) seed = int(gameMenu.textField.input());
 
     currentCarPos = car.Hit(); //til når der skal tjekkes kollision med bilen 

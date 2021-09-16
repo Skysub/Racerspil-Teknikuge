@@ -28,10 +28,9 @@ class Car {
     thetaAcc = ta;
     carWidth = cw;
     carHeight = ch;
-    
+
     carSprite = loadImage("car.png");
     ps = new ParticleSystem(pos);
-
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost) {
@@ -57,17 +56,16 @@ class Car {
     acc = rotation.mult(acceleration);
 
     Turn(cDrej);
-    //Om bilen kører på is eller ej
-    linearVel = mag(vel.x, vel.y);
+
+    linearVel = mag(vel.x, vel.y); //Udregner den linæer hastighed og bakke hastighed
     linearBackVel = mag(backVel.x, backVel.y);
     Particles(linearVel, theta, givBoost);
-    
-    if (!ice) {
+
+    if (!ice) { //Om bieln kører på si eller ej
       Drive(accelerate, givBoost);
     } else DriveIce(accelerate);
 
     DrawCar();
-    
   }
 
 
@@ -78,7 +76,7 @@ class Car {
     translate(pos.x, pos.y);
     rotate(theta);
     imageMode(CENTER);
-    image(carSprite,0,0,carWidth, carHeight);
+    image(carSprite, 0, 0, carWidth, carHeight);
     rectMode(CORNER);
     popMatrix();
   }
@@ -86,9 +84,9 @@ class Car {
 
 
   void Turn(int drej) {
-    if (thetaVel >= maxThetaVel) thetaVel = maxThetaVel;
+    if (thetaVel >= maxThetaVel) thetaVel = maxThetaVel; //Sørger for at bilen ikke drejer for hurtigt
     if (linearVel == 0 || linearBackVel == 0) thetaVel = 0;
-    //Bilen drejer, vinkelacceleration og acceleration vikrer på samme måde som med lineær. 
+
     if (drej == 0) {
       theta += 0;
       thetaVel = 0;
@@ -106,28 +104,28 @@ class Car {
   void Drive(int koer, boolean boost) {
 
     if (boost) { 
-      maxVel = 10;
-      if (linearVel <= 2) vel.setMag(2);
+      maxVel = 10; //sætter maks hastigheden til et højere tal
+      if (linearVel <= 2) vel.setMag(2); //Sørger for et boost selvom der køres langsomt
       vel.mult(1.15);
     } else {
-      maxVel = constrain(maxVel, 4, 10);
-      maxVel = maxVel - 0.05;
+      maxVel = constrain(maxVel, 4, 10); 
+      maxVel = maxVel - 0.05; //maks hastigheden falder ligeså langsomt til den normalle makshastighed efter boostet
     }
 
-    vel.limit(maxVel); //Tophastighed
+    vel.limit(maxVel);
 
     if (koer == 1) {
-      if (linearBackVel > 0.02) Stop(-stopVel);
+      if (linearBackVel > 0.02) Stop(-stopVel); //Sørger for at man ikke kan køre ligeud når der bakkes
       else {
         backVel.setMag(0);
         vel.add(acc);
         rotation.normalize();
-        rotation.mult(mag(vel.x, vel.y)); //Dette gøres hver gang for at sørge for at hastigheden er samme retning som bilen
+        rotation.mult(mag(vel.x, vel.y)); //Hastigheden vendes i bilens retning
         vel = rotation;
         pos.add(vel);
-        h = stopVel; //h er 1/-1 baseret på om bilen er i gang med at køre ligeud/bagud - bruges i Stop-metoden
+        h = stopVel; //h er negativt/positivt baseret på om man stopper efter et brems eller at køre ligeud
       }
-    } else if (koer == 2) { //Når bilen skal bakke
+    } else if (koer == 2) { //Når bilen skal bakke, alt logik er ens bortset fra at 
       if (linearVel > 0.02) Stop(bremseVel);
       else {
         vel.setMag(0);
@@ -177,7 +175,7 @@ class Car {
     return pos;
   }
 
-  void Particles(float s, float t, boolean which) {
+  void Particles(float s, float t, boolean which) { //Laver partikelsystemet
     ps.addParticle(s, t, which);
     ps.run(pos);
   }
