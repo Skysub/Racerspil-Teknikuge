@@ -5,11 +5,6 @@ class ParticleBoost extends Particle {
     lifespan = 32 * s;
   }
 
-  /*void Update() {
-    if (lifespan >= 200) lifespan = 199.9;
-    rect(200,200,200,200);
-  }*/
-
   void display() {
     float theta = map(location.x, 0, width, 0, TWO_PI*20);
 
