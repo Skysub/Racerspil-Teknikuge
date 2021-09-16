@@ -8,7 +8,7 @@ class Bane {
     blok = new Blok();
     bIalt = blok.GetBlokIalt();
     dBTS = LavDebugTileSet(bIalt);
-    bane = GenererBane(seed);
+    NyBane(seed);
   }
 
   void Draw(boolean tT) {
@@ -22,7 +22,11 @@ class Bane {
   }
 
   void NyBane(int seed) {
-    bane = GenererBane(seed);
+    while (true) {
+      bane = GenererBane(seed);
+      if (bane[0][0][0] != -2) break;
+      else seed++;
+    }
   }
 
   //Generer banen tilfældigt ved hjælp af et seed
@@ -62,13 +66,13 @@ class Bane {
 
       int fuck = 0;
       if (sted.x == fStart.x && sted.y == fStart.y) {
-        if (b[int(start.x)][int(start.y)][1] == (tRot % 4)) { //<>//
+        if (b[int(start.x)][int(start.y)][1] == tRot % 4) {
           blokC = 3;
           rot = b[int(start.x)][int(start.y)][1];
         }
         if (b[int(start.x)][int(start.y)][1] == (tRot + 1) % 4) {
           blokC = 1;
-          rot = b[int(start.x)][int(start.y)][1];
+          rot = b[int(start.x)][int(start.y)][1]-1;
         }
         if (b[int(start.x)][int(start.y)][1] == (tRot - 1) % 4) {
           blokC = 2;
@@ -102,6 +106,20 @@ class Bane {
       rotF = rot;
       b[int(sted.x)][int(sted.y)][0] = blokF;
       b[int(sted.x)][int(sted.y)][1] = rotF;
+    }
+    if (b[int(fStart.x)][int(fStart.y)][0] == -1) b[0][0][0] = -2;
+    for (int i=0; i<6; i++) {
+      for (int j=0; j<12; j++) {
+        if (b[j][i][0] != -1)print(" "+b[j][i][0]+" ");
+        else print(b[j][i][0]+" ");
+      }
+      println();
+    }
+    for (int i=0; i<6; i++) {
+      for (int j=0; j<12; j++) {
+        print(b[j][i][1]+" ");
+      }
+      println();
     }
     return b;
   }
