@@ -4,11 +4,11 @@ class Particle {
   PVector acceleration;
   float lifespan;
 
-  Particle(PVector origin) {
+  Particle(PVector origin, float s) {
     acceleration = new PVector(-0.01,-0.01);
     velocity = new PVector(random(-3,-1),random(-1,1));
     location = origin.get();
-    lifespan = 40.0;
+    lifespan = 20 * s;
   }
 
   void run() {
