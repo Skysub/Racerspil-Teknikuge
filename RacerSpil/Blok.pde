@@ -14,6 +14,7 @@ class Blok {
   }
 
   //tegner blokken, al translation og rotation gøres ikke her men i metoden der kalder denne metode
+  //Vælger hvilken blok draw metode der skal bruges ud fra blok id'et
   void DrawBlok(int id) {
     switch (id) {
     case 0: //Start blok
@@ -62,6 +63,8 @@ class Blok {
     int[] ligeud = {1, 1, 0, 0};
     blokInfo[3] = ligeud;
   }
+
+  //Hver blok skal drawes anderledes og har derfor hvert sin metode der bliver kaldt via switchen tiddligere
 
   //Start blok Draw
   void DrawB0() {
