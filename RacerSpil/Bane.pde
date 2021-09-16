@@ -73,10 +73,11 @@ class Bane {
         if (b[int(start.x)][int(start.y)][1] == (tRot + 1) % 4) {
           blokC = 1;
           rot = b[int(start.x)][int(start.y)][1]-1;
+          if(rot == -1) rot = 3;
         }
         if (b[int(start.x)][int(start.y)][1] == (tRot - 1) % 4) {
           blokC = 2;
-          rot = b[int(start.x)][int(start.y)][1];
+          rot = b[int(start.x)][int(start.y)][1]+1;
         }
       } else {
         while (true) {
@@ -108,7 +109,7 @@ class Bane {
       b[int(sted.x)][int(sted.y)][1] = rotF;
     }
     if (b[int(fStart.x)][int(fStart.y)][0] == -1) b[0][0][0] = -2;
-    for (int i=0; i<6; i++) {
+    /*for (int i=0; i<6; i++) {
       for (int j=0; j<12; j++) {
         if (b[j][i][0] != -1)print(" "+b[j][i][0]+" ");
         else print(b[j][i][0]+" ");
@@ -120,7 +121,7 @@ class Bane {
         print(b[j][i][1]+" ");
       }
       println();
-    }
+    }*/
     return b;
   }
 
