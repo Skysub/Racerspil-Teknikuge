@@ -3,6 +3,7 @@ class Car {
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
   int cDrej, accelerate, carWidth, carHeight;
   boolean ice;
+  ParticleSystem ps;
 
   Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int cw, int ch) {
 
@@ -24,6 +25,8 @@ class Car {
     thetaAcc = ta;
     carWidth = cw;
     carHeight = ch;
+
+    ps = new ParticleSystem(pos);
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost) {
@@ -55,6 +58,8 @@ class Car {
     } else DriveIce(accelerate);
 
     DrawCar();
+    
+    Particles();
   }
 
 
@@ -162,8 +167,12 @@ class Car {
     }
   } 
 
-
   PVector Hit() {
     return pos;
+  }
+
+  void Particles() {
+    ps.addParticle();
+    ps.run(pos);
   }
 }
