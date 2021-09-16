@@ -21,7 +21,7 @@ class Bane {
     popMatrix();
   }
 
-  void Nybane(int seed) {
+  void NyBane(int seed) {
     bane = GenererBane(seed);
   }
 
@@ -64,16 +64,16 @@ class Bane {
         rot = rotF+blok.GetBI(blokF, 3);
         tRot = rot+blok.GetBI(blokC, 3);
 
-        if (tRot+1 % 4 == 0) {
+        if ((tRot+1) % 4 == 0) {
           if (sted.y != 0 && !(sted.y == 3 && sted.x > 1) && !(sted.x > 9 && sted.y < 3)) break;
         }
-        if (tRot-1 % 4 == 0) {
+        if ((tRot-1) % 4 == 0) {
           if (sted.y != 5 && !(sted.y == 2 && sted.x < 10) && !(sted.x < 2 && sted.y > 1)) break;
         }
         if (tRot % 4 == 0) {
           if (sted.x != 11 && !(sted.y > 2)) break;
         }
-        if (tRot+2 % 4 == 0) {
+        if ((tRot+2) % 4 == 0) {
           if (sted.x != 0 && !(sted.y < 3)) break;
         }
         fuck++;
