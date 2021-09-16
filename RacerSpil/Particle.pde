@@ -24,12 +24,11 @@ class Particle {
 
   void display() {
     stroke(0,lifespan);
-    fill(random(50,255),0,0,lifespan);
-    triangle(location.x,location.y, location.x-12, location.y-12, location.x-12, location.y+12);
+    fill(random(110,130), random(110,130), random(110,130),lifespan);
+    ellipse(location.x, location.y, 15 + random(-5, 5), 15 + random(-5, 5));
     stroke(0);
   }
 
-  // Is the Particle alive or dead?
   boolean isDead() {
     if (lifespan < 0.0) {
       return true;
