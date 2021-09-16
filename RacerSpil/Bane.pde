@@ -21,6 +21,10 @@ class Bane {
     popMatrix();
   }
 
+  void Nybane(int seed) {
+    bane = GenererBane(seed);
+  }
+
   //Generer banen tilfældigt ved hjælp af et seed
   int[][][] GenererBane (int seed) {
     randomSeed(seed);

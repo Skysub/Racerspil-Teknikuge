@@ -24,6 +24,7 @@ class GameLogic { //<>//
   
   //Ting til seed og menu
   int seed = int(random(0,9999));
+  int seedOld = seed;
   Menu gameMenu;
 
   GameLogic(PApplet thePApplet) {
@@ -34,6 +35,12 @@ class GameLogic { //<>//
   }
 
   void Update() {
+    //laver en ny bane hvis seedet er ændret
+    if(seed != seedOld){
+     seedOld = seed;
+     bane.NyBane(seed);
+    }
+    
     //gør at man kan toggle tilemaptest med t
     toggleTemp = toggle(t, tF, tileTest);
     tileTest = toggleTemp[0];
