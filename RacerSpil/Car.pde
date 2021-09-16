@@ -1,5 +1,5 @@
 class Car {
-  PVector pos, vel, acc, rotation, backVel;
+  PVector pos, vel, acc, rotation, backVel, endOfCar;
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
   int cDrej, accelerate, carWidth, carHeight;
   boolean ice;
@@ -53,6 +53,10 @@ class Car {
 
     Turn(cDrej);
     //Om bilen kører på is eller ej
+    linearVel = mag(vel.x, vel.y);
+    linearBackVel = mag(backVel.x, backVel.y);
+    Particles(linearVel, theta, givBoost);
+    
     if (!ice) {
       Drive(accelerate, givBoost);
     } else DriveIce(accelerate);
@@ -95,9 +99,6 @@ class Car {
 
 
   void Drive(int koer, boolean boost) {
-    linearVel = mag(vel.x, vel.y);
-    linearBackVel = mag(backVel.x, backVel.y);
-    Particles(linearVel, theta);
 
     if (boost) { 
       maxVel = 10;
@@ -171,8 +172,8 @@ class Car {
     return pos;
   }
 
-  void Particles(float s, float t) {
-    ps.addParticle(s, t);
+  void Particles(float s, float t, boolean which) {
+    ps.addParticle(s, t, which);
     ps.run(pos);
   }
 }

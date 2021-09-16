@@ -1,13 +1,14 @@
 class Particle {
   PVector location, velocity, acceleration, currentVelocity;
-  float lifespan, theta;
+  float lifespan, theta, limit;
 
-  Particle(PVector origin, float s, float t) {
+  Particle(PVector origin, float s, float t, float l) {
     acceleration = new PVector(-0.01,-0.01);
     location = origin.get();
     velocity = new PVector(random(-3, -1),random(-1,1));
     lifespan = 16 * s;
     theta = t;
+    limit = l;
   }
 
   void run() {
@@ -16,6 +17,7 @@ class Particle {
   }
 
   void update() {
+    if(lifespan >= limit) lifespan = limit - 0.1;
     velocity.add(acceleration);
     currentVelocity = new PVector(velocity.x * cos(theta), velocity.y * sin(theta));
     location.add(currentVelocity);

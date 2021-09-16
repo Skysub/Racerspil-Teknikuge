@@ -10,8 +10,9 @@ class ParticleSystem {
     particles = new ArrayList<Particle>();
   }
 
-  void addParticle(float strength, float theta) {
-    particles.add(new Particle(origin, strength, theta + random(-1.5, 1.5)));
+  void addParticle(float strength, float theta, boolean particleBoost) {
+    if(!particleBoost) particles.add(new Particle(origin, strength, theta + random(-1.5, 1.5), 65));
+    if(particleBoost) particles.add(new ParticleBoost(origin, strength, theta + random(-1.5, 1.5), 150));
   }
 
   void run(PVector location) {
