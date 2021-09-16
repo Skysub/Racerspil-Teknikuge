@@ -1,5 +1,5 @@
 class Car {
-  PVector pos, vel, acc, rotation, backVel, boostVel;
+  PVector pos, vel, acc, rotation, backVel;
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
   int cDrej, accelerate, carWidth, carHeight;
   boolean ice;
@@ -10,7 +10,6 @@ class Car {
     backVel = new PVector(0, 0);
     thetaVel = 0;
     acc = new PVector (0, 0);
-    boostVel = new PVector(10, 10);
 
     pos = p;
     ice = i;
@@ -56,16 +55,6 @@ class Car {
     } else DriveIce(accelerate);
 
     DrawCar();
-
-    if (givBoost) {
-      maxVel = 100;
-      Boost();
-      givBoost = Boost();
-    } else {
-      boostVel.setMag(0);
-      givBoost = false;
-      maxVel = 3;
-    }
   }
 
 
@@ -80,8 +69,8 @@ class Car {
     rectMode(CORNER);
     popMatrix();
   }
-  
-  
+
+
 
   void Turn(int drej) {
     if (thetaVel >= maxThetaVel) thetaVel = maxThetaVel;
@@ -98,14 +87,25 @@ class Car {
       theta += thetaVel;
     }
   }
-  
-  
+
+
 
   void Drive(int koer, boolean boost) {
     linearVel = mag(vel.x, vel.y);
     linearBackVel = mag(backVel.x, backVel.y);
 
-    if (koer == 1 && !boost) {
+    if (boost) { 
+      maxVel = 10;
+      if (linearVel <= 2) vel.setMag(2);
+      vel.mult(1.15);
+    } else {
+      maxVel = constrain(maxVel, 4, 10);
+      maxVel = maxVel - 0.05;
+    }
+
+    vel.limit(maxVel); //Tophastighed
+
+    if (koer == 1) {
       if (linearBackVel > 0.02) Stop(-stopVel);
       else {
         backVel.setMag(0);
@@ -113,7 +113,6 @@ class Car {
         rotation.normalize();
         rotation.mult(mag(vel.x, vel.y)); //Dette gøres hver gang for at sørge for at hastigheden er samme retning som bilen
         vel = rotation;
-        vel.limit(maxVel); //Tophastighed
         pos.add(vel);
         h = stopVel; //h er 1/-1 baseret på om bilen er i gang med at køre ligeud/bagud - bruges i Stop-metoden
       }
@@ -132,8 +131,8 @@ class Car {
       if (thetaVel >= maxThetaBackVel) thetaVel = maxThetaBackVel; //Sørger for at bilen ikke kan dreje ligeså hurtigt rundt når den bakker
     } else Stop(h);
   }
-  
-  
+
+
 
   void DriveIce (int koer) {
     if (koer == 1) {
@@ -142,8 +141,8 @@ class Car {
       pos.add(vel); //Forskellen på is vs asfalt er at hastigheden ikke sættes samme retning som bilen - først når accelerationen har "indhentet" den, kan bilen kører dens retning - indtil da glider den
     } else Stop(1);
   }
-  
-  
+
+
 
   void Stop(float h) {
     // virker på samme måde som når bilen speeder op, bare med sub istedet for add
@@ -161,23 +160,8 @@ class Car {
       backVel = rotation;
       pos.add(backVel);
     }
-  }
-  
-  
+  } 
 
-  boolean Boost() {
-    rotation.normalize();
-    rotation.mult(mag(abs(boostVel.x), abs(boostVel.y)));
-    boostVel = rotation.mult(3);
-    boostVel.limit(maxVel); 
-    pos.add(boostVel);
-    //boostVel.sub(acc);
-
-    if (boostVel.mag() > 0) return true;
-    else return false;
-  }
-  
-  
 
   PVector Hit() {
     return pos;
