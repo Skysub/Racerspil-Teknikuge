@@ -1,7 +1,7 @@
 class GameLogic { //<>// //<>// //<>// //<>//
 
   Bane bane;
-
+  int mSec;
 
   boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false; //kun til taster
   boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false; //til andre bools
@@ -57,6 +57,12 @@ class GameLogic { //<>// //<>// //<>// //<>//
 
     bane.Draw(tileTest, hitboxDebug);
 
+    bane.CalculateCollisions(car.GetPos(), carWidth, carHeight);
+    
+    //printer frametime
+    //println(millis()-mSec);
+    mSec = millis();
+
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
 
     handleTimer();
@@ -69,8 +75,6 @@ class GameLogic { //<>// //<>// //<>// //<>//
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest, hitboxDebug);
-    
-
   }
 
   void DrawUI() {
