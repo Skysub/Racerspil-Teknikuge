@@ -22,6 +22,11 @@ String enteredSeed;
     textSize(25);
     text("Enter seed here", 890, 435);
     
+    textSize(20);
+    fill(125,125,125);
+    text("Space to generate new seed", 850, 522);
+    
+    textSize(25);
     fill(0,0,0);
     rect(730,590,520,1);
     text("Controls",933,580);
