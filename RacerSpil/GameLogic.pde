@@ -38,7 +38,7 @@ class GameLogic { //<>//
     //laver en ny bane hvis seedet er ændret
     if(seed != seedOld){
      seedOld = seed;
-     bane.NyBane(seed);
+     //bane.NyBane(seed);
     }
     
     //gør at man kan toggle tilemaptest med t
