@@ -65,7 +65,7 @@ class Car {
       Drive(accelerate, givBoost);
     } else DriveIce(accelerate);
 
-    if(hDb)DrawCarHitbox();
+    if (hDb)DrawCarHitbox();
     else DrawCar();
   }
 

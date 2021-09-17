@@ -23,13 +23,13 @@ class Bane {
 
   float CalculateCollisions(PVector carPos, int carW, int carH) {
     PVector relativeCarPos = new PVector(carPos.x % 160, carPos.y % 160);
-    PVector sted = new PVector(floor(carPos.x/160),floor(carPos.y/160));
-    
-    
-    
-    
-    
-    
+    PVector sted = new PVector(floor(carPos.x/160), floor(((carPos.y-120)/160)));
+
+    PVector[][][] hitBoxes = blok.GetHitboxes(sted, bane);
+
+
+
+
     return 0;
   }
 

@@ -53,6 +53,7 @@ class Blok {
     if (sted.y == 0 || sted.y == 5)felter--;
     PVector[][][] x = new PVector[felter][][];
     int next = 0;
+
     x[next] = GetBlokHitboxes(bane[int(sted.x)][int(sted.y)][0], new PVector(0, 0));
     next++;
 
