@@ -1,7 +1,7 @@
 class Menu {
 TextField textField;
 String enteredSeed;
-int seed;
+int seed, newSeedDecider;
 
   Menu(PApplet thePApplet, int s) {
     seed = s;
@@ -10,7 +10,9 @@ int seed;
 
   void Update(boolean newSeed) {
     Draw();
-    if(newSeed) seed = int(random(0,9999));
+    if(newSeed) newSeedDecider = 0;
+    newSeedDecider += 1;
+    if (newSeedDecider >= 2) seed = int(random(0,9999)); //Sørger for et enkelt nyt seed per gang der trykkes mellemrum
     textField.Update(seed, newSeed);
   }
 

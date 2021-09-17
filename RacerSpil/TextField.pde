@@ -19,10 +19,9 @@ int firstSeed;
   }
 
   void Update(int seed, boolean newSeed) {
-    print(seed, "|||");
     Draw();
     firstSeed = seed;
-    if (newSeed) cp5.addTextfield("SeedTextField").setPosition(730,450).setSize(520,50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("");
+    if (newSeed) cp5.addTextfield("SeedTextField").setPosition(730,450).setSize(520,50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
     enteredSeed = str(seed);
     enteredSeed = cp5.get(Textfield.class,"SeedTextField").getText();
   }
