@@ -13,7 +13,9 @@ int firstSeed;
     PFont p = createFont("Verdana", 20);
     ControlFont font = new ControlFont(p);
     cp5.setFont(font);
-    cp5.addTextfield("SeedTextField").setPosition(730,450).setSize(520,50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("");
+
+    cp5.addTextfield("SeedTextField").setPosition(730,450).setSize(520,50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
+
   }
 
   void Update(int seed, boolean newSeed) {
