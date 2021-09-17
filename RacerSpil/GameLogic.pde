@@ -70,7 +70,6 @@ class GameLogic { //<>// //<>//
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest);
-    
   }
 
   void DrawUI() {

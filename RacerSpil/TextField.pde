@@ -1,9 +1,8 @@
-import java.util.Iterator;
-
 class TextField {
   ControlP5 cp5;
-  String enteredSeed, seedTextfield;
+  String enteredSeed, seedTextfield, seedTextfieldOld;
   int firstSeed, textFieldCount;
+  Textfield textfield;
 
   //konstruktør hvor tesktfeltet sættes op. Se http://www.sojamo.de/libraries/controlP5/reference/controlP5/Textfield.html for dokumentation
   //PApplet er en reference til selve sketchen og fåes helt tilbage fra RacerSpil ved at blive trukket igennem konstruktører hertil
@@ -17,8 +16,7 @@ class TextField {
     PFont p = createFont("Verdana", 20);
     ControlFont font = new ControlFont(p);
     cp5.setFont(font);
-
-    cp5.addTextfield("SeedTextField").setPosition(730, 450).setSize(520, 50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
+    textfield = cp5.addTextfield("SeedTextField").setPosition(730, 450).setSize(520, 50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
   }
 
   void Update(int seed, boolean newRandomSeed) {
@@ -27,8 +25,13 @@ class TextField {
     if (newRandomSeed) {
       textFieldCount += 1;
       seedTextfield = "SeedTextField" + str(textFieldCount);
-      cp5.addTextfield(seedTextfield).setPosition(730, 450).setSize(520, 50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
+      seedTextfieldOld = seedTextfield;
+
+      textfield = cp5.addTextfield(seedTextfieldOld).setPosition(730, 450).setSize(520, 50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
+      //cp5.get(Textfield.class, "SeedTextField").setVisible(false);
+      //cp5.remove("SeedTextField");
     }
+    seedTextfieldOld = null;
     enteredSeed = str(seed);
     enteredSeed = cp5.get(Textfield.class, seedTextfield).getText();
   }
