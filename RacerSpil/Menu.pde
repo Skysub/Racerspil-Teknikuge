@@ -1,14 +1,17 @@
 class Menu {
 TextField textField;
 String enteredSeed;
+int seed;
 
-  Menu(PApplet thePApplet, int seed) {
+  Menu(PApplet thePApplet, int s) {
+    seed = s;
     textField = new TextField(thePApplet, seed);
   }
 
-  void Update() {
+  void Update(boolean newSeed) {
     Draw();
-    textField.Update();
+    if(newSeed) seed = int(random(0,9999));
+    textField.Update(seed, newSeed);
   }
 
   void Draw() {

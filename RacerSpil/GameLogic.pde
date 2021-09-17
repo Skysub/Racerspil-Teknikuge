@@ -58,7 +58,7 @@ class GameLogic { //<>//
     handleTimer();
     DrawUI();
 
-    if (menu) gameMenu.Update();
+    if (menu) gameMenu.Update(space);
 
     if (enter ) seed = int(gameMenu.textField.input());
 
