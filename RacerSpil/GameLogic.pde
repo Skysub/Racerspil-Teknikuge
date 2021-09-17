@@ -17,7 +17,7 @@ class GameLogic { //<>// //<>//
 
   //ting til bilen
   PVector carPos = new PVector(width/2, height/2), carBoost = new PVector(0, 0), currentCarPos;
-  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 1, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.01, thetaAcc = 0.014;
+  float startRotation = 0, maxVel = 10, maxBackVel = 1.5, stopVel = 1, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.55, thetaAcc = 0.014;
   int carWidth = 55, carHeight = 25;
   Car car;
 
