@@ -8,7 +8,7 @@ class Car {
   ParticleSystem ps;
 
 
-  Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int cw, int ch) {
+  Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int carW, int carH) {
 
     vel = new PVector (0, 0);
     backVel = new PVector(0, 0);
@@ -26,14 +26,14 @@ class Car {
     maxThetaBackVel = mtbv;
     acceleration = a;
     thetaAcc = ta;
-    carWidth = cw;
-    carHeight = ch;
+    carWidth = carW;
+    carHeight = carH;
 
     carSprite = loadImage("car.png");
     ps = new ParticleSystem(pos);
   }
 
-  void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost) {
+  void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb) {
 
     // Styrer controls
     if ((hojre && venstre)||(!hojre && !venstre)) {
@@ -65,7 +65,8 @@ class Car {
       Drive(accelerate, givBoost);
     } else DriveIce(accelerate);
 
-    DrawCar();
+    if(hDb)DrawCarHitbox();
+    else DrawCar();
   }
 
 
@@ -76,7 +77,18 @@ class Car {
     translate(pos.x, pos.y);
     rotate(theta);
     imageMode(CENTER);
-    image(carSprite, 0, 0, carWidth, carHeight);
+    image(carSprite, 0, 0, carWidth+5, carHeight+5);
+    rectMode(CORNER);
+    popMatrix();
+  }
+
+  void DrawCarHitbox() {
+    pushMatrix();
+    fill(255, 100, 100);
+    translate(pos.x, pos.y);
+    rotate(theta);
+    rectMode(CENTER);
+    rect(0, 0, carWidth, carHeight); 
     rectMode(CORNER);
     popMatrix();
   }
@@ -171,7 +183,7 @@ class Car {
     }
   } 
 
-  PVector Hit() {
+  PVector GetPos() {
     return pos;
   }
 
