@@ -1,4 +1,4 @@
-class GameLogic { //<>// //<>//
+class GameLogic { //<>// //<>// //<>//
 
   Bane bane;
 
@@ -55,7 +55,7 @@ class GameLogic { //<>// //<>//
     menu = toggleTemp[0];
     tabF = toggleTemp[1];
 
-    bane.Draw(tileTest);
+    bane.Draw(tileTest, hitboxDebug);
 
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
 
@@ -63,13 +63,12 @@ class GameLogic { //<>// //<>//
     DrawUI();
 
     if (menu) gameMenu.Update(space);
-
     if (enter ) seed = int(gameMenu.textField.input());
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
     DrawUI();
-    if (tileTest) bane.Draw(tileTest);
+    if (tileTest) bane.Draw(tileTest, hitboxDebug);
     
   }
 

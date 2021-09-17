@@ -10,16 +10,29 @@ class Bane {
     NyBane(seed); //genererer banen
   }
 
-  void Draw(boolean tT) {
+  void Draw(boolean tT, boolean hDb) {
     pushMatrix();
     translate(0, 120); //flytter alt ned så ui ikke bliver dækket
 
     //Vælger banen eller debug tilesettet givet tT (tileTest)
-    if (!tT)DrawBane(bane, tT);
-    else DrawBane(dBTS, tT);
+    if (!tT)DrawBane(bane, tT, hDb);
+    else DrawBane(dBTS, tT, hDb);
 
     popMatrix();
   }
+
+  float CalculateCollisions(PVector carPos, int carW, int carH) {
+    PVector relativeCarPos = new PVector(carPos.x % 160, carPos.y % 160);
+    PVector sted = new PVector(floor(carPos.x/160),floor(carPos.y/160));
+    
+    
+    
+    
+    
+    
+    return 0;
+  }
+
 
   //Genererer en bane givet et seed
   void NyBane(int seed) {
@@ -46,7 +59,7 @@ class Bane {
     PVector start = PlacerStart(b); //Så vi ved hvor start blokken er
     PVector sted = new PVector(start.x, start.y); //Et udgangspunkt til starten af generering
     PVector fStart = new PVector(start.x, start.y); //Vi skal vide hvor blokken lige før start er
-    
+
     int blokF = 0, blokke = 0;
     int blokC=0, rot=0, tRot;  //tRot er den retning vi ender med at gå ud af hvis vi tænker over brikkens rotation og om den svinger
     int rotF = b[int(sted.x)][int(sted.y)][1]; //rotation Før, den tidligere briks rotation. Starter med at være startbrikkens rotation
@@ -62,19 +75,19 @@ class Bane {
     while (true) {
       //finder ud af hvor blokken faktisk peger hen
       tRot = rotF+blok.GetBI(blokF, 3);
-      
+
       //Går til næste felt ud fra hvor den forrige blok pegede hen
       if ((tRot+1) % 4 == 0) sted.sub(new PVector(0, 1));//3
       if ((tRot-1) % 4 == 0) sted.add(new PVector(0, 1)); //1
       if (tRot % 4 == 0)   sted.add(new PVector(1, 0)); //0
       if ((tRot+2) % 4 == 0) sted.sub(new PVector(1, 0));//2
-      
+
       if (sted.x == start.x && sted.y == start.y) break; //Er vi nået tilbage til der vi startede er vi done og breaker loopet
       int fuck = 0; //Fuck holder styr på hvor mange gange en blok har er blevet forsøgt placeret men fejlede.
-      
+
       //Er vi der hvor den sidste brik skal sætte, gør vi det på en forudbestemt måde istedet for at bruge den tilfældige del af algoritmen
       if (sted.x == fStart.x && sted.y == fStart.y) {
-        
+
         //Der bestemmes hvilken retning start peger, så vi kan vælge hvilken type blok der skal bruges. De bliver yderligere roteret for at passe.
         if (b[int(start.x)][int(start.y)][1] == tRot % 4) {
           blokC = 3;
@@ -83,7 +96,7 @@ class Bane {
         if (b[int(start.x)][int(start.y)][1] == (tRot + 1) % 4) {
           blokC = 1;
           rot = b[int(start.x)][int(start.y)][1]-1;
-          if(rot == -1) rot = 3;
+          if (rot == -1) rot = 3;
         }
         if (b[int(start.x)][int(start.y)][1] == (tRot - 1) % 4) {
           blokC = 2;
@@ -125,48 +138,48 @@ class Bane {
     }
     //Er Banen ikke lukket og "før start" har ikke nogen brik, signalerer vi at vi skal skifte seed og prøve igen
     if (b[int(fStart.x)][int(fStart.y)][0] == -1) b[0][0][0] = -2;
-    
+
     //Kode til at printe hele arrayet så det ser godt ud i konsollen, både id og rotation
     /*for (int i=0; i<6; i++) {
-      for (int j=0; j<12; j++) {
-        if (b[j][i][0] != -1)print(" "+b[j][i][0]+" ");
-        else print(b[j][i][0]+" ");
-      }
-      println();
-    }
-    for (int i=0; i<6; i++) {
-      for (int j=0; j<12; j++) {
-        print(b[j][i][1]+" ");
-      }
-      println();
-    }*/
-    
+     for (int j=0; j<12; j++) {
+     if (b[j][i][0] != -1)print(" "+b[j][i][0]+" ");
+     else print(b[j][i][0]+" ");
+     }
+     println();
+     }
+     for (int i=0; i<6; i++) {
+     for (int j=0; j<12; j++) {
+     print(b[j][i][1]+" ");
+     }
+     println();
+     }*/
+
     //Vi er done, og banen returneres
     return b;
   }
 
   //Tegner alle blokkene som beskrevet i bane arrayet
-  void DrawBane(int[][][] x, boolean tT) {
+  void DrawBane(int[][][] x, boolean tT, boolean hDb) {
     for (int i=0; i<6; i++) {
       for (int j=0; j<12; j++) {
         pushMatrix();
-        
+
         //flytter hen til hvor vi skal tegne på griddet
         translate((160*j), (160*i));
-        
+
         //tilføjer et lille mellemrum hvis vi debugger så man kan skelne mellem blokkene
         if (tT) translate(2*j, 2*i);
-        
+
         //fikser bug med rotation af tiles
         if (x[j][i][1] == 1) translate(160, 0);
         if (x[j][i][1] == 2) translate(160, 160);
         if (x[j][i][1] == 3) translate(0, 160);
-        
+
         //Bullshit in a can
         rotate(x[j][i][1]*PI/2f);
-        
+
         //kalder en funktion der vælger hvilken metode der skal bruges alt efter hvilken blok skal tegnes
-        blok.DrawBlok(x[j][i][0]);
+        blok.DrawBlok(x[j][i][0], hDb);
         popMatrix();
       }
     }
