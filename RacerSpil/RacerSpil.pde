@@ -1,5 +1,6 @@
 import controlP5.*;
 GameLogic gameLogic;
+PImage backdrop;
 
 void setup() {
   size(1920, 1080);

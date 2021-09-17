@@ -2,9 +2,18 @@ class Blok {
 
   int blokkeIalt = 4;
   int[][] blokInfo = new int[blokkeIalt][5];
+  
+  PImage startTexture,straightTexture,rightCornerTexture,leftCornerTexture;
+  
 
   //constructer
   Blok() {
+    
+    startTexture = loadImage("Start.png");
+    straightTexture = loadImage("Straight.png");
+    rightCornerTexture = loadImage("Right.png");
+    leftCornerTexture = loadImage("Left.png");
+    
     InitialiserInfo();
   }
 
@@ -80,6 +89,9 @@ class Blok {
     line(75, 20, 75, 110);
     stroke(255);
     line(80, 20, 80, 140);
+    
+    imageMode(CORNER);
+    //image(startTexture,0,0);
   }
 
   //Højresving blok Draw
@@ -90,6 +102,9 @@ class Blok {
     fill(255);
     rect(20, 20, 120, 140);
     rect(0, 20, 20, 120);
+    
+    imageMode(CORNER);
+    //image(rightCornerTexture,0,0);
   }
 
   //Venstresving blok Draw
@@ -100,6 +115,9 @@ class Blok {
     fill(255);
     rect(20, 0, 120, 140);
     rect(0, 20, 20, 120);
+    
+    imageMode(CORNER);
+    //image(leftCornerTexture,0,0);
   }
 
   //Ligeud blok Draw
@@ -109,5 +127,8 @@ class Blok {
     rect(0, 0, 160, 160);
     fill(255);
     rect(0, 20, 160, 120);
+    
+    imageMode(CORNER);
+    //image(straightTexture,0,0);
   }
 }
