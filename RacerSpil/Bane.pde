@@ -224,7 +224,7 @@ class Bane {
     for (int i=0; i<6; i++) {
       for (int j=0; j<12; j++) {
         a[j][i][0] = blok;
-        a[j][i][1] = 3;
+        a[j][i][1] = 0;
         if (blok-1 == bIalt) blok = -1;
         if (blok != -1) {
           blok++;

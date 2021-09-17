@@ -73,13 +73,13 @@ class Blok {
     stroke(20);
     square(0, 0, 160);
     fill(20);
-    rect(0, 0, 160, 30);
-    rect(0, 130, 160, 30);
+    rect(0, 0, 160, 20);
+    rect(0, 140, 160, 20);
     strokeWeight(5);
-    line(85, 30, 85, 130);
-    line(75, 30, 75, 100);
+    line(85, 20, 85, 140);
+    line(75, 20, 75, 110);
     stroke(255);
-    line(80, 30, 80, 130);
+    line(80, 20, 80, 140);
   }
 
   //Højresving blok Draw
@@ -88,8 +88,8 @@ class Blok {
     noStroke();
     rect(0, 0, 160, 160);
     fill(255);
-    rect(30, 30, 100, 130);
-    rect(0, 30, 31, 100);
+    rect(20, 20, 120, 140);
+    rect(0, 20, 20, 120);
   }
 
   //Venstresving blok Draw
@@ -98,8 +98,8 @@ class Blok {
     noStroke();
     rect(0, 0, 160, 160);
     fill(255);
-    rect(30, 0, 100, 130);
-    rect(0, 30, 31, 100);
+    rect(20, 0, 120, 140);
+    rect(0, 20, 20, 120);
   }
 
   //Ligeud blok Draw
@@ -108,6 +108,6 @@ class Blok {
     noStroke();
     rect(0, 0, 160, 160);
     fill(255);
-    rect(0, 30, 160, 100);
+    rect(0, 20, 160, 120);
   }
 }
