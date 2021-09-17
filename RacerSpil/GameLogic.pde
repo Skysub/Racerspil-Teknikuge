@@ -1,4 +1,4 @@
-class GameLogic{ //<>// //<>//
+class GameLogic{ //<>//
 
   Bane bane;
   int mSec;

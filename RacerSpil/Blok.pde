@@ -115,6 +115,11 @@ class Blok {
       break;
     }
     for (int i = 0; i<temp.length; i++) {
+      temp[i][0].sub(new PVector(80, 80));
+      temp[i][0].rotate(blokRot*PI/2f);
+      temp[i][0].sub(new PVector(-80, -80));
+
+      temp[i][1].rotate(blokRot*PI/2f);
       temp[i][0].add(shift.mult(160));
     }
     return temp;
@@ -127,7 +132,7 @@ class Blok {
   PVector[][] BoxesB0(int blokRot) {
     PVector[][] boxes = new PVector[2][2];
 
-    boxes[0][0] = new PVector(0, 0));
+    boxes[0][0] = new PVector(0, 0);
     boxes[0][1] = new PVector(160, 20);
 
     boxes[1][0] = new PVector(0, 140);
