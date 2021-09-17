@@ -1,6 +1,6 @@
 class TextField {
   ControlP5 cp5;
-  String enteredSeed, seedTextfield;
+  String enteredSeed, seedTextfield, seedTextfieldOld;
   int firstSeed, textFieldCount;
   Textfield textfield;
 
@@ -16,21 +16,24 @@ class TextField {
     PFont p = createFont("Verdana", 20);
     ControlFont font = new ControlFont(p);
     cp5.setFont(font);
-
     textfield = cp5.addTextfield("SeedTextField").setPosition(730, 450).setSize(520, 50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
   }
 
   void Update(int seed, boolean newRandomSeed) {
     Draw();
     firstSeed = seed;
-     if (newRandomSeed) {
-     textFieldCount += 1;
-     seedTextfield = "SeedTextField" + str(textFieldCount);
-     
-     textfield = cp5.addTextfield(seedTextfield).setPosition(730, 450).setSize(520, 50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
-     }
-     enteredSeed = str(seed);
-     enteredSeed = cp5.get(Textfield.class, seedTextfield).getText();
+    if (newRandomSeed) {
+      textFieldCount += 1;
+      seedTextfield = "SeedTextField" + str(textFieldCount);
+      seedTextfieldOld = seedTextfield;
+
+      textfield = cp5.addTextfield(seedTextfieldOld).setPosition(730, 450).setSize(520, 50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
+      //cp5.get(Textfield.class, "SeedTextField").setVisible(false);
+      //cp5.remove("SeedTextField");
+    }
+    seedTextfieldOld = null;
+    enteredSeed = str(seed);
+    enteredSeed = cp5.get(Textfield.class, seedTextfield).getText();
   }
 
   void Draw() {
