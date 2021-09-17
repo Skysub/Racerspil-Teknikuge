@@ -1,21 +1,27 @@
 class TextField {
 ControlP5 cp5;
 String enteredSeed;
+int firstSeed;
 
 //konstruktør hvor tesktfeltet sættes op. Se http://www.sojamo.de/libraries/controlP5/reference/controlP5/Textfield.html for dokumentation
 //PApplet er en reference til selve sketchen og fåes helt tilbage fra RacerSpil ved at blive trukket igennem konstruktører hertil
-  TextField(PApplet thePApplet, int seed) {
-    enteredSeed = str(seed);
+  TextField(PApplet thePApplet, int fs) {
+    firstSeed = fs;
+    enteredSeed = str(firstSeed);
     cp5 = new ControlP5(thePApplet);
     cp5.setAutoDraw(false);
     PFont p = createFont("Verdana", 20);
     ControlFont font = new ControlFont(p);
     cp5.setFont(font);
-    cp5.addTextfield("SeedTextField").setPosition(730,450).setSize(520,50).setAutoClear(false).setInputFilter(1).setText(str(seed)).setCaptionLabel("");
+    cp5.addTextfield("SeedTextField").setPosition(730,450).setSize(520,50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("");
   }
 
-  void Update() {
+  void Update(int seed, boolean newSeed) {
+    print(seed, "|||");
     Draw();
+    firstSeed = seed;
+    if (newSeed) cp5.addTextfield("SeedTextField").setPosition(730,450).setSize(520,50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("");
+    enteredSeed = str(seed);
     enteredSeed = cp5.get(Textfield.class,"SeedTextField").getText();
   }
 
