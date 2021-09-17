@@ -21,14 +21,41 @@ class Bane {
     popMatrix();
   }
 
-  float CalculateCollisions(PVector carPos, int carW, int carH) {
-    PVector relativeCarPos = new PVector(carPos.x % 160, carPos.y % 160);
+  float CalculateCollisions(PVector carPos, int carW, int carH, float carRot,boolean hDb) {
+    PVector relativeCarPos = new PVector(carPos.x % 160, (carPos.y % 160)+40);
     PVector sted = new PVector(floor(carPos.x/160), floor(((carPos.y-120)/160)));
 
     PVector[][][] hitBoxes = blok.GetHitboxes(sted, bane);
+    PVector[] carCorners = new PVector[4];
+    carCorners[0] = new PVector(-carW/2f, -carH/2f); //top left
+    carCorners[1]= new PVector(-carW/2f, carH/2f); // Bottom Left
+    carCorners[2]= new PVector(carW/2f, -carH/2f); // Top Right
+    carCorners[3]= new PVector(carW/2f, carH/2f); // Bottom Right
+
+    PVector carRetning = new PVector(carW/2f, 0);
+    carRetning.rotate(carRot);
+
+    for (int i = 0; i<4; i++) {
+      carCorners[i].rotate(carRot);
+      carCorners[i].add(relativeCarPos);
+    }
 
 
+    for (int i = 0; i<hitBoxes.length; i++) {
+      for (int j = 0; j<hitBoxes[i].length; j++) {
+        for (int s = 0; s<4; s++) {
+          if ((carCorners[s].x < hitBoxes[i][j][0].x+hitBoxes[i][j][1].x) && (carCorners[s].x > hitBoxes[i][j][0].x) && (carCorners[s].y < hitBoxes[i][j][0].y+hitBoxes[i][j][1].y) && (carCorners[s].y > hitBoxes[i][j][0].y)) {
 
+            if (hDb) {
+              println("Collision!");
+              println(millis());
+              fill(255);
+              circle(carPos.x, carPos.y, 50);
+            }
+          }
+        }
+      }
+    }
 
     return 0;
   }

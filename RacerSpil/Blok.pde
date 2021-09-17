@@ -49,52 +49,73 @@ class Blok {
   //returnerer alle hitboxes der kunne skære bilen, med deres relative shift
   PVector[][][] GetHitboxes(PVector sted, int[][][] bane) {
     int felter = 5;
-    if (sted.x == 0 || sted.x == 11)felter--;
-    if (sted.y == 0 || sted.y == 5)felter--;
+    if (bane[int(sted.x)][int(sted.y)][0] == -1) felter--;
+    if (sted.x == 0)felter--;
+    else if (bane[int(sted.x)-1][int(sted.y)][0] == -1) felter--;
+    if (sted.x == 11)felter--;
+    else if (bane[int(sted.x)+1][int(sted.y)][0] == -1) felter--;
+    if (sted.y == 0)felter--;
+    else if (bane[int(sted.x)][int(sted.y)-1][0] == -1) felter--;
+    if (sted.y == 5) felter--;
+    else if (bane[int(sted.x)][int(sted.y)+1][0] == -1) felter--;
     PVector[][][] x = new PVector[felter][][];
     int next = 0;
 
-    x[next] = GetBlokHitboxes(bane[int(sted.x)][int(sted.y)][0], new PVector(0, 0));
-    next++;
+    if (bane[int(sted.x)][int(sted.y)][0] != -1) {
+      x[next] = GetBlokHitboxes(bane[int(sted.x)][int(sted.y)][0], new PVector(0, 0), bane[int(sted.x)][int(sted.y)][1]);
+      next++;
+    }
 
     if (sted.x != 0) {
-      x[next] = GetBlokHitboxes(bane[int(sted.x)-1][int(sted.y)][0], new PVector(-1, 0));
-      next++;
+      if (bane[int(sted.x)-1][int(sted.y)][0] != -1) {
+        x[next] = GetBlokHitboxes(bane[int(sted.x)-1][int(sted.y)][0], new PVector(-1, 0), bane[int(sted.x)-1][int(sted.y)][1]);
+        next++;
+      }
     }
     if (sted.x != 11) {
-      x[next] = GetBlokHitboxes(bane[int(sted.x)+1][int(sted.y)][0], new PVector(1, 0));
-      next++;
+      if (bane[int(sted.x)+1][int(sted.y)][0] != -1) {
+        x[next] = GetBlokHitboxes(bane[int(sted.x)+1][int(sted.y)][0], new PVector(1, 0), bane[int(sted.x)+1][int(sted.y)][1]);
+
+        next++;
+      }
     }
     if (sted.y != 0) {
-      x[next] = GetBlokHitboxes(bane[int(sted.x)][int(sted.y)-1][0], new PVector(0, -1));
-      next++;
+      if (bane[int(sted.x)][int(sted.y)-1][0] != -1) {
+        x[next] = GetBlokHitboxes(bane[int(sted.x)][int(sted.y)-1][0], new PVector(0, -1), bane[int(sted.x)][int(sted.y)-1][1]);
+        next++;
+      }
     }
     if (sted.y != 5) {
-      x[next] = GetBlokHitboxes(bane[int(sted.x)][int(sted.y)+1][0], new PVector(0, 1));
-      next++;
+      if (bane[int(sted.x)][int(sted.y)+1][0] != -1) {
+        x[next] = GetBlokHitboxes(bane[int(sted.x)][int(sted.y)+1][0], new PVector(0, 1), bane[int(sted.x)][int(sted.y)+1][1]);
+        next++;
+      }
     }
     return x;
   }
 
   //returnerer alle hitboxes fra blokken med relativt shift i forhold til blokken bilen er i
-  PVector[][] GetBlokHitboxes(int id, PVector shift) {
+  PVector[][] GetBlokHitboxes(int id, PVector shift, int blokRot) {
     PVector[][] temp = new PVector[0][0];
     switch (id) {
     case 0: //Start blok
-      temp = BoxesB0(shift);
+      temp = BoxesB0(blokRot);
       break;
     case 1:
-      temp = BoxesB1(shift);
+      temp = BoxesB1(blokRot);
       break;
     case 2:
-      temp = BoxesB2(shift);
+      temp = BoxesB2(blokRot);
       break;
     case 3:
-      temp = BoxesB3(shift);
+      temp = BoxesB3(blokRot);
       break;
 
     default:
       break;
+    }
+    for (int i = 0; i<temp.length; i++) {
+      temp[i][0].add(shift.mult(160));
     }
     return temp;
   }
@@ -102,59 +123,60 @@ class Blok {
   //Hitbox information for hvert blok skrives her
   //returnerer alle hitboxes fra blokken med relativt shift i forhold til blokken bilen er i
 
-  PVector[][] BoxesB0(PVector shift) {
+  //hitboxes startblok
+  PVector[][] BoxesB0(int blokRot) {
     PVector[][] boxes = new PVector[2][2];
 
-    boxes[0][0] = new PVector(0+(shift.x*160), 0+(shift.y*160));
+    boxes[0][0] = new PVector(0, 0));
     boxes[0][1] = new PVector(160, 20);
 
-    boxes[0][0] = new PVector(0+(shift.x*160), 140+(shift.y*160));
-    boxes[0][1] = new PVector(160, 20);
+    boxes[1][0] = new PVector(0, 140);
+    boxes[1][1] = new PVector(160, 20);
 
     return boxes;
   }
 
   //højresvingsblok hitboxes
-  PVector[][] BoxesB1(PVector shift) {
+  PVector[][] BoxesB1(int blokRot) {
     PVector[][] boxes = new PVector[3][2];
 
-    boxes[0][0] = new PVector(0+(shift.x*160), 140+(shift.y*160));
+    boxes[0][0] = new PVector(0, 140);
     boxes[0][1] = new PVector(20, 20);
 
-    boxes[1][0] = new PVector(0+(shift.x*160), 0+(shift.y*160));
+    boxes[1][0] = new PVector(0, 0);
     boxes[1][1] = new PVector(160, 20);
 
-    boxes[2][0] = new PVector(140+(shift.x*160), 20+(shift.y*160));
+    boxes[2][0] = new PVector(140, 20);
     boxes[2][1] = new PVector(20, 140);
 
     return boxes;
   }
 
   //Venstresvingsblok hitboxes
-  PVector[][] BoxesB2(PVector shift) {
+  PVector[][] BoxesB2(int blokRot) {
     PVector[][] boxes = new PVector[3][2];
 
-    boxes[0][0] = new PVector(0+(shift.x*160), 0+(shift.y*160));
+    boxes[0][0] = new PVector(0, 0);
     boxes[0][1] = new PVector(20, 20);
 
-    boxes[1][0] = new PVector(0+(shift.x*160), 140+(shift.y*160));
+    boxes[1][0] = new PVector(0, 140);
     boxes[1][1] = new PVector(160, 20);
 
-    boxes[2][0] = new PVector(140+(shift.x*160), 0+(shift.y*160));
+    boxes[2][0] = new PVector(140, 0);
     boxes[2][1] = new PVector(20, 140);
 
     return boxes;
   }
 
   //Ligeudblok hitboxes
-  PVector[][] BoxesB3(PVector shift) {
+  PVector[][] BoxesB3(int blokRot) {
     PVector[][] boxes = new PVector[2][2];
 
-    boxes[0][0] = new PVector(0+(shift.x*160), 0+(shift.y*160));
+    boxes[0][0] = new PVector(0, 0);
     boxes[0][1] = new PVector(160, 20);
 
-    boxes[0][0] = new PVector(0+(shift.x*160), 140+(shift.y*160));
-    boxes[0][1] = new PVector(160, 20);
+    boxes[1][0] = new PVector(0, 140);
+    boxes[1][1] = new PVector(160, 20);
 
     return boxes;
   }

@@ -187,6 +187,10 @@ class Car {
     return pos;
   }
 
+  float GetRot() {
+    return theta;
+  }
+
   void Particles(float s, float t, boolean which) { //Laver partikelsystemet
     ps.addParticle(s, t, which);
     ps.run(pos);
