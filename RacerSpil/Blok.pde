@@ -91,7 +91,7 @@ class Blok {
     line(80, 20, 80, 140);
     
     imageMode(CORNER);
-    //image(startTexture,0,0);
+    image(startTexture,0,0,160,160);
   }
 
   //Højresving blok Draw
@@ -104,7 +104,7 @@ class Blok {
     rect(0, 20, 20, 120);
     
     imageMode(CORNER);
-    //image(rightCornerTexture,0,0);
+    image(rightCornerTexture,0,0,160,160);
   }
 
   //Venstresving blok Draw
@@ -117,7 +117,7 @@ class Blok {
     rect(0, 20, 20, 120);
     
     imageMode(CORNER);
-    //image(leftCornerTexture,0,0);
+    image(leftCornerTexture,0,0,160,160);
   }
 
   //Ligeud blok Draw
@@ -129,6 +129,6 @@ class Blok {
     rect(0, 20, 160, 120);
     
     imageMode(CORNER);
-    //image(straightTexture,0,0);
+    image(straightTexture,0,0,160,160);
   }
 }
