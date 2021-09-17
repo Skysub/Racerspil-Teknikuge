@@ -1,4 +1,4 @@
-class GameLogic { //<>// //<>// //<>//
+class GameLogic { //<>// //<>// //<>// //<>//
 
   Bane bane;
 
@@ -70,6 +70,7 @@ class GameLogic { //<>// //<>// //<>//
     DrawUI();
     if (tileTest) bane.Draw(tileTest, hitboxDebug);
     
+
   }
 
   void DrawUI() {
