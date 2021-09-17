@@ -66,6 +66,7 @@ class GameLogic { //<>//
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest);
+    
   }
 
   void DrawUI() {
@@ -97,7 +98,7 @@ class GameLogic { //<>//
     if (k == 40) ned = b;
     if (k == 82) r = b;
     if (k == 84) t = b;
-    if (k == 32) space = b;
+    if (k == 32) space = b; //Kun et random seed per tryk
     if (k == 9) tab = b;
     if (k == 10) enter = b;
     if (k == 66) givBoost = b;
