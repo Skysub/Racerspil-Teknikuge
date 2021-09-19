@@ -120,7 +120,7 @@ class Blok {
       temp[i][0].add(new PVector(80, 80));
 
       temp[i][1].rotate(blokRot*PI/2f);
-      temp[i][0].add(new PVector(shift.x*160,shift.y*160)); //<>//
+      temp[i][0].add(new PVector(shift.x*160,shift.y*160));
     }
     return temp;
   }
