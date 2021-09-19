@@ -21,7 +21,7 @@ class Bane {
     popMatrix();
   }
 
-  float CalculateCollisions(PVector carPos, int carW, int carH, float carRot,boolean hDb) {
+  float CalculateCollisions(PVector carPos, int carW, int carH, float carRot, boolean hDb) {
     PVector relativeCarPos = new PVector(carPos.x % 160, (carPos.y % 160)+40);
     PVector sted = new PVector(floor(carPos.x/160), floor(((carPos.y-120)/160)));
 
@@ -40,9 +40,16 @@ class Bane {
       carCorners[i].add(relativeCarPos);
     }
 
-
     for (int i = 0; i<hitBoxes.length; i++) {
       for (int j = 0; j<hitBoxes[i].length; j++) {
+        if (hDb) {
+          pushMatrix();
+          fill(0, 255, 0);
+          translate(0, 120);
+          translate(sted.x*160,sted.y*160);
+          rect(hitBoxes[i][j][0].x, hitBoxes[i][j][0].y, hitBoxes[i][j][1].x, hitBoxes[i][j][1].y);
+          popMatrix();
+        }
         for (int s = 0; s<4; s++) {
           if ((carCorners[s].x < hitBoxes[i][j][0].x+hitBoxes[i][j][1].x) && (carCorners[s].x > hitBoxes[i][j][0].x) && (carCorners[s].y < hitBoxes[i][j][0].y+hitBoxes[i][j][1].y) && (carCorners[s].y > hitBoxes[i][j][0].y)) {
 

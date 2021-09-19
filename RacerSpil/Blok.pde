@@ -117,10 +117,10 @@ class Blok {
     for (int i = 0; i<temp.length; i++) {
       temp[i][0].sub(new PVector(80, 80));
       temp[i][0].rotate(blokRot*PI/2f);
-      temp[i][0].sub(new PVector(-80, -80));
+      temp[i][0].add(new PVector(80, 80));
 
       temp[i][1].rotate(blokRot*PI/2f);
-      temp[i][0].add(shift.mult(160));
+      temp[i][0].add(new PVector(shift.x*160,shift.y*160)); //<>//
     }
     return temp;
   }
