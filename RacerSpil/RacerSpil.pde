@@ -1,4 +1,5 @@
 import controlP5.*;
+
 GameLogic gameLogic;
 
 void setup() {
