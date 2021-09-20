@@ -52,6 +52,9 @@ class Bane {
         }
         for (int s = 0; s<4; s++) {
           if ((carCorners[s].x < hitBoxes[i][j][0].x+hitBoxes[i][j][1].x) && (carCorners[s].x > hitBoxes[i][j][0].x) && (carCorners[s].y < hitBoxes[i][j][0].y+hitBoxes[i][j][1].y) && (carCorners[s].y > hitBoxes[i][j][0].y)) {
+            //Det er fordi indersiden af kassen ikke nødvendig vis er x positiv i forhold til hitboxens position
+            //Hvis hitboxens expanse ikke er positiv i y og x er lortet broken
+            //Skal reworke metoden for hvordan punket beregnes at være inde i kassen
 
             if (hDb) {
               println("Collision!");
