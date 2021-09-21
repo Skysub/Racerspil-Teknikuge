@@ -36,8 +36,8 @@ class GameLogic { //<>// //<>//
 
   void Update() {
     imageMode(CORNER);
-    if(coolGraphics)image(backdrop, 0, 120);
-    
+    if (coolGraphics)image(backdrop, 0, 120);
+
     //laver en ny bane hvis seedet er ændret
     if (seed != seedOld) {
       seedOld = seed;
@@ -65,11 +65,12 @@ class GameLogic { //<>// //<>//
 
     bane.Draw(tileTest, hitboxDebug, coolGraphics);
 
-    bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug);
+    println(degrees(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug)));
+    //bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug);
 
-    //printer frametime
-    println(1/((millis()-mSec)/1000f));
-    mSec = millis();
+      //printer frametime
+      //println(1/((millis()-mSec)/1000f));
+      mSec = millis();
 
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
 
