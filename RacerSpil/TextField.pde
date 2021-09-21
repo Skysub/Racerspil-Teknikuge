@@ -23,6 +23,12 @@ class TextField {
     Draw();
     firstSeed = seed;
     if (newRandomSeed) {
+      if (textFieldCount == 0) {
+        cp5.remove("SeedTextField");
+      }
+      else {
+        cp5.remove(seedTextfield);
+      }
       textFieldCount += 1;
       seedTextfield = "SeedTextField" + str(textFieldCount);
       seedTextfieldOld = seedTextfield;

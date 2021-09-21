@@ -2,9 +2,18 @@ class Blok {
 
   int blokkeIalt = 4;
   int[][] blokInfo = new int[blokkeIalt][5];
+  
+  PImage startTexture,straightTexture,rightCornerTexture,leftCornerTexture;
+  
 
   //constructer
   Blok() {
+    
+    startTexture = loadImage("Start.png");
+    straightTexture = loadImage("Straight.png");
+    rightCornerTexture = loadImage("Right.png");
+    leftCornerTexture = loadImage("Left.png");
+    
     InitialiserInfo();
   }
 
@@ -15,23 +24,23 @@ class Blok {
 
   //tegner blokken, al translation og rotation gøres ikke her men i metoden der kalder denne metode
   //Vælger hvilken blok draw metode der skal bruges ud fra blok id'et
-  void DrawBlok(int id, boolean hDb) {
+  void DrawBlok(int id, boolean hDb, Boolean gfx) {
     switch (id) {
     case 0: //Start blok
-      if (!hDb)DrawB0();
-      else DrawOldB0();
+      if (!hDb)DrawB0(gfx);
+      else DrawOldB0(gfx);
       break;
     case 1:
-      if (!hDb)DrawB1();
-      else DrawOldB1();
+      if (!hDb)DrawB1(gfx);
+      else DrawOldB1(gfx);
       break;
     case 2:
-      if (!hDb)DrawB2();
-      else DrawOldB2();
+      if (!hDb)DrawB2(gfx);
+      else DrawOldB2(gfx);
       break;
     case 3:
-      if (!hDb)DrawB3();
-      else DrawOldB3();
+      if (!hDb)DrawB3(gfx);
+      else DrawOldB3(gfx);
       break;
 
     default:
@@ -212,7 +221,7 @@ class Blok {
   //Hver blok skal drawes anderledes og har derfor hvert sin metode der bliver kaldt via switchen tiddligere
 
   //Start blok Draw
-  void DrawB0() {
+  void DrawB0(boolean gfx) {
     fill(250, 200, 250);
     strokeWeight(0);
     stroke(20);
@@ -225,35 +234,55 @@ class Blok {
     line(75, 20, 75, 110);
     stroke(255);
     line(80, 20, 80, 140);
+    
+    if(gfx) {
+    imageMode(CORNER);
+    image(startTexture,0,0,160,160);
+    }
   }
 
   //Højresving blok Draw
-  void DrawB1() {
+  void DrawB1(boolean gfx) {
     fill(20);
     noStroke();
     rect(0, 0, 160, 160);
     fill(255);
     rect(20, 20, 120, 140);
     rect(0, 20, 20, 120);
+    
+    if(gfx) {
+    imageMode(CORNER);
+    image(rightCornerTexture,0,0,160,160);
+    }
   }
 
   //Venstresving blok Draw
-  void DrawB2() {
+  void DrawB2(boolean gfx) {
     fill(20);
     noStroke();
     rect(0, 0, 160, 160);
     fill(255);
     rect(20, 0, 120, 140);
     rect(0, 20, 20, 120);
+    
+    if(gfx) {
+    imageMode(CORNER);
+    image(leftCornerTexture,0,0,160,160);
+    }
   }
 
   //Ligeud blok Draw
-  void DrawB3() {
+  void DrawB3(boolean gfx) {
     fill(20);
     noStroke();
     rect(0, 0, 160, 160);
     fill(255);
     rect(0, 20, 160, 120);
+    
+    if(gfx) {
+    imageMode(CORNER);
+    image(straightTexture,0,0,160,160);
+    }
   }
 
 
