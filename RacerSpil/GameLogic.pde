@@ -21,6 +21,9 @@ class GameLogic { //<>// //<>//
   int carWidth = 55, carHeight = 25;
   Car car;
 
+  //Til boosts
+  float boostProbability = 0.05;
+  int maxBoosts = 3;
 
   //Ting til seed og menu
   int seed = int(random(0, 9999));
@@ -31,7 +34,7 @@ class GameLogic { //<>// //<>//
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
 
     gameMenu = new Menu(thePApplet, seed);
-    bane = new Bane(seed);
+    bane = new Bane(seed,maxBoosts);
   }
 
   void Update() {

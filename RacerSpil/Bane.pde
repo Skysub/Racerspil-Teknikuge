@@ -3,8 +3,8 @@ class Bane {
   Blok blok;
   int bIalt; //Antallet af blokke der er ialt, bruges til at lave debug tilesettet med alle blokkene
 
-  Bane(int seed) {
-    blok = new Blok();
+  Bane(int seed, int maxBoosts) {
+    blok = new Blok(maxBoosts);
     bIalt = blok.GetBlokIalt();
     dBTS = LavDebugTileSet(bIalt); //Laver debug tilesettet
     NyBane(seed); //genererer banen
