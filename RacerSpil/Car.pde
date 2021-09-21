@@ -65,7 +65,7 @@ class Car {
       Drive(accelerate, givBoost);
     } else DriveIce(accelerate);
 
-    if(hDb)DrawCarHitbox();
+    if (hDb)DrawCarHitbox();
     else DrawCar();
   }
 
@@ -185,6 +185,10 @@ class Car {
 
   PVector GetPos() {
     return pos;
+  }
+
+  float GetRot() {
+    return theta;
   }
 
   void Particles(float s, float t, boolean which) { //Laver partikelsystemet

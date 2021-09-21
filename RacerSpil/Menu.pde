@@ -1,7 +1,7 @@
 class Menu {
-TextField textField;
-String enteredSeed;
-int seed, newSeedDecider;
+  TextField textField;
+  String enteredSeed;
+  int seed, newSeedDecider;
 
   Menu(PApplet thePApplet, int s) {
     seed = s;
@@ -10,31 +10,31 @@ int seed, newSeedDecider;
 
   void Update(boolean newSeed) {
     Draw();
-    if(newSeed) newSeedDecider = 0;
+    if (newSeed) newSeedDecider = 0;
     newSeedDecider += 1;
-    if (newSeedDecider >= 2) seed = int(random(0,9999)); //Sørger for et enkelt nyt seed per gang der trykkes mellemrum
+    if (newSeedDecider >= 2) seed = int(random(0, 9999)); //Sørger for et enkelt nyt seed per gang der trykkes mellemrum
     textField.Update(seed, newSeed);
   }
 
   void Draw() {
     fill(180, 200, 220);
-    rect(700,300,580,600, 10);
-    
-    fill(0,0,0);
+    rect(700, 300, 580, 600, 10);
+
+    fill(0, 0, 0);
     textSize(50);
     text("RACING GAME 9001", 745, 370);
-    
+
     textSize(25);
     text("Enter seed here", 890, 435);
-    
+
     textSize(20);
-    fill(125,125,125);
+    fill(125, 125, 125);
     text("Space to generate new seed", 850, 522);
-    
+
     textSize(25);
-    fill(0,0,0);
-    rect(730,590,520,1);
-    text("Controls",933,580);
+    fill(0, 0, 0);
+    rect(730, 590, 520, 1);
+    text("Controls", 933, 580);
     textSize(20);
     text("←↑↓→ to steer", 910, 630);
     text("R to reset", 935, 670);

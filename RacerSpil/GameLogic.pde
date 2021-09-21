@@ -1,7 +1,7 @@
-class GameLogic { //<>// //<>//
+class GameLogic{ //<>//
 
   Bane bane;
-
+  int mSec;
 
   boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false; //kun til taster
   boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics; //til andre bools
@@ -60,7 +60,13 @@ class GameLogic { //<>// //<>//
     coolGraphics = toggleTemp[0];
     gF = toggleTemp[1];
 
-    bane.Draw(tileTest,coolGraphics);
+    bane.Draw(tileTest, hitboxDebug , coolGraphics);
+
+    bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug);
+
+    //printer frametime
+     //println(millis()-mSec);
+    mSec = millis();
 
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
 
@@ -68,14 +74,13 @@ class GameLogic { //<>// //<>//
     DrawUI();
 
     if (menu) gameMenu.Update(space);
-
     if (enter) seed = int(gameMenu.textField.input());
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
     DrawUI();
-    if (tileTest) bane.Draw(tileTest,coolGraphics);
-    
+    if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
+
   }
 
   void DrawUI() {
