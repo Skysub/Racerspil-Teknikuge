@@ -25,6 +25,12 @@ class TextField {
     Draw();
     firstSeed = seed;
     if (newRandomSeed) {
+      if (textFieldCount == 0) {
+        cp5.remove("SeedTextField");
+      }
+      else {
+        cp5.remove(seedTextfield);
+      }
       textFieldCount += 1;
       seedTextfield = "SeedTextField" + str(textFieldCount);
       cp5.addTextfield(seedTextfield).setPosition(730, 450).setSize(520, 50).setAutoClear(false).setInputFilter(1).setText(str(firstSeed)).setCaptionLabel("").keepFocus(true);
