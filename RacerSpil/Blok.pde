@@ -28,19 +28,19 @@ class Blok {
     switch (id) {
     case 0: //Start blok
       if (!hDb)DrawB0(gfx);
-      else DrawOldB0(gfx);
+      else DrawOldB0();
       break;
     case 1:
       if (!hDb)DrawB1(gfx);
-      else DrawOldB1(gfx);
+      else DrawOldB1();
       break;
     case 2:
       if (!hDb)DrawB2(gfx);
-      else DrawOldB2(gfx);
+      else DrawOldB2();
       break;
     case 3:
       if (!hDb)DrawB3(gfx);
-      else DrawOldB3(gfx);
+      else DrawOldB3();
       break;
 
     default:

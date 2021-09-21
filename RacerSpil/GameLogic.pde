@@ -1,4 +1,4 @@
-class GameLogic{ //<>//
+class GameLogic { //<>// //<>//
 
   Bane bane;
   int mSec;
@@ -35,6 +35,9 @@ class GameLogic{ //<>//
   }
 
   void Update() {
+    imageMode(CORNER);
+    if(coolGraphics)image(backdrop, 0, 120);
+    
     //laver en ny bane hvis seedet er ændret
     if (seed != seedOld) {
       seedOld = seed;
@@ -54,18 +57,18 @@ class GameLogic{ //<>//
     toggleTemp = toggle(tab, tabF, menu);
     menu = toggleTemp[0];
     tabF = toggleTemp[1];
-    
+
     //gør at man kan toggle grafik med g
     toggleTemp = toggle(g, gF, coolGraphics);
     coolGraphics = toggleTemp[0];
     gF = toggleTemp[1];
 
-    bane.Draw(tileTest, hitboxDebug , coolGraphics);
+    bane.Draw(tileTest, hitboxDebug, coolGraphics);
 
     bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug);
 
     //printer frametime
-     //println(millis()-mSec);
+    println(1/((millis()-mSec)/1000f));
     mSec = millis();
 
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
@@ -80,7 +83,6 @@ class GameLogic{ //<>//
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
-
   }
 
   void DrawUI() {

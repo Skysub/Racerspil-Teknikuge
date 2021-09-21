@@ -13,8 +13,7 @@ void setup() {
 
 void draw() {
   background(220);
-  imageMode(CORNER);
-  image(backdrop,0,120);
+
   gameLogic.Update();
 }
 
