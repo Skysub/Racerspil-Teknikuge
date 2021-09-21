@@ -3,8 +3,8 @@ class GameLogic { //<>// //<>//
   Bane bane;
 
 
-  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false; //kun til taster
-  boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false; //til andre bools
+  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false; //kun til taster
+  boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics; //til andre bools
 
   boolean[] toggleTemp; 
 
@@ -17,7 +17,7 @@ class GameLogic { //<>// //<>//
 
   //ting til bilen
   PVector carPos = new PVector(width/2, height/2), carBoost = new PVector(0, 0), currentCarPos;
-  float startRotation = 0, maxVel = 10, maxBackVel = 1.5, stopVel = 1, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.55, thetaAcc = 0.014;
+  float startRotation = 0, maxVel = 3, maxBackVel = 1.5, stopVel = 1, bremseVel = 5, maxThetaVel = 0.02, maxThetaBackVel = 0.02, acceleration = 0.01, thetaAcc = 0.014;
   int carWidth = 55, carHeight = 25;
   Car car;
 
@@ -54,8 +54,13 @@ class GameLogic { //<>// //<>//
     toggleTemp = toggle(tab, tabF, menu);
     menu = toggleTemp[0];
     tabF = toggleTemp[1];
+    
+    //gør at man kan toggle grafik med g
+    toggleTemp = toggle(g, gF, coolGraphics);
+    coolGraphics = toggleTemp[0];
+    gF = toggleTemp[1];
 
-    bane.Draw(tileTest);
+    bane.Draw(tileTest,coolGraphics);
 
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
 
@@ -69,7 +74,7 @@ class GameLogic { //<>// //<>//
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
     DrawUI();
-    if (tileTest) bane.Draw(tileTest);
+    if (tileTest) bane.Draw(tileTest,coolGraphics);
     
   }
 
@@ -107,6 +112,7 @@ class GameLogic { //<>// //<>//
     if (k == 10) enter = b;
     if (k == 66) givBoost = b;
     if (k == 72) h = b;
+    if (k == 71) g = b;
   }
 
   //a bit of stuff for the timer and logic for handling record time when starting a race

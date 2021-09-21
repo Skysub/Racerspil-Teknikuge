@@ -24,19 +24,19 @@ class Blok {
 
   //tegner blokken, al translation og rotation gøres ikke her men i metoden der kalder denne metode
   //Vælger hvilken blok draw metode der skal bruges ud fra blok id'et
-  void DrawBlok(int id) {
+  void DrawBlok(int id, Boolean gfx) {
     switch (id) {
     case 0: //Start blok
-      DrawB0();
+      DrawB0(gfx);
       break;
     case 1:
-      DrawB1();
+      DrawB1(gfx);
       break;
     case 2:
-      DrawB2();
+      DrawB2(gfx);
       break;
     case 3:
-      DrawB3();
+      DrawB3(gfx);
       break;
 
     default:
@@ -76,7 +76,7 @@ class Blok {
   //Hver blok skal drawes anderledes og har derfor hvert sin metode der bliver kaldt via switchen tiddligere
 
   //Start blok Draw
-  void DrawB0() {
+  void DrawB0(boolean gfx) {
     fill(250, 200, 250);
     strokeWeight(0);
     stroke(20);
@@ -90,12 +90,14 @@ class Blok {
     stroke(255);
     line(80, 20, 80, 140);
     
+    if(gfx) {
     imageMode(CORNER);
     image(startTexture,0,0,160,160);
+    }
   }
 
   //Højresving blok Draw
-  void DrawB1() {
+  void DrawB1(boolean gfx) {
     fill(20);
     noStroke();
     rect(0, 0, 160, 160);
@@ -103,12 +105,14 @@ class Blok {
     rect(20, 20, 120, 140);
     rect(0, 20, 20, 120);
     
+    if(gfx) {
     imageMode(CORNER);
     image(rightCornerTexture,0,0,160,160);
+    }
   }
 
   //Venstresving blok Draw
-  void DrawB2() {
+  void DrawB2(boolean gfx) {
     fill(20);
     noStroke();
     rect(0, 0, 160, 160);
@@ -116,19 +120,23 @@ class Blok {
     rect(20, 0, 120, 140);
     rect(0, 20, 20, 120);
     
+    if(gfx) {
     imageMode(CORNER);
     image(leftCornerTexture,0,0,160,160);
+    }
   }
 
   //Ligeud blok Draw
-  void DrawB3() {
+  void DrawB3(boolean gfx) {
     fill(20);
     noStroke();
     rect(0, 0, 160, 160);
     fill(255);
     rect(0, 20, 160, 120);
     
+    if(gfx) {
     imageMode(CORNER);
     image(straightTexture,0,0,160,160);
+    }
   }
 }

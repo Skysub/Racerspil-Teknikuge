@@ -10,13 +10,13 @@ class Bane {
     NyBane(seed); //genererer banen
   }
 
-  void Draw(boolean tT) {
+  void Draw(boolean tT, boolean gfx) {
     pushMatrix();
     translate(0, 120); //flytter alt ned så ui ikke bliver dækket
 
     //Vælger banen eller debug tilesettet givet tT (tileTest)
-    if (!tT)DrawBane(bane, tT);
-    else DrawBane(dBTS, tT);
+    if (!tT)DrawBane(bane, tT,gfx);
+    else DrawBane(dBTS, tT,gfx);
 
     popMatrix();
   }
@@ -146,7 +146,7 @@ class Bane {
   }
 
   //Tegner alle blokkene som beskrevet i bane arrayet
-  void DrawBane(int[][][] x, boolean tT) {
+  void DrawBane(int[][][] x, boolean tT, boolean gfx) {
     for (int i=0; i<6; i++) {
       for (int j=0; j<12; j++) {
         pushMatrix();
@@ -166,7 +166,7 @@ class Bane {
         rotate(x[j][i][1]*PI/2f);
         
         //kalder en funktion der vælger hvilken metode der skal bruges alt efter hvilken blok skal tegnes
-        blok.DrawBlok(x[j][i][0]);
+        blok.DrawBlok(x[j][i][0],gfx);
         popMatrix();
       }
     }
