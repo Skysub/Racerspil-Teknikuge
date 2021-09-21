@@ -1,5 +1,5 @@
 class Car {
-  PVector pos, vel, acc, rotation, backVel, endOfCar;
+  PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
   int cDrej, accelerate, carWidth, carHeight;
   boolean ice;
@@ -34,6 +34,8 @@ class Car {
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb) {
+    carRetning = new PVector(carWidth/2f, 0);
+    carRetning.rotate(theta+HALF_PI);
 
     // Styrer controls
     if ((hojre && venstre)||(!hojre && !venstre)) {
@@ -69,7 +71,53 @@ class Car {
     else DrawCar();
   }
 
+  void Hit(float[] ret, boolean tT) {
+    //println(carRetning.y > 0);
+    //println(carRetning.x > 0);
+    if (ret[0] != -1 && !tT) {
+      vel.mult(0.9);
+      if (carRetning.y > 0) {
+        switch (int(ret[1])) {
+        case 0:
+          if (carRetning.x > 0)theta += 0.1f;
+          else theta -= 0.1f;
+          break;
+        case 1:
+          if (carRetning.x > 0)theta -= 0.1f;
+          else theta += 0.1f;
+          break;
+        case 2:
+          if (carRetning.x > 0)theta += 0.1f;
+          else theta -= 0.1f;
+          break;
+        case 3:
+          if (carRetning.x > 0)theta -= 0.1f;
+          else theta += 0.1f;
+          break;
+        }
+      } else {
 
+        switch (int(ret[1])) {
+        case 0:
+          if (carRetning.x > 0)theta -= 0.1f;
+          else theta += 0.1f;
+          break;
+        case 1:
+          if (carRetning.x > 0)theta += 0.1f;
+          else theta -= 0.1f;
+          break;
+        case 2:
+          if (carRetning.x > 0)theta -= 0.1f;
+          else theta += 0.1f;
+          break;
+        case 3:
+          if (carRetning.x > 0)theta += 0.1f;
+          else theta -= 0.1f;
+          break;
+        }
+      }
+    }
+  }
 
   void DrawCar() {
     pushMatrix();

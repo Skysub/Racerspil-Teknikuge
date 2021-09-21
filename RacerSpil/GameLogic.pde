@@ -65,8 +65,7 @@ class GameLogic { //<>// //<>//
 
     bane.Draw(tileTest, hitboxDebug, coolGraphics);
 
-    println(degrees(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug)));
-    //bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug);
+    car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug),tileTest);
 
       //printer frametime
       //println(1/((millis()-mSec)/1000f));
