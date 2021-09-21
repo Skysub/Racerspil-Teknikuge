@@ -22,7 +22,7 @@ class Bane {
   }
 
   float CalculateCollisions(PVector carPos, int carW, int carH, float carRot, boolean hDb) {
-    PVector relativeCarPos = new PVector(carPos.x % 160, (carPos.y % 160)-120);
+    PVector relativeCarPos = new PVector(carPos.x % 160, ((carPos.y-120) % 160));
     PVector sted = new PVector(floor(carPos.x/160), floor((((carPos.y)-120)/160)));
 
     PVector[][][] hitBoxes = blok.GetHitboxes(sted, bane);
@@ -100,6 +100,10 @@ class Bane {
               }
             } else {
               if ((carCorners[s].x < hitBoxes[i][j][0].x+hitBoxes[i][j][1].x) && (carCorners[s].x > hitBoxes[i][j][0].x) && (carCorners[s].y < hitBoxes[i][j][0].y+hitBoxes[i][j][1].y) && (carCorners[s].y > hitBoxes[i][j][0].y)) {
+                
+                
+                
+                
                 if (hDb) {
                   println("Collision!");
                   println(i+" "+j);
