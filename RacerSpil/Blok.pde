@@ -9,10 +9,10 @@ class Blok {
   //constructer
   Blok() {
     
-    startTexture = loadImage("Start.png");
-    straightTexture = loadImage("Straight.png");
-    rightCornerTexture = loadImage("Right.png");
-    leftCornerTexture = loadImage("Left.png");
+    startTexture = loadImage("Start.jpg");
+    straightTexture = loadImage("Straight.jpg");
+    rightCornerTexture = loadImage("Right.jpg");
+    leftCornerTexture = loadImage("Left.jpg");
     
     InitialiserInfo();
   }
