@@ -19,9 +19,7 @@ class Bane { //<>//
     boostLimit = maxBoosts;
     boosts = new Boost[maxBoosts];
     boostLocations = new PVector[maxBoosts];
-    NyBane(seed); //genererer banen
-
-    println(boostProbability+" / "+boostProb); //<>//
+    NyBane(seed); //genererer banen //<>//
   }
 
 
@@ -49,8 +47,6 @@ class Bane { //<>//
     carCorners[1]= new PVector(-carW/2f, carH/2f); // Bottom Left
     carCorners[2]= new PVector(carW/2f, -carH/2f); // Top Right
     carCorners[3]= new PVector(carW/2f, carH/2f); // Bottom Right
-
-
 
     PVector carRetning = new PVector(carW/2f, 0);
     carRetning.rotate(carRot);
@@ -316,13 +312,13 @@ class Bane { //<>//
 
       //Der tjekkes, om der skal laves et boost i denne blok
       checkForBoost = random(0, 1);
-      println("Probability: "+boostProbability+" || Booost check: "+checkForBoost+" || Current boosts: "+currentBoosts + "|| Boost limit: "+boostLimit);
+      //println("Probability: "+boostProbability+" || Booost check: "+checkForBoost+" || Current boosts: "+currentBoosts + "|| Boost limit: "+boostLimit);
       if (boostProbability >= checkForBoost && currentBoosts < boostLimit) {
         b[int(sted.x)][int(sted.y)][2] = 1;
         boostLocations[currentBoosts] = new PVector(80, 80);
         boosts[currentBoosts] = new Boost(boostLocations[currentBoosts]);
         currentBoosts++;
-        println("Probability: "+boostProbability+" || Booost check: "+checkForBoost+" || Current boosts: "+currentBoosts);
+        //println("Probability: "+boostProbability+" || Booost check: "+checkForBoost+" || Current boosts: "+currentBoosts);
       }
     }
     //Er Banen ikke lukket og "før start" har ikke nogen brik, signalerer vi at vi skal skifte seed og prøve igen

@@ -2,7 +2,7 @@ class Car { //<>// //<>// //<>//
   PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
 
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1, collisionTurnRate = 0.02f, collisionSpeedLoss = 0.30f;
-  int cDrej, accelerate, carWidth, carHeight;
+  int cDrej, accelerate, carWidth, carHeight, collisionPush = 1;
   boolean ice, playSpeedUp = true, playBoostSFX = true;
 
 
@@ -68,14 +68,10 @@ class Car { //<>// //<>// //<>//
     linearBackVel = mag(backVel.x, backVel.y);
     Particles(linearVel, theta, givBoost);
 
-    speedUp.amp(linearVel/5);
+    speedUp.amp((linearVel/5)+0.0001f);
     if (playSpeedUp) speedUp.play();
     if (speedUp.isPlaying()) playSpeedUp = false;
     else playSpeedUp = true;
-
-
-
-
     if (!ice) { //Om bieln kører på si eller ej
       Drive(accelerate, givBoost);
     } else DriveIce(accelerate);
@@ -85,6 +81,11 @@ class Car { //<>// //<>// //<>//
   }
 
   void placeCar(PVector nyPos, int rot) {
+    if (rot == 2) nyPos.add(83, 0);
+    if (rot != 2 && rot != 0) {
+      if (rot == 1){ nyPos.add(40,-45);}
+      else { nyPos.add(40,45);}
+    }
     pos.x = nyPos.x;
     pos.y = nyPos.y;
     vel.mult(0);
@@ -207,7 +208,7 @@ class Car { //<>// //<>// //<>//
       maxVel = 10; //sætter maks hastigheden til et højere tal
       if (linearVel <= 2) vel.setMag(2); //Sørger for et boost selvom der køres langsomt
       vel.mult(1.15);
-      
+
       speedUp.stop();
       speedUp.amp(0.2);
       if (playBoostSFX) boostSFX.play();
