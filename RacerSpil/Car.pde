@@ -71,6 +71,16 @@ class Car { //<>// //<>// //<>//
     else DrawCar();
   }
 
+  void placeCar(PVector nyPos, int rot) {
+    pos.x = nyPos.x;
+    pos.y = nyPos.y;
+    vel.mult(0);
+    backVel.mult(0);
+    theta = rot*HALF_PI;
+    acc = new PVector (0, 0);
+    thetaVel = 0;
+  }
+
   void Hit(float[] ret, boolean tT, boolean boost) {
     //println(carRetning.y > 0);
     //println(carRetning.x > 0);

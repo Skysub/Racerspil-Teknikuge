@@ -412,4 +412,15 @@ class Bane { //<>//
     }
     return a;
   }
+
+  int[] whereStart() {
+    for (int i=0; i<6; i++) {
+      for (int j=0; j<12; j++) {
+        if (bane[j][i][0] == 0) {
+          return new int[] {j,i,bane[j][i][1]};
+        }
+      }
+    }
+    return new int[0];
+  }
 }
