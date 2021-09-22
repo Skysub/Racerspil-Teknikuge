@@ -1,8 +1,10 @@
-class Car {
+class Car { //<>// //<>// //<>//
   PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
-  float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
+
+  float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1, collisionTurnRate = 0.02f, collisionSpeedLoss = 0.30f;
   int cDrej, accelerate, carWidth, carHeight;
   boolean ice, playSpeedUp = true, playBoostSFX = true;
+
 
   PImage carSprite;
   ParticleSystem ps;
@@ -82,48 +84,75 @@ class Car {
     else DrawCar();
   }
 
-  void Hit(float[] ret, boolean tT) {
+  void placeCar(PVector nyPos, int rot) {
+    pos.x = nyPos.x;
+    pos.y = nyPos.y;
+    vel.mult(0);
+    backVel.mult(0);
+    theta = rot*HALF_PI;
+    acc = new PVector (0, 0);
+    thetaVel = 0;
+  }
+
+  void Hit(float[] ret, boolean tT, boolean boost) {
     //println(carRetning.y > 0);
     //println(carRetning.x > 0);
+    //println(vel.mag());
     if (ret[0] != -1 && !tT) {
-      vel.mult(0.9);
+      vel.mult(1-collisionSpeedLoss);
+      backVel.mult(1-collisionSpeedLoss);
+      //println(carRetning.y > 0);
+      //println(carRetning.x > 0);
+      //println(ret[1]);
+      int cP;
+      if (vel.mag() > 5 || boost) cP = collisionPush*15;
+      else cP = collisionPush;
+
       if (carRetning.y > 0) {
         switch (int(ret[1])) {
         case 0:
-          if (carRetning.x > 0)theta += 0.1f;
-          else theta -= 0.1f;
+          pos.y += cP;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
           break;
         case 1:
-          if (carRetning.x > 0)theta -= 0.1f;
-          else theta += 0.1f;
+          pos.x -= cP;
+          if (carRetning.x > 0)theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
           break;
         case 2:
-          if (carRetning.x > 0)theta += 0.1f;
-          else theta -= 0.1f;
+          pos.y -= cP;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
           break;
         case 3:
-          if (carRetning.x > 0)theta -= 0.1f;
-          else theta += 0.1f;
+          pos.x += cP;
+          if (carRetning.x > 0) theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
           break;
         }
       } else {
 
         switch (int(ret[1])) {
         case 0:
-          if (carRetning.x > 0)theta -= 0.1f;
-          else theta += 0.1f;
+          pos.y += cP;
+          if (carRetning.x > 0)theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
           break;
         case 1:
-          if (carRetning.x > 0)theta += 0.1f;
-          else theta -= 0.1f;
+          pos.x -= cP;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
           break;
         case 2:
-          if (carRetning.x > 0)theta -= 0.1f;
-          else theta += 0.1f;
+          pos.y -= cP;
+          if (carRetning.x > 0)theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
           break;
         case 3:
-          if (carRetning.x > 0)theta += 0.1f;
-          else theta -= 0.1f;
+          pos.x += cP;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
           break;
         }
       }
