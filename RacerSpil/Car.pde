@@ -2,12 +2,11 @@ class Car {
   PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
   int cDrej, accelerate, carWidth, carHeight;
-  boolean ice, playSpeedUp = true;
-  long startWait;
+  boolean ice, playSpeedUp = true, playBoostSFX = true;
 
   PImage carSprite;
   ParticleSystem ps;
-  SoundFile speedUp;
+  SoundFile speedUp, boostSFX;
 
 
   Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int carW, int carH) {
@@ -34,8 +33,7 @@ class Car {
     carSprite = loadImage("car.png");
     ps = new ParticleSystem(pos);
     speedUp = new SoundFile(RacerSpil.this, "speedUp.mp3");
-
-    startWait = millis();
+    boostSFX = new SoundFile(RacerSpil.this, "boost.mp3");
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb) {
@@ -68,10 +66,8 @@ class Car {
     linearBackVel = mag(backVel.x, backVel.y);
     Particles(linearVel, theta, givBoost);
 
-    speedUp.amp(linearVel/4);
-
+    speedUp.amp(linearVel/5);
     if (playSpeedUp) speedUp.play();
-
     if (speedUp.isPlaying()) playSpeedUp = false;
     else playSpeedUp = true;
 
@@ -182,6 +178,12 @@ class Car {
       maxVel = 10; //sætter maks hastigheden til et højere tal
       if (linearVel <= 2) vel.setMag(2); //Sørger for et boost selvom der køres langsomt
       vel.mult(1.15);
+      
+      speedUp.stop();
+      speedUp.amp(0.2);
+      if (playBoostSFX) boostSFX.play();
+      if (boostSFX.isPlaying()) playBoostSFX = false;
+      else playBoostSFX = true;
     } else {
       maxVel = constrain(maxVel, 4, 10); 
       maxVel = maxVel - 0.05; //maks hastigheden falder ligeså langsomt til den normalle makshastighed efter boostet
