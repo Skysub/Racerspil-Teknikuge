@@ -35,7 +35,7 @@ class GameLogic { //<>// //<>//
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
 
     gameMenu = new Menu(thePApplet, seed);
-    bane = new Bane(seed,maxBoosts,boostProbability); //<>//
+    bane = new Bane(seed,maxBoosts,boostProbability);
     ordenBil();
 
   }
@@ -87,8 +87,7 @@ class GameLogic { //<>// //<>//
     //println("Frametime: "+(millis()-mSec)); //printer frametime
     mSec = millis();
     
-    givBoost = bane.boosting;
-    car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
+    car.Update(hojre, venstre, op, ned, bane.checkBoostCollisions(), hitboxDebug);
 
 
 

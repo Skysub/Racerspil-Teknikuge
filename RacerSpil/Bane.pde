@@ -1,14 +1,15 @@
-class Bane { //<>//
+class Bane { //<>// //<>//
   int[][][] bane, dBTS;
   Blok blok;
   int bIalt; //Antallet af blokke der er ialt, bruges til at lave debug tilesettet med alle blokkene
-  
+
   //boost stuff
   int k = 0, boostLimit, currentBoosts = 0; //bruges til at iterere boosts
   float checkForBoost, boostProbability;
   Boolean boosting;
   Boost[] boosts;
   PVector[] boostLocations;
+  PVector relativeCarPos, sted;
 
 
   Bane(int seed, int maxBoosts, float boostProb) {
@@ -19,7 +20,7 @@ class Bane { //<>//
     boostLimit = maxBoosts;
     boosts = new Boost[maxBoosts];
     boostLocations = new PVector[maxBoosts];
-    NyBane(seed); //genererer banen //<>//
+    NyBane(seed); //genererer banen
   }
 
 
@@ -37,8 +38,8 @@ class Bane { //<>//
   }
 
   float[] CalculateCollisions(PVector carPos, int carW, int carH, float carRot, boolean hDb) {
-    PVector relativeCarPos = new PVector(carPos.x % 160, ((carPos.y-120) % 160));
-    PVector sted = new PVector(floor(carPos.x/160), floor((((carPos.y)-120)/160)));
+    relativeCarPos = new PVector(carPos.x % 160, ((carPos.y-120) % 160));
+    sted = new PVector(floor(carPos.x/160), floor((((carPos.y)-120)/160)));
     PVector basisRetning = new PVector(1, 0), b2 = new PVector(0, -1);
 
     PVector[][][] hitBoxes = blok.GetHitboxes(sted, bane);
@@ -376,8 +377,6 @@ class Bane { //<>//
 
         if (!tT && k<currentBoosts && x [j][i][2]==1) {
           boosts[k].DrawBoost();
-          boosts[k].UpdateBoost();
-          if(boosts[k].IsBoosting() == true) boosting = true;
           k++;
         }
 
@@ -385,7 +384,6 @@ class Bane { //<>//
       }
     }
     k = 0;
-    boosting = false;
   }
 
   //placerer og roterer startfeltet efter et forudvalgt system, se skemaet "grid startretning.png" i "hjælp til racerprojekt generering" mappen i repositoriet.
@@ -454,10 +452,17 @@ class Bane { //<>//
     for (int i=0; i<6; i++) {
       for (int j=0; j<12; j++) {
         if (bane[j][i][0] == 0) {
-          return new int[] {j,i,bane[j][i][1]};
+          return new int[] {j, i, bane[j][i][1]};
         }
       }
     }
     return new int[0];
+  }
+
+  boolean checkBoostCollisions() {
+    for (int i = 0; i < currentBoosts; i++) { //<>//
+      if(boosts[i].CheckCollision(relativeCarPos) && bane[int(sted.x)][int(sted.y)][2] == 1) return true;
+    }
+    return false;
   }
 }

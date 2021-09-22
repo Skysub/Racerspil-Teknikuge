@@ -2,6 +2,7 @@ class Boost {
 
   PVector location;
   Boolean boosting = false;
+  int w = 50, h = 50;
   
   //constructer
   Boost(PVector boostLocation) {
@@ -22,11 +23,8 @@ class Boost {
     stroke(20);
   }
   
-  void UpdateBoost(){
-    //collision logic here. Boosting true if colliding
-  }
-  
-  Boolean IsBoosting(){
-    return boosting;
+  boolean CheckCollision(PVector carPos){
+    if((carPos.x+5 > location.x-w/2f) && (carPos.x-5 < location.x+w/2f) && (carPos.y+5 > location.y-h/2f) && (carPos.y-5 < location.y+h/2f)) return true;    
+    return false;
   }
 }
