@@ -1,11 +1,14 @@
 class Car { //<>// //<>// //<>//
   PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
+
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1, collisionTurnRate = 0.02f, collisionSpeedLoss = 0.30f;
-  int cDrej, accelerate, carWidth, carHeight, collisionPush = 1;
-  boolean ice;
+  int cDrej, accelerate, carWidth, carHeight;
+  boolean ice, playSpeedUp = true, playBoostSFX = true;
+
 
   PImage carSprite;
   ParticleSystem ps;
+  SoundFile speedUp, boostSFX;
 
 
   Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int carW, int carH) {
@@ -31,6 +34,8 @@ class Car { //<>// //<>// //<>//
 
     carSprite = loadImage("car.png");
     ps = new ParticleSystem(pos);
+    speedUp = new SoundFile(RacerSpil.this, "speedUp.mp3");
+    boostSFX = new SoundFile(RacerSpil.this, "boost.mp3");
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb) {
@@ -62,6 +67,14 @@ class Car { //<>// //<>// //<>//
     linearVel = mag(vel.x, vel.y); //Udregner den linæer hastighed og bakke hastighed
     linearBackVel = mag(backVel.x, backVel.y);
     Particles(linearVel, theta, givBoost);
+
+    speedUp.amp(linearVel/5);
+    if (playSpeedUp) speedUp.play();
+    if (speedUp.isPlaying()) playSpeedUp = false;
+    else playSpeedUp = true;
+
+
+
 
     if (!ice) { //Om bieln kører på si eller ej
       Drive(accelerate, givBoost);
@@ -194,6 +207,12 @@ class Car { //<>// //<>// //<>//
       maxVel = 10; //sætter maks hastigheden til et højere tal
       if (linearVel <= 2) vel.setMag(2); //Sørger for et boost selvom der køres langsomt
       vel.mult(1.15);
+      
+      speedUp.stop();
+      speedUp.amp(0.2);
+      if (playBoostSFX) boostSFX.play();
+      if (boostSFX.isPlaying()) playBoostSFX = false;
+      else playBoostSFX = true;
     } else {
       maxVel = constrain(maxVel, 4, 10); 
       maxVel = maxVel - 0.05; //maks hastigheden falder ligeså langsomt til den normalle makshastighed efter boostet
