@@ -71,7 +71,7 @@ class GameLogic { //<>// //<>//
     //println("BaneDrawTime: "+(millis()-baneDrawTime)); //print time it takes to draw bane
 
     collisionTime = millis();
-    car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest);
+    car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest, givBoost);
     //println("collision time: "+millis()-collisionTime); //printer tiden det tog a lave collision detection
 
 
