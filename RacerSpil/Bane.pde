@@ -2,9 +2,11 @@ class Bane { //<>//
   int[][][] bane, dBTS;
   Blok blok;
   int bIalt; //Antallet af blokke der er ialt, bruges til at lave debug tilesettet med alle blokkene
+  
+  //boost stuff
   int k = 0, boostLimit, currentBoosts = 0; //bruges til at iterere boosts
   float checkForBoost, boostProbability;
-
+  Boolean boosting;
   Boost[] boosts;
   PVector[] boostLocations;
 
@@ -319,13 +321,16 @@ class Bane { //<>//
 
         if (!tT && k<currentBoosts && x [j][i][2]==1) {
           boosts[k].DrawBoost();
+          boosts[k].UpdateBoost();
+          if(boosts[k].IsBoosting() == true) boosting = true;
           k++;
         }
 
         popMatrix();
       }
     }
-    k=0;
+    k = 0;
+    boosting = false;
   }
 
   //placerer og roterer startfeltet efter et forudvalgt system, se skemaet "grid startretning.png" i "hjælp til racerprojekt generering" mappen i repositoriet.

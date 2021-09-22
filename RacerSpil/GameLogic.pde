@@ -73,7 +73,8 @@ class GameLogic { //<>// //<>//
     //printer frametime
     //println(1/((millis()-mSec)/1000f));
     mSec = millis();
-
+    
+    givBoost = bane.boosting;
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
 
     handleTimer();

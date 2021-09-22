@@ -1,6 +1,7 @@
 class Boost {
 
   PVector location;
+  Boolean boosting = false;
   
   //constructer
   Boost(PVector boostLocation) {
@@ -13,10 +14,19 @@ class Boost {
     rectMode(CENTER);
     rect(location.x,location.y,50,50);
     fill(255,0,0);
-    triangle(30,5, 12.5,27.5, 22.5,27.5);
-    //rect();
-    //triangle();
-    
     rectMode(CORNER);
+    noStroke();
+    rect(77.5,77.5, 5,5);
+    triangle(85,60, 67.5,82.5, 77.5,82.5);
+    triangle(82.5,77.5, 92.5,77.5, 77.5,102.5);
+    stroke(20);
+  }
+  
+  void UpdateBoost(){
+    //collision logic here. Boosting true if colliding
+  }
+  
+  Boolean IsBoosting(){
+    return boosting;
   }
 }
