@@ -2,10 +2,12 @@ class Car {
   PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
   int cDrej, accelerate, carWidth, carHeight;
-  boolean ice;
+  boolean ice, playSpeedUp = true;
+  long startWait;
 
   PImage carSprite;
   ParticleSystem ps;
+  SoundFile speedUp;
 
 
   Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int carW, int carH) {
@@ -31,6 +33,9 @@ class Car {
 
     carSprite = loadImage("car.png");
     ps = new ParticleSystem(pos);
+    speedUp = new SoundFile(RacerSpil.this, "speedUp.mp3");
+
+    startWait = millis();
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb) {
@@ -62,6 +67,16 @@ class Car {
     linearVel = mag(vel.x, vel.y); //Udregner den linæer hastighed og bakke hastighed
     linearBackVel = mag(backVel.x, backVel.y);
     Particles(linearVel, theta, givBoost);
+
+    speedUp.amp(linearVel/4);
+
+    if (playSpeedUp) speedUp.play();
+
+    if (speedUp.isPlaying()) playSpeedUp = false;
+    else playSpeedUp = true;
+
+
+
 
     if (!ice) { //Om bieln kører på si eller ej
       Drive(accelerate, givBoost);
