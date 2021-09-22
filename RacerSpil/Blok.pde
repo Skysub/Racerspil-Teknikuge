@@ -2,24 +2,19 @@ class Blok {
 
   int blokkeIalt = 4;
   int[][] blokInfo = new int[blokkeIalt][5];
-  float checkForBoost;
-  int currentBoosts = 0;
-  int boostLimit;
-  
+
   PImage startTexture,straightTexture,rightCornerTexture,leftCornerTexture;
   
-  Boost[] boosts = new Boost[3];
-  PVector[] boostLocations = new PVector[3];
+
 
   //constructer
-  Blok(int maxBoosts) {
+  Blok() {
     
     startTexture = loadImage("Start.png");
     straightTexture = loadImage("Straight.png");
     rightCornerTexture = loadImage("Right.png");
     leftCornerTexture = loadImage("Left.png");
-    
-    boostLimit = maxBoosts;
+
     
     InitialiserInfo();
   }
@@ -34,7 +29,7 @@ class Blok {
   void DrawBlok(int id, boolean hDb, Boolean gfx, float boostProb) {
     switch (id) {
     case 0: //Start blok
-      if (!hDb)DrawB0(gfx,boostProb);
+      if (!hDb)DrawB0(gfx);
       else DrawOldB0();
       break;
     case 1:
@@ -56,10 +51,7 @@ class Blok {
     //Reverter til default
     stroke(20);
     strokeWeight(1);
-    
-    for (int i=0; i < currentBoosts; i++){
-      boosts[i].DrawBoost();
-    }
+     //<>//
   }
 
   int GetBlokIalt() {
@@ -232,7 +224,7 @@ class Blok {
   //Hver blok skal drawes anderledes og har derfor hvert sin metode der bliver kaldt via switchen tiddligere
 
   //Start blok Draw
-  void DrawB0(boolean gfx, float boostProb) {
+  void DrawB0(boolean gfx) {
     fill(250, 200, 250);
     strokeWeight(0);
     stroke(20);
@@ -245,14 +237,6 @@ class Blok {
     line(75, 20, 75, 110);
     stroke(255);
     line(80, 20, 80, 140);
-    
-    //Der tjekkes, om der skal laves et boost i denne blok
-    checkForBoost = random(0,1);
-    if (boostProb >= checkForBoost && currentBoosts < boostLimit){
-      boostLocations[currentBoosts] = new PVector(80,80);
-      boosts[currentBoosts] = new Boost(boostLocations[currentBoosts]);
-      currentBoosts++;
-    }
     
     if(gfx) {
     imageMode(CORNER);
@@ -269,14 +253,6 @@ class Blok {
     rect(20, 20, 120, 140);
     rect(0, 20, 20, 120);
     
-    //Der tjekkes, om der skal laves et boost i denne blok
-    checkForBoost = random(0,1);
-    if (boostProb >= checkForBoost && currentBoosts < boostLimit){
-      boostLocations[currentBoosts] = new PVector(80,80);
-      boosts[currentBoosts] = new Boost(boostLocations[currentBoosts]);
-      currentBoosts++;
-    }
-    
     if(gfx) {
     imageMode(CORNER);
     image(rightCornerTexture,0,0,160,160);
@@ -292,14 +268,6 @@ class Blok {
     rect(20, 0, 120, 140);
     rect(0, 20, 20, 120);
     
-    //Der tjekkes, om der skal laves et boost i denne blok
-    checkForBoost = random(0,1);
-    if (boostProb >= checkForBoost && currentBoosts < boostLimit){
-      boostLocations[currentBoosts] = new PVector(80,80);
-      boosts[currentBoosts] = new Boost(boostLocations[currentBoosts]);
-      currentBoosts++;
-    }
-    
     if(gfx) {
     imageMode(CORNER);
     image(leftCornerTexture,0,0,160,160);
@@ -313,14 +281,6 @@ class Blok {
     rect(0, 0, 160, 160);
     fill(255);
     rect(0, 20, 160, 120);
-    
-    //Der tjekkes, om der skal laves et boost i denne blok
-    checkForBoost = random(0,1);
-    if (boostProb >= checkForBoost && currentBoosts < boostLimit){
-      boostLocations[currentBoosts] = new PVector(80,80);
-      boosts[currentBoosts] = new Boost(boostLocations[currentBoosts]);
-      currentBoosts++;
-    }
     
     if(gfx) {
     imageMode(CORNER);

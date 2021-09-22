@@ -34,7 +34,7 @@ class GameLogic { //<>// //<>//
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
 
     gameMenu = new Menu(thePApplet, seed);
-    bane = new Bane(seed,maxBoosts);
+    bane = new Bane(seed,maxBoosts,boostProbability); //<>//
   }
 
   void Update() {
@@ -71,7 +71,7 @@ class GameLogic { //<>// //<>//
     bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug);
 
     //printer frametime
-    println(1/((millis()-mSec)/1000f));
+    //println(1/((millis()-mSec)/1000f));
     mSec = millis();
 
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
