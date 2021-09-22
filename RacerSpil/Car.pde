@@ -1,6 +1,6 @@
-class Car {
+class Car { //<>// //<>//
   PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
-  float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
+  float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1, collisionTurnRate = 0.02f;
   int cDrej, accelerate, carWidth, carHeight;
   boolean ice;
 
@@ -75,44 +75,49 @@ class Car {
     //println(carRetning.y > 0);
     //println(carRetning.x > 0);
     if (ret[0] != -1 && !tT) {
-      vel.mult(0.9);
-      if (carRetning.y > 0) {
+      vel.mult(0.92);
+      backVel.mult(0.92);
+      println(carRetning.y > 0);
+      println(carRetning.x > 0);
+      println(ret[1]);
+
+      if (carRetning.y > 0) { //<>//
         switch (int(ret[1])) {
         case 0:
-          if (carRetning.x > 0)theta += 0.1f;
-          else theta -= 0.1f;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
           break;
         case 1:
-          if (carRetning.x > 0)theta -= 0.1f;
-          else theta += 0.1f;
+          if (carRetning.x > 0)theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
           break;
         case 2:
-          if (carRetning.x > 0)theta += 0.1f;
-          else theta -= 0.1f;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
           break;
         case 3:
-          if (carRetning.x > 0)theta -= 0.1f;
-          else theta += 0.1f;
+          if (carRetning.x > 0) theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
           break;
         }
       } else {
 
         switch (int(ret[1])) {
         case 0:
-          if (carRetning.x > 0)theta -= 0.1f;
-          else theta += 0.1f;
+          if (carRetning.x > 0)theta -= collisionTurnRate;
+          else theta -= collisionTurnRate;
           break;
         case 1:
-          if (carRetning.x > 0)theta += 0.1f;
-          else theta -= 0.1f;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
           break;
         case 2:
-          if (carRetning.x > 0)theta -= 0.1f;
-          else theta += 0.1f;
+          if (carRetning.x > 0)theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
           break;
         case 3:
-          if (carRetning.x > 0)theta += 0.1f;
-          else theta -= 0.1f;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
           break;
         }
       }

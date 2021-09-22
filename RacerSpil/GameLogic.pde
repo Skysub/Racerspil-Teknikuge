@@ -1,7 +1,7 @@
 class GameLogic { //<>// //<>//
 
   Bane bane;
-  int mSec;
+  int mSec, collisionTime, baneDrawTime, miscTime;
 
   boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false; //kun til taster
   boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics; //til andre bools
@@ -35,6 +35,8 @@ class GameLogic { //<>// //<>//
   }
 
   void Update() {
+    miscTime = millis();
+    
     imageMode(CORNER);
     if (coolGraphics)image(backdrop, 0, 120);
 
@@ -63,15 +65,23 @@ class GameLogic { //<>// //<>//
     coolGraphics = toggleTemp[0];
     gF = toggleTemp[1];
 
+
+    baneDrawTime = millis();
     bane.Draw(tileTest, hitboxDebug, coolGraphics);
+    //println("BaneDrawTime: "+(millis()-baneDrawTime)); //print time it takes to draw bane
 
-    car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug),tileTest);
+    collisionTime = millis();
+    car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest);
+    //println("collision time: "+millis()-collisionTime); //printer tiden det tog a lave collision detection
 
-      //printer frametime
-      //println(1/((millis()-mSec)/1000f));
-      mSec = millis();
+
+    //println(1/((millis()-mSec)/1000f)); //printer framerate
+    //println("Frametime: "+(millis()-mSec)); //printer frametime
+    mSec = millis();
 
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
+
+
 
     handleTimer();
     DrawUI();
@@ -83,6 +93,8 @@ class GameLogic { //<>// //<>//
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
+    
+    //println("MiscTime: "+(millis()-miscTime));
   }
 
   void DrawUI() {
