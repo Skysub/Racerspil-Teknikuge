@@ -22,6 +22,9 @@ class GameLogic { //<>// //<>//
   int carWidth = 55, carHeight = 25;
   Car car;
 
+  //Til boosts
+  float boostProbability = 0.05;
+  int maxBoosts = 3;
 
   //Ting til seed og menu
   int seed = int(random(0, 9999));
@@ -32,8 +35,9 @@ class GameLogic { //<>// //<>//
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
 
     gameMenu = new Menu(thePApplet, seed);
-    bane = new Bane(seed);
+    bane = new Bane(seed,maxBoosts,boostProbability); //<>//
     ordenBil();
+
   }
 
   void Update() {
@@ -78,10 +82,12 @@ class GameLogic { //<>// //<>//
     //println("collision time: "+millis()-collisionTime); //printer tiden det tog a lave collision detection
 
 
+
     //println(1/((millis()-mSec)/1000f)); //printer framerate
     //println("Frametime: "+(millis()-mSec)); //printer frametime
     mSec = millis();
-
+    
+    givBoost = bane.boosting;
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
 
 

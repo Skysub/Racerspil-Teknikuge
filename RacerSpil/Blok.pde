@@ -2,17 +2,19 @@ class Blok {
 
   int blokkeIalt = 4;
   int[][] blokInfo = new int[blokkeIalt][5];
-  
+
   PImage startTexture,straightTexture,rightCornerTexture,leftCornerTexture;
   
+
 
   //constructer
   Blok() {
     
-    startTexture = loadImage("Start.jpg");
-    straightTexture = loadImage("Straight.jpg");
-    rightCornerTexture = loadImage("Right.jpg");
-    leftCornerTexture = loadImage("Left.jpg");
+    startTexture = loadImage("Start.png");
+    straightTexture = loadImage("Straight.png");
+    rightCornerTexture = loadImage("Right.png");
+    leftCornerTexture = loadImage("Left.png");
+
     
     InitialiserInfo();
   }
@@ -24,22 +26,22 @@ class Blok {
 
   //tegner blokken, al translation og rotation gøres ikke her men i metoden der kalder denne metode
   //Vælger hvilken blok draw metode der skal bruges ud fra blok id'et
-  void DrawBlok(int id, boolean hDb, Boolean gfx) {
+  void DrawBlok(int id, boolean hDb, Boolean gfx, float boostProb) {
     switch (id) {
     case 0: //Start blok
       if (!hDb)DrawB0(gfx);
       else DrawOldB0();
       break;
     case 1:
-      if (!hDb)DrawB1(gfx);
+      if (!hDb)DrawB1(gfx,boostProb);
       else DrawOldB1();
       break;
     case 2:
-      if (!hDb)DrawB2(gfx);
+      if (!hDb)DrawB2(gfx,boostProb);
       else DrawOldB2();
       break;
     case 3:
-      if (!hDb)DrawB3(gfx);
+      if (!hDb)DrawB3(gfx,boostProb);
       else DrawOldB3();
       break;
 
@@ -49,6 +51,7 @@ class Blok {
     //Reverter til default
     stroke(20);
     strokeWeight(1);
+     //<>//
   }
 
   int GetBlokIalt() {
@@ -242,7 +245,7 @@ class Blok {
   }
 
   //Højresving blok Draw
-  void DrawB1(boolean gfx) {
+  void DrawB1(boolean gfx, float boostProb) {
     fill(20);
     noStroke();
     rect(0, 0, 160, 160);
@@ -257,7 +260,7 @@ class Blok {
   }
 
   //Venstresving blok Draw
-  void DrawB2(boolean gfx) {
+  void DrawB2(boolean gfx, float boostProb) {
     fill(20);
     noStroke();
     rect(0, 0, 160, 160);
@@ -272,7 +275,7 @@ class Blok {
   }
 
   //Ligeud blok Draw
-  void DrawB3(boolean gfx) {
+  void DrawB3(boolean gfx, float boostProb) {
     fill(20);
     noStroke();
     rect(0, 0, 160, 160);

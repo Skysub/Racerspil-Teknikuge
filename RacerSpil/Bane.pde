@@ -2,12 +2,26 @@ class Bane { //<>//
   int[][][] bane, dBTS;
   Blok blok;
   int bIalt; //Antallet af blokke der er ialt, bruges til at lave debug tilesettet med alle blokkene
+  
+  //boost stuff
+  int k = 0, boostLimit, currentBoosts = 0; //bruges til at iterere boosts
+  float checkForBoost, boostProbability;
+  Boolean boosting;
+  Boost[] boosts;
+  PVector[] boostLocations;
 
-  Bane(int seed) {
+
+  Bane(int seed, int maxBoosts, float boostProb) {
     blok = new Blok();
     bIalt = blok.GetBlokIalt();
     dBTS = LavDebugTileSet(bIalt); //Laver debug tilesettet
+    boostProbability = boostProb;
+    boostLimit = maxBoosts;
+    boosts = new Boost[maxBoosts];
+    boostLocations = new PVector[maxBoosts];
     NyBane(seed); //genererer banen
+
+    println(boostProbability+" / "+boostProb); //<>//
   }
 
 
@@ -17,8 +31,8 @@ class Bane { //<>//
     translate(0, 120); //flytter alt ned så ui ikke bliver dækket
 
     //Vælger banen eller debug tilesettet givet tT (tileTest)
-    if (!tT)DrawBane(bane, tT, hDb, gfx);
-    else DrawBane(dBTS, tT, hDb, gfx);
+    if (!tT)DrawBane(bane, tT, hDb, gfx, boostProbability);
+    else DrawBane(dBTS, tT, hDb, gfx, boostProbability);
 
 
     popMatrix();
@@ -163,7 +177,6 @@ class Bane { //<>//
               }
             } else {
               if ((carCorners[s].x < hitBoxes[i][j][0].x+hitBoxes[i][j][1].x) && (carCorners[s].x > hitBoxes[i][j][0].x) && (carCorners[s].y < hitBoxes[i][j][0].y+hitBoxes[i][j][1].y) && (carCorners[s].y > hitBoxes[i][j][0].y)) {
-
                 if (hDb) {
                   println("Collision!");
                   println(i+" "+j);
@@ -202,18 +215,19 @@ class Bane { //<>//
   void NyBane(int seed) {
     //Hvis banen der blev genereret er broken upshifter den seedet med 1 og prøver igen
     while (true) {
-      bane = GenererBane(seed);
+      bane = GenererBane(seed, boostProbability);
       if (bane[0][0][0] != -2) break;
       else seed++;
     }
   }
 
   //Generer banen tilfældigt ved hjælp af et seed
-  int[][][] GenererBane (int seed) {
+  int[][][] GenererBane (int seed, float boostProb) {
+    currentBoosts = 0;
     randomSeed(seed);
 
     //initialiserer banen some et 3-dimensionelt array og gør alle blok id'er til -1, så de ikke render hvis de ikke bliver overskrevet.
-    int[][][] b = new int [12][6][2];
+    int[][][] b = new int [12][6][3];
     for (int i=0; i<6; i++) {
       for (int j=0; j<12; j++) {
         b[j][i][0] = -1;        
@@ -299,6 +313,17 @@ class Bane { //<>//
       rotF = rot;
       b[int(sted.x)][int(sted.y)][0] = blokF;
       b[int(sted.x)][int(sted.y)][1] = rotF;
+
+      //Der tjekkes, om der skal laves et boost i denne blok
+      checkForBoost = random(0, 1);
+      println("Probability: "+boostProbability+" || Booost check: "+checkForBoost+" || Current boosts: "+currentBoosts + "|| Boost limit: "+boostLimit);
+      if (boostProbability >= checkForBoost && currentBoosts < boostLimit) {
+        b[int(sted.x)][int(sted.y)][2] = 1;
+        boostLocations[currentBoosts] = new PVector(80, 80);
+        boosts[currentBoosts] = new Boost(boostLocations[currentBoosts]);
+        currentBoosts++;
+        println("Probability: "+boostProbability+" || Booost check: "+checkForBoost+" || Current boosts: "+currentBoosts);
+      }
     }
     //Er Banen ikke lukket og "før start" har ikke nogen brik, signalerer vi at vi skal skifte seed og prøve igen
     if (b[int(fStart.x)][int(fStart.y)][0] == -1) b[0][0][0] = -2;
@@ -316,15 +341,21 @@ class Bane { //<>//
      print(b[j][i][1]+" ");
      }
      println();
+     }
+     for (int i=0; i<6; i++) {
+     for (int j=0; j<12; j++) {
+     if (b[j][i][2] != -1)print(" "+b[j][i][2]+" ");
+     else print(b[j][i][2]+" ");
+     }
+     println();
      }*/
-
     //Vi er done, og banen returneres
     return b;
   }
 
   //Tegner alle blokkene som beskrevet i bane arrayet
 
-  void DrawBane(int[][][] x, boolean tT, boolean hDb, boolean gfx) {
+  void DrawBane(int[][][] x, boolean tT, boolean hDb, boolean gfx, float boostProbability) {
     for (int i=0; i<6; i++) {
       for (int j=0; j<12; j++) {
         pushMatrix();
@@ -345,10 +376,20 @@ class Bane { //<>//
 
         //kalder en funktion der vælger hvilken metode der skal bruges alt efter hvilken blok skal tegnes
 
-        blok.DrawBlok(x[j][i][0], hDb, gfx);
+        blok.DrawBlok(x[j][i][0], hDb, gfx, boostProbability);
+
+        if (!tT && k<currentBoosts && x [j][i][2]==1) {
+          boosts[k].DrawBoost();
+          boosts[k].UpdateBoost();
+          if(boosts[k].IsBoosting() == true) boosting = true;
+          k++;
+        }
+
         popMatrix();
       }
     }
+    k = 0;
+    boosting = false;
   }
 
   //placerer og roterer startfeltet efter et forudvalgt system, se skemaet "grid startretning.png" i "hjælp til racerprojekt generering" mappen i repositoriet.
@@ -397,7 +438,7 @@ class Bane { //<>//
 
   //Tager alle blokke fra blok klassen og lægger dem ind i en bane én efter hindanden, er lavet til at man nemt kan tjekke hvordan hver blok ser ud ved at trykke t.
   int[][][] LavDebugTileSet(int bIalt) {
-    int[][][] a = new int [12][6][2];
+    int[][][] a = new int [12][6][3];
     int blok = 0;
 
     for (int i=0; i<6; i++) {
