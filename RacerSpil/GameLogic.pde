@@ -1,12 +1,13 @@
 class GameLogic { //<>// //<>//
 
   Bane bane;
-  int mSec;
+  int mSec, collisionTime, baneDrawTime, miscTime;
 
   boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false; //kun til taster
   boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics; //til andre bools
 
   boolean[] toggleTemp; 
+  PVector start;
 
   //Til runde counter
   int CurrentRound = 1, TotalRounds = 3;
@@ -35,16 +36,21 @@ class GameLogic { //<>// //<>//
 
     gameMenu = new Menu(thePApplet, seed);
     bane = new Bane(seed,maxBoosts,boostProbability); //<>//
+    ordenBil();
+
   }
 
   void Update() {
+    miscTime = millis();
+
     imageMode(CORNER);
-    if(coolGraphics)image(backdrop, 0, 120);
-    
+    if (coolGraphics)image(backdrop, 0, 120);
+
     //laver en ny bane hvis seedet er ændret
     if (seed != seedOld) {
       seedOld = seed;
       bane.NyBane(seed);
+      ordenBil();
     }
     //gør at man kan toggle hitboxes med h
     toggleTemp = toggle(h, hF, hitboxDebug);
@@ -66,16 +72,25 @@ class GameLogic { //<>// //<>//
     coolGraphics = toggleTemp[0];
     gF = toggleTemp[1];
 
+
+    baneDrawTime = millis();
     bane.Draw(tileTest, hitboxDebug, coolGraphics);
+    //println("BaneDrawTime: "+(millis()-baneDrawTime)); //print time it takes to draw bane
 
-    bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug);
+    collisionTime = millis();
+    car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest, givBoost);
+    //println("collision time: "+millis()-collisionTime); //printer tiden det tog a lave collision detection
 
-    //printer frametime
-    //println(1/((millis()-mSec)/1000f));
+
+
+    //println(1/((millis()-mSec)/1000f)); //printer framerate
+    //println("Frametime: "+(millis()-mSec)); //printer frametime
     mSec = millis();
     
     givBoost = bane.boosting;
     car.Update(hojre, venstre, op, ned, givBoost, hitboxDebug);
+
+
 
     handleTimer();
     DrawUI();
@@ -87,6 +102,8 @@ class GameLogic { //<>// //<>//
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
+
+    //println("MiscTime: "+(millis()-miscTime));
   }
 
   void DrawUI() {
@@ -181,5 +198,10 @@ class GameLogic { //<>// //<>//
     if (xF && !x) xF = x;
     boolean[] a = {v, xF};
     return a;
+  }
+
+  void ordenBil() {
+    int[] tt = bane.whereStart();
+    car.placeCar(new PVector(tt[0]*160+40, tt[1]*160+200), tt[2]);
   }
 }

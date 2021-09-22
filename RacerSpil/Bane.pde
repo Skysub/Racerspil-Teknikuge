@@ -38,9 +38,10 @@ class Bane { //<>//
     popMatrix();
   }
 
-  float CalculateCollisions(PVector carPos, int carW, int carH, float carRot, boolean hDb) {
+  float[] CalculateCollisions(PVector carPos, int carW, int carH, float carRot, boolean hDb) {
     PVector relativeCarPos = new PVector(carPos.x % 160, ((carPos.y-120) % 160));
     PVector sted = new PVector(floor(carPos.x/160), floor((((carPos.y)-120)/160)));
+    PVector basisRetning = new PVector(1, 0), b2 = new PVector(0, -1);
 
     PVector[][][] hitBoxes = blok.GetHitboxes(sted, bane);
     PVector[] carCorners = new PVector[4];
@@ -72,6 +73,32 @@ class Bane { //<>//
 
     for (int i = 0; i<hitBoxes.length; i++) {
       for (int j = 0; j<hitBoxes[i].length; j++) {
+        float angle = PVector.angleBetween(basisRetning, carRetning);
+        if (carRetning.x < 0) {
+          angle = PI-angle;
+        }
+
+        int storstX = 0, storstY = 0, mindstX = 0, mindstY = 0;
+        float temp1 = carCorners[0].x, temp2 = carCorners[0].x, temp3 = carCorners[0].y, temp4 = carCorners[0].y;
+        for (int k = 0; k<4; k++) {
+          if (carCorners[k].x > temp1) {
+            temp1 = carCorners[k].x;
+            storstX = k;
+          }
+          if (carCorners[k].x < temp2) {
+            temp2 = carCorners[k].x;
+            mindstX = k;
+          }
+          if (carCorners[k].y > temp3) {
+            temp3 = carCorners[k].y;
+            storstY = k;
+          }
+          if (carCorners[k].y < temp4) {
+            temp4 = carCorners[k].y;
+            mindstY = k;
+          }
+        }    
+
         if (hDb) {
           pushMatrix();
           fill(0, 255, 0);
@@ -81,6 +108,33 @@ class Bane { //<>//
           popMatrix();
         }
         for (int s = 0; s<4; s++) {
+          int side = 1;
+
+          if (s == storstX) {
+            //angle += HALF_PI + PI;
+            side = 1;
+            angle = HALF_PI - angle;
+          }
+          if (s == mindstX) {
+            side = 3;
+            //angle += HALF_PI;
+            angle = HALF_PI - angle;
+          }
+          if (s == storstY) {
+            //angle += PI;
+            side = 2;
+          }
+          if (s == mindstY) {
+            //angle += HALF_PI + PI;
+            side = 0;
+            angle = HALF_PI - angle;
+          }
+
+          float[] ret = new float[2];
+          ret[0] = angle % HALF_PI;
+          ret[1] = side;
+
+          //println(degrees(ret[0])); //printer angle
 
           if (hitBoxes[i][j][1].x < 0) {
             if (hitBoxes[i][j][1].y < 0) {
@@ -88,20 +142,24 @@ class Bane { //<>//
                 if (hDb) {
                   println("Collision!");
                   println(i+" "+j);
+                  println(degrees(angle));
                   println(millis());
                   fill(0, 0, 255);
                   circle(carPos.x, carPos.y, 45);
                 }
+                return ret;
               }
             } else {
               if ((carCorners[s].x > hitBoxes[i][j][0].x+hitBoxes[i][j][1].x) && (carCorners[s].x < hitBoxes[i][j][0].x) && (carCorners[s].y < hitBoxes[i][j][0].y+hitBoxes[i][j][1].y) && (carCorners[s].y > hitBoxes[i][j][0].y)) {
                 if (hDb) {
                   println("Collision!");
                   println(i+" "+j);
+                  println(degrees(angle));
                   println(millis());
                   fill(255, 255, 100);
                   circle(carPos.x, carPos.y, 50);
                 }
+                return ret;
               }
             }
           } else {
@@ -110,24 +168,24 @@ class Bane { //<>//
                 if (hDb) {
                   println("Collision!");
                   println(i+" "+j);
+                  println(degrees(angle));
                   println(millis());
                   fill(255, 0, 255);
                   circle(carPos.x, carPos.y, 55);
                 }
+                return ret;
               }
             } else {
               if ((carCorners[s].x < hitBoxes[i][j][0].x+hitBoxes[i][j][1].x) && (carCorners[s].x > hitBoxes[i][j][0].x) && (carCorners[s].y < hitBoxes[i][j][0].y+hitBoxes[i][j][1].y) && (carCorners[s].y > hitBoxes[i][j][0].y)) {
-
-
-
-
                 if (hDb) {
                   println("Collision!");
                   println(i+" "+j);
+                  println(degrees(angle));
                   println(millis());
                   fill(255);
                   circle(carPos.x, carPos.y, 60);
                 }
+                return ret;
               }
             }
           }
@@ -147,8 +205,9 @@ class Bane { //<>//
         }
       }
     }
-    return 0;
+    return new float[]{-1f};
   }
+
 
 
 
@@ -393,5 +452,16 @@ class Bane { //<>//
       }
     }
     return a;
+  }
+
+  int[] whereStart() {
+    for (int i=0; i<6; i++) {
+      for (int j=0; j<12; j++) {
+        if (bane[j][i][0] == 0) {
+          return new int[] {j,i,bane[j][i][1]};
+        }
+      }
+    }
+    return new int[0];
   }
 }

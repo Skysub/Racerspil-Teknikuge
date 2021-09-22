@@ -1,11 +1,14 @@
-class Car {
-  PVector pos, vel, acc, rotation, backVel, endOfCar;
-  float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1;
+class Car { //<>// //<>// //<>//
+  PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
+
+  float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1, collisionTurnRate = 0.02f, collisionSpeedLoss = 0.30f;
   int cDrej, accelerate, carWidth, carHeight;
-  boolean ice;
+  boolean ice, playSpeedUp = true, playBoostSFX = true;
+
 
   PImage carSprite;
   ParticleSystem ps;
+  SoundFile speedUp, boostSFX;
 
 
   Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int carW, int carH) {
@@ -31,9 +34,13 @@ class Car {
 
     carSprite = loadImage("car.png");
     ps = new ParticleSystem(pos);
+    speedUp = new SoundFile(RacerSpil.this, "speedUp.mp3");
+    boostSFX = new SoundFile(RacerSpil.this, "boost.mp3");
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb) {
+    carRetning = new PVector(carWidth/2f, 0);
+    carRetning.rotate(theta+HALF_PI);
 
     // Styrer controls
     if ((hojre && venstre)||(!hojre && !venstre)) {
@@ -61,6 +68,14 @@ class Car {
     linearBackVel = mag(backVel.x, backVel.y);
     Particles(linearVel, theta, givBoost);
 
+    speedUp.amp(linearVel/5);
+    if (playSpeedUp) speedUp.play();
+    if (speedUp.isPlaying()) playSpeedUp = false;
+    else playSpeedUp = true;
+
+
+
+
     if (!ice) { //Om bieln kører på si eller ej
       Drive(accelerate, givBoost);
     } else DriveIce(accelerate);
@@ -69,7 +84,80 @@ class Car {
     else DrawCar();
   }
 
+  void placeCar(PVector nyPos, int rot) {
+    pos.x = nyPos.x;
+    pos.y = nyPos.y;
+    vel.mult(0);
+    backVel.mult(0);
+    theta = rot*HALF_PI;
+    acc = new PVector (0, 0);
+    thetaVel = 0;
+  }
 
+  void Hit(float[] ret, boolean tT, boolean boost) {
+    //println(carRetning.y > 0);
+    //println(carRetning.x > 0);
+    //println(vel.mag());
+    if (ret[0] != -1 && !tT) {
+      vel.mult(1-collisionSpeedLoss);
+      backVel.mult(1-collisionSpeedLoss);
+      //println(carRetning.y > 0);
+      //println(carRetning.x > 0);
+      //println(ret[1]);
+      int cP;
+      if (vel.mag() > 5 || boost) cP = collisionPush*15;
+      else cP = collisionPush;
+
+      if (carRetning.y > 0) {
+        switch (int(ret[1])) {
+        case 0:
+          pos.y += cP;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
+          break;
+        case 1:
+          pos.x -= cP;
+          if (carRetning.x > 0)theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
+          break;
+        case 2:
+          pos.y -= cP;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
+          break;
+        case 3:
+          pos.x += cP;
+          if (carRetning.x > 0) theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
+          break;
+        }
+      } else {
+
+        switch (int(ret[1])) {
+        case 0:
+          pos.y += cP;
+          if (carRetning.x > 0)theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
+          break;
+        case 1:
+          pos.x -= cP;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
+          break;
+        case 2:
+          pos.y -= cP;
+          if (carRetning.x > 0)theta -= collisionTurnRate;
+          else theta += collisionTurnRate;
+          break;
+        case 3:
+          pos.x += cP;
+          if (carRetning.x > 0)theta += collisionTurnRate;
+          else theta -= collisionTurnRate;
+          break;
+        }
+      }
+    }
+  }
 
   void DrawCar() {
     pushMatrix();
@@ -119,6 +207,12 @@ class Car {
       maxVel = 10; //sætter maks hastigheden til et højere tal
       if (linearVel <= 2) vel.setMag(2); //Sørger for et boost selvom der køres langsomt
       vel.mult(1.15);
+      
+      speedUp.stop();
+      speedUp.amp(0.2);
+      if (playBoostSFX) boostSFX.play();
+      if (boostSFX.isPlaying()) playBoostSFX = false;
+      else playBoostSFX = true;
     } else {
       maxVel = constrain(maxVel, 4, 10); 
       maxVel = maxVel - 0.05; //maks hastigheden falder ligeså langsomt til den normalle makshastighed efter boostet
