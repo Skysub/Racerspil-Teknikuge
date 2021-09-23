@@ -51,7 +51,7 @@ class Blok {
     //Reverter til default
     stroke(20);
     strokeWeight(1);
-     //<>// //<>//
+     //<>// //<>// //<>//
   }
 
   int GetBlokIalt() {
@@ -301,7 +301,7 @@ class Blok {
     rect(0, 0, 160, 20);
     rect(0, 140, 160, 20);
     fill(255, 0, 0);
-    rect(64, 20, 32, 120);
+    rect(40, 20, 20, 120);
   }
 
   //Højresving blok Draw

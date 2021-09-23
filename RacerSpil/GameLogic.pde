@@ -1,7 +1,7 @@
 class GameLogic { //<>// //<>//
 
   Bane bane;
-  int mSec, collisionTime, baneDrawTime, miscTime;
+  int mSec, collisionTime, baneDrawTime, miscTime, waitTime = 2500, waitTimer = 0;
 
   boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false; //kun til taster
   boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics; //til andre bools
@@ -10,7 +10,7 @@ class GameLogic { //<>// //<>//
   PVector start;
 
   //Til runde counter
-  int currentRound = 1, TotalRounds = 3;
+  int currentRound = 0, TotalRounds = 3;
 
   //Til time counter
   int record, raceTime = 0, raceTimeStart;
@@ -35,9 +35,8 @@ class GameLogic { //<>// //<>//
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
 
     gameMenu = new Menu(thePApplet, seed);
-    bane = new Bane(seed,maxBoosts,boostProbability);
+    bane = new Bane(seed, maxBoosts, boostProbability);
     ordenBil();
-
   }
 
   void Update() {
@@ -52,16 +51,18 @@ class GameLogic { //<>// //<>//
       bane.NyBane(seed);
       ordenBil();
       racing = false;
-    currentRound = bane.startCollision(currentRound, true);
-      record = 0;
+      currentRound = bane.startCollision(currentRound, true);
+      if (!r) record = 0;
+      waitTimer = 0;
     }
-    
-    if (op && !racing) {
+
+    if (op && !racing && millis() > waitTimer + waitTime) {
       raceStart = true;
     }
     
     currentRound = bane.startCollision(currentRound, false);
-    
+    if (currentRound < 0) currentRound = 0;
+
     //gør at man kan toggle hitboxes med h
     toggleTemp = toggle(h, hF, hitboxDebug);
     hitboxDebug = toggleTemp[0];
@@ -96,7 +97,7 @@ class GameLogic { //<>// //<>//
     //println(1/((millis()-mSec)/1000f)); //printer framerate
     //println("Frametime: "+(millis()-mSec)); //printer frametime
     mSec = millis();
-    
+
     car.Update(hojre, venstre, op, ned, bane.checkBoostCollisions(), hitboxDebug, racing);
 
 
@@ -157,7 +158,6 @@ class GameLogic { //<>// //<>//
     if (raceStart) {
       racing = true;
       raceTime = 0;
-      currentRound = 1;
       raceTimeStart = millis();
       raceStart = false;
     }
@@ -168,7 +168,9 @@ class GameLogic { //<>// //<>//
     //logic for når race er ovre
     if (racing && currentRound > TotalRounds) {
       racing = false;
+      ordenBil();
       currentRound = 0;
+      waitTimer = millis();
       if (raceTime < record) record = raceTime;
       else if (record == 0 && raceTime != 0) record = raceTime;
     }
