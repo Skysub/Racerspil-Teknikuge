@@ -3,12 +3,12 @@ class Car { //<>// //<>// //<>// //<>//
 
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1, collisionTurnRate = 0.02f, collisionSpeedLoss = 0.30f;
   int cDrej, accelerate, carWidth, carHeight, collisionPush = 1;
-  boolean ice, playSpeedUp = true, playBoostSFX = true;
+  boolean ice, playSpeedUp = true, playBoostSFX = true, playHitSFX = true;
 
 
   PImage carSprite;
   ParticleSystem ps;
-  SoundFile speedUp, boostSFX;
+  SoundFile speedUp, boostSFX, hitSFX;
 
 
   Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int carW, int carH) {
@@ -36,6 +36,7 @@ class Car { //<>// //<>// //<>// //<>//
     ps = new ParticleSystem(pos);
     speedUp = new SoundFile(RacerSpil.this, "speedUp.mp3");
     boostSFX = new SoundFile(RacerSpil.this, "boost.mp3");
+    hitSFX = new SoundFile(RacerSpil.this, "jembayHit.wav");
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb, boolean round) {
@@ -68,11 +69,12 @@ class Car { //<>// //<>// //<>// //<>//
       linearBackVel = mag(backVel.x, backVel.y);
       Particles(linearVel, theta, givBoost);
 
-      speedUp.amp(linearVel/100);
+      if (linearVel > 0) speedUp.amp(linearVel/100);
+      if (linearBackVel > 0) speedUp.amp(linearBackVel/200);
       if (playSpeedUp) speedUp.play();
       if (speedUp.isPlaying()) playSpeedUp = false;
       else playSpeedUp = true;
-      
+
       if (!ice) { //Om bilen kører på is eller ej
         Drive(accelerate, givBoost);
       } else DriveIce(accelerate);
@@ -97,7 +99,7 @@ class Car { //<>// //<>// //<>// //<>//
     theta = rot*HALF_PI;
     acc = new PVector (0, 0);
     thetaVel = 0;
-    
+
     speedUp.stop();
   }
 
@@ -114,6 +116,11 @@ class Car { //<>// //<>// //<>// //<>//
       int cP;
       if (vel.mag() > 5 || boost) cP = collisionPush*15;
       else cP = collisionPush;
+
+      hitSFX.amp(0.2);
+      if (playHitSFX && linearVel > 1.25 || playHitSFX && linearBackVel > 1.25) hitSFX.play();
+      if (hitSFX.isPlaying()) playHitSFX = false;
+      else playHitSFX = true;
 
       if (carRetning.y > 0) {
         switch (int(ret[1])) {
