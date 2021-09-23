@@ -10,11 +10,11 @@ class GameLogic { //<>// //<>//
   PVector start;
 
   //Til runde counter
-  int CurrentRound = 1, TotalRounds = 3;
+  int currentRound = 1, TotalRounds = 3;
 
   //Til time counter
-  int Record, RaceTime = 60000, RaceTimeStart;
-  boolean RaceStart = false, Racing = false;
+  int record, raceTime = 0, raceTimeStart;
+  boolean raceStart = false, racing = false;
 
   //ting til bilen
   PVector carPos = new PVector(width/2, height/2), carBoost = new PVector(0, 0), currentCarPos;
@@ -47,11 +47,21 @@ class GameLogic { //<>// //<>//
     if (coolGraphics)image(backdrop, 0, 120);
 
     //laver en ny bane hvis seedet er ændret
-    if (seed != seedOld) {
+    if (seed != seedOld || r) {
       seedOld = seed;
       bane.NyBane(seed);
       ordenBil();
+      racing = false;
+    currentRound = bane.startCollision(currentRound, true);
+      record = 0;
     }
+    
+    if (op && !racing) {
+      raceStart = true;
+    }
+    
+    currentRound = bane.startCollision(currentRound, false);
+    
     //gør at man kan toggle hitboxes med h
     toggleTemp = toggle(h, hF, hitboxDebug);
     hitboxDebug = toggleTemp[0];
@@ -87,7 +97,7 @@ class GameLogic { //<>// //<>//
     //println("Frametime: "+(millis()-mSec)); //printer frametime
     mSec = millis();
     
-    car.Update(hojre, venstre, op, ned, bane.checkBoostCollisions(), hitboxDebug);
+    car.Update(hojre, venstre, op, ned, bane.checkBoostCollisions(), hitboxDebug, racing);
 
 
 
@@ -112,10 +122,10 @@ class GameLogic { //<>// //<>//
     fill(0, 0, 0);
 
     //skal kombineres med collision tjek med start
-    text("Round: "+CurrentRound+"/"+TotalRounds, 15, 65);
+    text("Round: "+currentRound+"/"+TotalRounds, 15, 65);
     rect(312, 0, 10, 100, 0, 0, 10, 10);
 
-    DrawTime(Record, RaceTime);
+    DrawTime(record, raceTime);
     rect(745, 0, 10, 100, 0, 0, 10, 10);
     rect(1245, 0, 10, 100, 0, 0, 10, 10);
 
@@ -144,46 +154,46 @@ class GameLogic { //<>// //<>//
 
   //a bit of stuff for the timer and logic for handling record time when starting a race
   void handleTimer() {
-    if (RaceStart) {
-      Racing = true;
-      RaceTime = 0;
-      CurrentRound = 1;
-      RaceTimeStart = millis();
-      RaceStart = false;
+    if (raceStart) {
+      racing = true;
+      raceTime = 0;
+      currentRound = 1;
+      raceTimeStart = millis();
+      raceStart = false;
     }
     //måler tiden fra starten af race
-    if (Racing) {
-      RaceTime = millis() - RaceTimeStart;
+    if (racing) {
+      raceTime = millis() - raceTimeStart;
     }
     //logic for når race er ovre
-    if (Racing && CurrentRound > TotalRounds) {
-      Racing = false;
-      CurrentRound = 0;
-      if (RaceTime < Record) Record = RaceTime;
-      else if (Record == 0 && RaceTime != 0) Record = RaceTime;
+    if (racing && currentRound > TotalRounds) {
+      racing = false;
+      currentRound = 0;
+      if (raceTime < record) record = raceTime;
+      else if (record == 0 && raceTime != 0) record = raceTime;
     }
   }
 
   //Timer drawing
-  void DrawTime(int RecordTime, int Time) {
+  void DrawTime(int recordTime, int time) {
     int min, sec;
-    int RecordMin, RecordSec;
+    int recordMin, recordSec;
     fill(0, 0, 0);
     textSize(50);
 
     //konverterer tiden til læsbar format for racetime
-    min = floor(Time/60000f);
-    Time = Time - floor(Time/60000f)*60000;
-    sec = floor(Time/1000f);
-    Time = Time - floor(Time/1000f)*1000;
-    text("Time: "+min+":"+sec+"."+Time, 340, 65);
+    min = floor(time/60000f);
+    time = time - floor(time/60000f)*60000;
+    sec = floor(time/1000f);
+    time = time - floor(time/1000f)*1000;
+    text("Time: "+min+":"+sec+"."+time, 340, 65);
 
     //samme som overstående men blot for rekord tiden
-    RecordMin = floor(RecordTime/60000f);
-    RecordTime = RecordTime - floor(RecordTime/60000f)*60000;
-    RecordSec = floor(RecordTime/1000f);
-    RecordTime = RecordTime - floor(RecordTime/1000f)*1000;
-    text("Record: "+RecordMin+":"+RecordSec+"."+RecordTime, 775, 65);
+    recordMin = floor(recordTime/60000f);
+    recordTime = recordTime - floor(recordTime/60000f)*60000;
+    recordSec = floor(recordTime/1000f);
+    recordTime = recordTime - floor(recordTime/1000f)*1000;
+    text("record: "+recordMin+":"+recordSec+"."+recordTime, 775, 65);
   }
 
   //En metode der hjælper med at toggle visse booleans.

@@ -1,4 +1,4 @@
-class Bane { //<>// //<>//
+class Bane { //<>// //<>// //<>//
   int[][][] bane, dBTS;
   Blok blok;
   int bIalt; //Antallet af blokke der er ialt, bruges til at lave debug tilesettet med alle blokkene
@@ -9,8 +9,10 @@ class Bane { //<>// //<>//
   Boolean boosting;
   Boost[] boosts;
   PVector[] boostLocations;
-  PVector relativeCarPos, sted;
-
+  PVector relativeCarPos, sted = new PVector(0, 0);
+  ;
+  int lastStartBox = 0, currentStartBox = 0, lastLastStartBox = 0, medium = 0;
+  boolean tick = true;
 
   Bane(int seed, int maxBoosts, float boostProb) {
     blok = new Blok();
@@ -35,6 +37,44 @@ class Bane { //<>// //<>//
 
 
     popMatrix();
+  }
+
+  int startCollision(int cR, boolean r) {
+
+    if (r) {      
+      currentStartBox = 0;
+      lastStartBox = 0;
+      lastLastStartBox = 0;
+      return 0;
+    }
+
+    if (bane[int(sted.x)][int(sted.y)][0] == 0) {
+      if (relativeCarPos.x < 64) {
+        currentStartBox = 0;
+      } else if (relativeCarPos.x > 96) {
+        currentStartBox = 2;
+      } else {
+        currentStartBox = 1;
+      }
+    }
+    if (medium != currentStartBox) { 
+      lastLastStartBox = lastStartBox;
+      lastStartBox = currentStartBox;
+      tick = true;
+    }
+    medium = currentStartBox;
+
+
+    println(currentStartBox + " " + lastStartBox + " " + lastLastStartBox);
+    if (lastStartBox == 1 && currentStartBox == 0 && lastLastStartBox == 1) {
+      tick = false; 
+      return cR - 1;
+    }
+    if (lastStartBox == 2 && currentStartBox == 2 && lastLastStartBox == 1) {
+      tick = true; 
+      return cR + 1;
+    }
+    return cR;
   }
 
   float[] CalculateCollisions(PVector carPos, int carW, int carH, float carRot, boolean hDb) {
@@ -460,8 +500,8 @@ class Bane { //<>// //<>//
   }
 
   boolean checkBoostCollisions() {
-    for (int i = 0; i < currentBoosts; i++) { //<>//
-      if(boosts[i].CheckCollision(relativeCarPos) && bane[int(sted.x)][int(sted.y)][2] == 1) return true;
+    for (int i = 0; i < currentBoosts; i++) {
+      if (boosts[i].CheckCollision(relativeCarPos) && bane[int(sted.x)][int(sted.y)][2] == 1) return true;
     }
     return false;
   }
