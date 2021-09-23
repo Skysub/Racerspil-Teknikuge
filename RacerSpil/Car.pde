@@ -68,11 +68,12 @@ class Car { //<>// //<>// //<>// //<>//
       linearBackVel = mag(backVel.x, backVel.y);
       Particles(linearVel, theta, givBoost);
 
-      speedUp.amp((linearVel/5)+0.0001f);
+      speedUp.amp(linearVel/100);
       if (playSpeedUp) speedUp.play();
       if (speedUp.isPlaying()) playSpeedUp = false;
       else playSpeedUp = true;
-      if (!ice) { //Om bieln kører på si eller ej
+      
+      if (!ice) { //Om bilen kører på is eller ej
         Drive(accelerate, givBoost);
       } else DriveIce(accelerate);
     }
@@ -96,6 +97,8 @@ class Car { //<>// //<>// //<>// //<>//
     theta = rot*HALF_PI;
     acc = new PVector (0, 0);
     thetaVel = 0;
+    
+    speedUp.stop();
   }
 
   void Hit(float[] ret, boolean tT, boolean boost) {
@@ -214,6 +217,7 @@ class Car { //<>// //<>// //<>// //<>//
 
       speedUp.stop();
       speedUp.amp(0.2);
+      boostSFX.amp(0.5);
       if (playBoostSFX) boostSFX.play();
       if (boostSFX.isPlaying()) playBoostSFX = false;
       else playBoostSFX = true;
