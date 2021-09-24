@@ -47,6 +47,7 @@ class GameLogic { //<>// //<>//
 
     //laver en ny bane hvis seedet er ændret
     if (seed != seedOld || r) {
+      System.gc();
       seedOld = seed;
       bane.NyBane(seed);
       ordenBil();

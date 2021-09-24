@@ -99,7 +99,7 @@ class Bane { //<>// //<>// //<>//
     }
     medium = currentStartBox;
 
-    println(currentStartBox + " " + lastStartBox + " " + lastLastStartBox);
+    //println(currentStartBox + " " + lastStartBox + " " + lastLastStartBox);
     if (lastStartBox == 0 && currentStartBox == 0 && lastLastStartBox == 1 && tick) {
       tick = false; 
       return currentRound - 1;
