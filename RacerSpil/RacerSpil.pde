@@ -24,4 +24,4 @@ void keyPressed() {
 
 void keyReleased() {
   gameLogic.HandleInput(keyCode, false);
-}
+} 
