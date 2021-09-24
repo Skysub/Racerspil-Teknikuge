@@ -37,6 +37,7 @@ class Car { //<>// //<>// //<>// //<>// //<>//
     speedUp = new SoundFile(RacerSpil.this, "speedUp.mp3");
     boostSFX = new SoundFile(RacerSpil.this, "boost.mp3");
     hitSFX = new SoundFile(RacerSpil.this, "jembayHit.wav");
+    // I am a sneak comment. I sneaked in your code. Sat on your processor. Ate your interrupt handler. Dispatched an ip packet to your mother.
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb, boolean round) {
