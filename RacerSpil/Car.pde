@@ -300,6 +300,7 @@ class Car { //<>// //<>// //<>// //<>// //<>//
     return theta;
   }
 
+//Laver partiklerne
   void Particles(float s, float t, boolean which) { //Laver partikelsystemet
     ps.addParticle(s, t, which);
     ps.run(pos);
