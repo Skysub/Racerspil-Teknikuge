@@ -104,10 +104,14 @@ class Car { //<>// //<>// //<>// //<>// //<>//
     speedUp.stop();
   }
 
-  void Hit(float[] ret, boolean tT, boolean boost) {
+  int Hit(float[] ret, boolean tT, boolean boost) {
     //println(carRetning.y > 0);
     //println(carRetning.x > 0);
     //println(vel.mag());
+    if (ret[0] == 69420) {
+      placeCar(new PVector(500,500),0);
+      return -1;
+    }
     if (ret[0] != -1 && !tT) {
       vel.mult(1-collisionSpeedLoss);
       backVel.mult(1-collisionSpeedLoss);
@@ -172,6 +176,7 @@ class Car { //<>// //<>// //<>// //<>// //<>//
         }
       }
     }
+    return 0;
   }
 
   void DrawCar() {
@@ -301,7 +306,7 @@ class Car { //<>// //<>// //<>// //<>// //<>//
     return theta;
   }
 
-//Laver partiklerne
+  //Laver partiklerne
   void Particles(float s, float t, boolean which) { //Laver partikelsystemet
     ps.addParticle(s, t, which);
     ps.run(pos);

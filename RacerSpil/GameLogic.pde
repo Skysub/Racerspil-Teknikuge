@@ -60,7 +60,7 @@ class GameLogic { //<>// //<>//
     if (op && !racing && millis() > waitTimer + waitTime) {
       raceStart = true;
     }
-    
+
     currentRound = bane.startCollision(currentRound, false);
     if (currentRound < 0) currentRound = 0;
 
@@ -90,10 +90,17 @@ class GameLogic { //<>// //<>//
     //println("BaneDrawTime: "+(millis()-baneDrawTime)); //print time it takes to draw bane
 
     collisionTime = millis();
-    car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest, givBoost);
+    if (car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest, givBoost) == -1) {
+      System.gc();
+      seedOld = seed;
+      bane.NyBane(seed);
+      ordenBil();
+      racing = false;
+      currentRound = bane.startCollision(currentRound, true);
+      if (!r) record = 0;
+      waitTimer = 0;
+    }
     //println("collision time: "+millis()-collisionTime); //printer tiden det tog a lave collision detection
-
-
 
     //println(1/((millis()-mSec)/1000f)); //printer framerate
     //println("Frametime: "+(millis()-mSec)); //printer frametime
