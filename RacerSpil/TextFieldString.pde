@@ -19,14 +19,12 @@ class TextFieldString {
 
   void Update() {
     Draw();
-
   }
 
   void Draw() {
     cp5.draw();
   }  
 
-  //metode til at returnere input. Input skæres af ved 9 cifre, så værdien ikke bliver for stor for en int
   String input() {
     if (enteredString.length()<10) tooLong = false;
     else tooLong = true;

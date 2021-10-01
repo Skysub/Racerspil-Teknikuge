@@ -29,14 +29,16 @@ class LoginScreen {
       textAligner = 10;
     }
 
-    if (enteredUsername == "" && l == 1|| enteredPassword == "" && l == 1) canClose = true;
+    if (enteredPassword == null && l == 1 && enteredUsername == null) canClose = false;
     if (l != 1) canClose = true;
+    print(canClose);
 
     username.Update();
     password.Update();
 
     if (space && canClose && topText == "Log in") LogIn(enteredUsername, enteredPassword);
     else if (space && canClose && topText == "Sign up") SignUp(enteredUsername, enteredPassword);
+    
   }
 
   void Draw() {
@@ -55,6 +57,7 @@ class LoginScreen {
     fill(125, 125, 125);
     text("Enter to confirm username", 855, 572);
     text("Enter to confirm password", 855, 722);
+    text("Space to " + topText, 905 - textAligner/3, 800);
 
     text("Press ↑↓ to change between log in / sign in", 770, 420);
   }
