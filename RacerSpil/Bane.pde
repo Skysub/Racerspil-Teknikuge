@@ -534,6 +534,7 @@ class Bane { //<>// //<>// //<>//
   }
 
   boolean checkBoostCollisions() {
+    if(bane[int(sted.x)][int(sted.y)][0] == -1)return true;
     for (int i = 0; i < currentBoosts; i++) {
       if (boosts[i].CheckCollision(relativeCarPos) && bane[int(sted.x)][int(sted.y)][2] == 1) return true;
     }
