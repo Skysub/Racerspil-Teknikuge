@@ -1,10 +1,10 @@
 class GameLogic { //<>// //<>//
 
   Bane bane;
-  int mSec, collisionTime, baneDrawTime, miscTime, waitTime = 2500, waitTimer = 0;
+  int mSec, collisionTime, baneDrawTime, miscTime, waitTime = 2500, waitTimer = 0, logInFix = 1;
 
-  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false; //kun til taster
-  boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics; //til andre bools
+  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false, l = false, lF = false; //kun til taster
+  boolean ice = false, givBoost = false, tileTest = false, menu = false, loginScreenOpen = true, hitboxDebug = false, coolGraphics; //til andre bools
 
   boolean[] toggleTemp; 
   PVector start;
@@ -30,11 +30,15 @@ class GameLogic { //<>// //<>//
   int seed = int(random(0, 9999));
   int seedOld = seed;
   Menu gameMenu;
+  
+  //Ting til login skærm
+  LoginScreen loginScreen;
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
 
     gameMenu = new Menu(thePApplet, seed);
+    loginScreen = new LoginScreen(thePApplet);
     bane = new Bane(seed, maxBoosts, boostProbability);
     ordenBil();
   }
@@ -78,6 +82,11 @@ class GameLogic { //<>// //<>//
     toggleTemp = toggle(tab, tabF, menu);
     menu = toggleTemp[0];
     tabF = toggleTemp[1];
+    
+    //gør at man kan toggle log in skærmen
+    toggleTemp = toggle(l, lF, loginScreenOpen);
+    loginScreenOpen = toggleTemp[0];
+    lF = toggleTemp[1];
 
     //gør at man kan toggle grafik med g
     toggleTemp = toggle(g, gF, coolGraphics);
@@ -99,15 +108,17 @@ class GameLogic { //<>// //<>//
     //println("Frametime: "+(millis()-mSec)); //printer frametime
     mSec = millis();
 
-    car.Update(hojre, venstre, op, ned, bane.checkBoostCollisions(), hitboxDebug, racing);
-
-
+    car.Update(hojre, venstre, op, ned, bane.checkBoostCollisions(), hitboxDebug, racing, loginScreenOpen);
 
     handleTimer();
     DrawUI();
 
     if (menu) gameMenu.Update(space);
-    if (enter) seed = int(gameMenu.textField.input());
+    if (menu && enter) seed = int(gameMenu.textField.input());
+    
+    if(!loginScreen.canClose) loginScreenOpen = true;
+    if(loginScreenOpen) loginScreen.Update(enter, op, ned, space, logInFix);
+    else logInFix++;
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
@@ -146,12 +157,13 @@ class GameLogic { //<>// //<>//
     if (k == 40) ned = b;
     if (k == 82) r = b;
     if (k == 84) t = b;
-    if (k == 32) space = b; //Kun et random seed per tryk
+    if (k == 32) space = b; 
     if (k == 9) tab = b;
     if (k == 10) enter = b;
     if (k == 66) givBoost = b;
     if (k == 72) h = b;
     if (k == 71) g = b;
+    if(k == 76) l = b;
   }
 
   //a bit of stuff for the timer and logic for handling record time when starting a race
@@ -163,7 +175,7 @@ class GameLogic { //<>// //<>//
       raceStart = false;
     }
     //måler tiden fra starten af race
-    if (racing) {
+    if (racing && !loginScreenOpen) {
       raceTime = millis() - raceTimeStart;
     }
     //logic for når race er ovre
