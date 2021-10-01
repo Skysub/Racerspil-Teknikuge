@@ -3,11 +3,15 @@ class GameLogic { //<>// //<>//
   Bane bane;
   int mSec, collisionTime, baneDrawTime, miscTime;
 
-  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false; //kun til taster
-  boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics; //til andre bools
+  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false, s = false, sF = false; //kun til taster
+  boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics, seedMenu = false; //til andre bools
 
   boolean[] toggleTemp; 
   PVector start;
+  
+  //Til saved seeds og scores
+  float[] savedTime = {69.9,100,250,10};
+  int[] savedSeeds = {1,3,200,69};
 
   //Til runde counter
   int currentRound = 1, TotalRounds = 3;
@@ -30,13 +34,17 @@ class GameLogic { //<>// //<>//
   int seed = int(random(0, 9999));
   int seedOld = seed;
   Menu gameMenu;
+  SeedMenu manageSeeds;
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
 
     gameMenu = new Menu(thePApplet, seed);
+    manageSeeds = new SeedMenu();
     bane = new Bane(seed,maxBoosts,boostProbability);
     ordenBil();
+    
+
 
   }
 
@@ -76,6 +84,11 @@ class GameLogic { //<>// //<>//
     toggleTemp = toggle(tab, tabF, menu);
     menu = toggleTemp[0];
     tabF = toggleTemp[1];
+    
+    //gør at man kan toggle seed menuen med s
+    toggleTemp = toggle(s, sF, seedMenu);
+    seedMenu = toggleTemp[0];
+    sF = toggleTemp[1];
 
     //gør at man kan toggle grafik med g
     toggleTemp = toggle(g, gF, coolGraphics);
@@ -105,7 +118,9 @@ class GameLogic { //<>// //<>//
     DrawUI();
 
     if (menu) gameMenu.Update(space);
+    if (seedMenu) manageSeeds.Update(savedSeeds,savedTime);
     if (enter) seed = int(gameMenu.textField.input());
+
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
@@ -150,6 +165,7 @@ class GameLogic { //<>// //<>//
     if (k == 66) givBoost = b;
     if (k == 72) h = b;
     if (k == 71) g = b;
+    if (k == 83) s = b;
   }
 
   //a bit of stuff for the timer and logic for handling record time when starting a race
