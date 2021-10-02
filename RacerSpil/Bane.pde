@@ -47,6 +47,7 @@ class Bane { //<>// //<>// //<>//
       lastLastStartBox = 0;
       return 0;
     }
+    if (sted.x>11 || sted.x < 0 || sted.y < 0 || sted.y > 5) return 0;
 
     /*
     switch (cR) {
