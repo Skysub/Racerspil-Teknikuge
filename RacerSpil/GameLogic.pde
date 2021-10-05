@@ -117,7 +117,7 @@ class GameLogic { //<>// //<>//
     if (menu && enter) seed = int(gameMenu.textField.input());
     
     if(!loginScreen.canClose) loginScreenOpen = true;
-    if(loginScreenOpen) loginScreen.Update(enter, op, ned, space, logInFix, true);
+    if(loginScreenOpen) loginScreen.Update(enter, op, ned, logInFix);
     else logInFix++;
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
@@ -168,7 +168,7 @@ class GameLogic { //<>// //<>//
 
   //a bit of stuff for the timer and logic for handling record time when starting a race
   void handleTimer() {
-    if (raceStart) {
+    if (raceStart && !loginScreenOpen) {
       racing = true;
       raceTime = 0;
       raceTimeStart = millis();

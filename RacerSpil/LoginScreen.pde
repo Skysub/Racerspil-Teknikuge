@@ -12,14 +12,10 @@ class LoginScreen {
     textAligner = 0;
   }
 
-  void Update(boolean enter, boolean logIn, boolean signUp, boolean space, int l, boolean blank) {
-    if (blank) {
-      username.input(true);
-      blank = false;
-    }
-
-
+  void Update(boolean enter, boolean logIn, boolean signUp, int l) {
     Draw();
+     username.input(false);
+     password.input(false);
 
     if (logIn) {
       topText = "Log in";
@@ -39,12 +35,12 @@ class LoginScreen {
     if (enter) {
       enteredUsername = username.input(false);
       enteredPassword = password.input(false);
+
+      if (!username.tooLong && !username.tooShort && !password.tooLong && !password.tooShort) {
+        if (canClose && topText == "Log in") LogIn(enteredUsername, enteredPassword);
+        else if (canClose && topText == "Sign up") SignUp(enteredUsername, enteredPassword);
+      }
     }
-
-    if (space && canClose && topText == "Log in") LogIn(enteredUsername, enteredPassword);
-    else if (space && canClose && topText == "Sign up") SignUp(enteredUsername, enteredPassword);
-
-    print(enteredUsername, "||", enteredPassword, "||", canClose, "||", l, "||");
   }
 
   void Draw() {
@@ -61,15 +57,13 @@ class LoginScreen {
 
     textSize(20);
     fill(125, 125, 125);
-    text("Enter to confirm username", 855, 572);
-    text("Enter to confirm password", 855, 722);
-    text("Space to " + topText, 905 - textAligner/3, 800);
+    text("Enter to " + topText, 905 - textAligner/3, 800);
 
     fill(250, 100, 100);
-    if (username.tooLong) text("Your username is too long", 855, 600);
-    if (username.tooShort) text("Your username is too short", 855, 600);
-    if (password.tooLong) text("Your password is too long", 855, 750);
-    if (password.tooShort) text("Your password is too short", 855, 750);
+    if (username.tooLong) text("Your username is too long", 855, 572);
+    if (username.tooShort) text("Your username is too short", 855, 572);
+    if (password.tooLong) text("Your password is too long", 855, 722);
+    if (password.tooShort) text("Your password is too short", 855, 722);
   }
 
   void LogIn(String un, String pw) {
