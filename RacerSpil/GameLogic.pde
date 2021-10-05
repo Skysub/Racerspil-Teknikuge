@@ -117,7 +117,7 @@ class GameLogic { //<>// //<>//
     if (menu && enter) seed = int(gameMenu.textField.input());
     
     if(!loginScreen.canClose) loginScreenOpen = true;
-    if(loginScreenOpen) loginScreen.Update(enter, op, ned, space, logInFix);
+    if(loginScreenOpen) loginScreen.Update(enter, op, ned, space, logInFix, true);
     else logInFix++;
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 

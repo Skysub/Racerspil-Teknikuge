@@ -19,16 +19,16 @@ class TextFieldString {
 
   void Update() {
     Draw();
+    enteredString = cp5.get(Textfield.class, stringTextfield).getText();
   }
 
   void Draw() {
     cp5.draw();
   }  
 
-  String input() {
-    if (enteredString.length()<10) tooLong = false;
-    else tooLong = true;
-    
+  String input(Boolean remove) {
+    if(remove) enteredString = "";
+    if (enteredString.length()==0) return null;
     return enteredString;
   }
 }

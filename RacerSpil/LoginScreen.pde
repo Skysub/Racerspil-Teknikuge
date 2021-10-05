@@ -12,12 +12,14 @@ class LoginScreen {
     textAligner = 0;
   }
 
-  void Update(boolean enter, boolean logIn, boolean signUp, boolean space, int l) {
-    Draw();
-    if (enter) {
-      enteredUsername = username.input();
-      enteredPassword = password.input();
+  void Update(boolean enter, boolean logIn, boolean signUp, boolean space, int l, boolean blank) {
+    if(blank){
+      username.input(true);
+      blank = false;
     }
+    
+    
+    Draw();
 
     if (logIn) {
       topText = "Log in";
@@ -28,17 +30,21 @@ class LoginScreen {
       logIn = false;
       textAligner = 10;
     }
-
-    if (enteredPassword == null && l == 1 && enteredUsername == null) canClose = false;
-    if (l != 1) canClose = true;
-    print(canClose);
+    if (enteredPassword != null && enteredUsername != null) l++;
+    if (enteredPassword != null && l != 1 && enteredUsername != null) canClose = true;
 
     username.Update();
     password.Update();
 
+    if (enter) {
+      enteredUsername = username.input(false);
+      enteredPassword = password.input(false);
+    }
+   
     if (space && canClose && topText == "Log in") LogIn(enteredUsername, enteredPassword);
     else if (space && canClose && topText == "Sign up") SignUp(enteredUsername, enteredPassword);
     
+    print(enteredUsername, "||", enteredPassword, "||", canClose, "||", l, "||");
   }
 
   void Draw() {
@@ -69,6 +75,7 @@ class LoginScreen {
 
   void SignUp(String un, String pw) {
     print(un, pw);
-    //Database stuff
+    //Database stuff. Der skal være noget her der også gør at man så logger ind når den har oprettet navnet og koden i databsen
   }
+  
 }
