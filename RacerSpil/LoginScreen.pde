@@ -13,12 +13,12 @@ class LoginScreen {
   }
 
   void Update(boolean enter, boolean logIn, boolean signUp, boolean space, int l, boolean blank) {
-    if(blank){
+    if (blank) {
       username.input(true);
       blank = false;
     }
-    
-    
+
+
     Draw();
 
     if (logIn) {
@@ -40,10 +40,10 @@ class LoginScreen {
       enteredUsername = username.input(false);
       enteredPassword = password.input(false);
     }
-   
+
     if (space && canClose && topText == "Log in") LogIn(enteredUsername, enteredPassword);
     else if (space && canClose && topText == "Sign up") SignUp(enteredUsername, enteredPassword);
-    
+
     print(enteredUsername, "||", enteredPassword, "||", canClose, "||", l, "||");
   }
 
@@ -65,7 +65,8 @@ class LoginScreen {
     text("Enter to confirm password", 855, 722);
     text("Space to " + topText, 905 - textAligner/3, 800);
 
-    text("Press ↑↓ to change between log in / sign in", 770, 420);
+    fill(250, 100, 100);
+    if (username.long) text(topText, 910 - textAligner, 370);
   }
 
   void LogIn(String un, String pw) {
@@ -77,5 +78,4 @@ class LoginScreen {
     print(un, pw);
     //Database stuff. Der skal være noget her der også gør at man så logger ind når den har oprettet navnet og koden i databsen
   }
-  
 }
