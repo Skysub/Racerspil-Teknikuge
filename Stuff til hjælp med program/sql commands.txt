@@ -1,0 +1,4 @@
+CREATE TABLE [HS] (seed integer NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,time integer NOT NULL,username text NOT NULL)
+
+
+
