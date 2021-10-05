@@ -1,7 +1,7 @@
 class TextFieldString {
   ControlP5 cp5;
   String enteredString, stringTextfield, seedTextfieldOld;
-  boolean long, short;
+  boolean tooLong, tooShort;
   Textfield textfield;
 
   //konstruktør hvor tesktfeltet sættes op. Se http://www.sojamo.de/libraries/controlP5/reference/controlP5/Textfield.html for dokumentation
@@ -28,10 +28,10 @@ class TextFieldString {
 
   String input(Boolean remove) {
 
-    if (enteredString.length()< 16) long = true;
-    else long = false;
-    if (enteredString.length()>4) short = true;
-    else short = false;
+    if (enteredString.length() > 16) tooLong = true;
+    else tooLong = false;
+    if (enteredString.length() < 4) tooShort = true;
+    else tooShort = false;
 
     if (remove) enteredString = "";
     if (enteredString.length()==0) return null;

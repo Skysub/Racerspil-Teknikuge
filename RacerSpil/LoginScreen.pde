@@ -66,7 +66,10 @@ class LoginScreen {
     text("Space to " + topText, 905 - textAligner/3, 800);
 
     fill(250, 100, 100);
-    if (username.long) text(topText, 910 - textAligner, 370);
+    if (username.tooLong) text("Your username is too long", 855, 600);
+    if (username.tooShort) text("Your username is too short", 855, 600);
+    if (password.tooLong) text("Your password is too long", 855, 750);
+    if (password.tooShort) text("Your password is too short", 855, 750);
   }
 
   void LogIn(String un, String pw) {
