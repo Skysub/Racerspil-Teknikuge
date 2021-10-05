@@ -3,15 +3,15 @@ class GameLogic { //<>// //<>//
   Bane bane;
   int mSec, collisionTime, baneDrawTime, miscTime;
 
-  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false, s = false, sF = false; //kun til taster
+  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false, m = false, mF = false, ctrl = false, s = false; //kun til taster
   boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics, seedMenu = false; //til andre bools
 
   boolean[] toggleTemp; 
   PVector start;
-  
+
   //Til saved seeds og scores
-  float[] savedTime = {69.9,100,250,10};
-  int[] savedSeeds = {1,3,200,69};
+  float[] savedTime = {69.9, 100, 250, 10};
+  int[] savedSeeds = {1, 3, 200, 69};
 
   //Til runde counter
   int currentRound = 1, TotalRounds = 3;
@@ -41,11 +41,8 @@ class GameLogic { //<>// //<>//
 
     gameMenu = new Menu(thePApplet, seed);
     manageSeeds = new SeedMenu();
-    bane = new Bane(seed,maxBoosts,boostProbability);
+    bane = new Bane(seed, maxBoosts, boostProbability);
     ordenBil();
-    
-
-
   }
 
   void Update() {
@@ -60,16 +57,16 @@ class GameLogic { //<>// //<>//
       bane.NyBane(seed);
       ordenBil();
       racing = false;
-    currentRound = bane.startCollision(currentRound, true);
+      currentRound = bane.startCollision(currentRound, true);
       record = 0;
     }
-    
+
     if (op && !racing) {
       raceStart = true;
     }
-    
+
     currentRound = bane.startCollision(currentRound, false);
-    
+
     //gør at man kan toggle hitboxes med h
     toggleTemp = toggle(h, hF, hitboxDebug);
     hitboxDebug = toggleTemp[0];
@@ -84,11 +81,11 @@ class GameLogic { //<>// //<>//
     toggleTemp = toggle(tab, tabF, menu);
     menu = toggleTemp[0];
     tabF = toggleTemp[1];
-    
+
     //gør at man kan toggle seed menuen med s
-    toggleTemp = toggle(s, sF, seedMenu);
+    toggleTemp = toggle(m, mF, seedMenu);
     seedMenu = toggleTemp[0];
-    sF = toggleTemp[1];
+    mF = toggleTemp[1];
 
     //gør at man kan toggle grafik med g
     toggleTemp = toggle(g, gF, coolGraphics);
@@ -109,7 +106,7 @@ class GameLogic { //<>// //<>//
     //println(1/((millis()-mSec)/1000f)); //printer framerate
     //println("Frametime: "+(millis()-mSec)); //printer frametime
     mSec = millis();
-    
+
     car.Update(hojre, venstre, op, ned, bane.checkBoostCollisions(), hitboxDebug, racing);
 
 
@@ -118,7 +115,7 @@ class GameLogic { //<>// //<>//
     DrawUI();
 
     if (menu) gameMenu.Update(space);
-    if (seedMenu) manageSeeds.Update(savedSeeds,savedTime);
+    if (seedMenu) manageSeeds.Update();
     if (enter) seed = int(gameMenu.textField.input());
 
 
@@ -128,6 +125,8 @@ class GameLogic { //<>// //<>//
     if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
 
     //println("MiscTime: "+(millis()-miscTime));
+
+    //saveSeed(ctrl && s && seedMenu);
   }
 
   void DrawUI() {
@@ -146,8 +145,9 @@ class GameLogic { //<>// //<>//
 
     textSize(25);
     text("Press TAB to open menu and view controls", 1335, 50);
+    text("Press M to manage saved seeds", 1335, 80);
     textSize(17);
-    text("Current seed: "+seed, 1335, 70);
+    text("Current seed: "+seed, 1335, 100);
   }
 
   //sørger for at controls virker
@@ -166,6 +166,8 @@ class GameLogic { //<>// //<>//
     if (k == 72) h = b;
     if (k == 71) g = b;
     if (k == 83) s = b;
+    if (k == 77) m = b;
+    if (k == 17) ctrl = b;
   }
 
   //a bit of stuff for the timer and logic for handling record time when starting a race
