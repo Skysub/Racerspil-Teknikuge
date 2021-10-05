@@ -39,8 +39,8 @@ class Menu {
     text("←↑↓→ to steer", 910, 630);
     text("R to reset", 935, 670);
     text("TAB to toggle menu", 890, 710);
-    text("P to toggle particles", 891, 750);
-    text("Mute system audio to toggle sound", 825, 790);
-    text("ESC or Alt+F4 to close game", 855, 830);
+    text("Mute system audio to toggle sound", 825, 740);
+    text("ESC or Alt+F4 to close game", 855, 790);
+    text("F1 to open login screen", 870, 830);
   }
 }

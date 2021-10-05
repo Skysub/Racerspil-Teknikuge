@@ -30,9 +30,10 @@ class GameLogic { //<>// //<>//
   int seed = int(random(0, 9999));
   int seedOld = seed;
   Menu gameMenu;
-  
+
   //Ting til login skærm
   LoginScreen loginScreen;
+  int ort = 1;
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
@@ -64,7 +65,7 @@ class GameLogic { //<>// //<>//
     if (op && !racing && millis() > waitTimer + waitTime) {
       raceStart = true;
     }
-    
+
     currentRound = bane.startCollision(currentRound, false);
     if (currentRound < 0) currentRound = 0;
 
@@ -82,7 +83,7 @@ class GameLogic { //<>// //<>//
     toggleTemp = toggle(tab, tabF, menu);
     menu = toggleTemp[0];
     tabF = toggleTemp[1];
-    
+
     //gør at man kan toggle log in skærmen
     toggleTemp = toggle(l, lF, loginScreenOpen);
     loginScreenOpen = toggleTemp[0];
@@ -115,10 +116,18 @@ class GameLogic { //<>// //<>//
 
     if (menu) gameMenu.Update(space);
     if (menu && enter) seed = int(gameMenu.textField.input());
+
+    if (ort == 1 && loginScreenOpen) {
+      loginScreen.username.openRemoveText();
+      loginScreen.password.openRemoveText();
+      ort = 2;
+    } else if (!loginScreenOpen) ort = 1;
     
-    if(!loginScreen.canClose) loginScreenOpen = true;
-    if(loginScreenOpen) loginScreen.Update(enter, op, ned, logInFix);
+    if (!loginScreen.canClose) loginScreenOpen = true;
+    if (loginScreenOpen) loginScreen.Update(enter, op, ned, logInFix);
     else logInFix++;
+
+
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
@@ -163,12 +172,12 @@ class GameLogic { //<>// //<>//
     if (k == 66) givBoost = b;
     if (k == 72) h = b;
     if (k == 71) g = b;
-    if(k == 76) l = b;
+    if (k == 112) l = b;
   }
 
   //a bit of stuff for the timer and logic for handling record time when starting a race
   void handleTimer() {
-    if (raceStart && !loginScreenOpen) {
+    if (raceStart) {
       racing = true;
       raceTime = 0;
       raceTimeStart = millis();

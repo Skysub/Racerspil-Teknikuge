@@ -37,4 +37,8 @@ class TextFieldString {
     if (enteredString.length()==0) return null;
     return enteredString;
   }
+
+  void openRemoveText() {
+    cp5.get(Textfield.class, stringTextfield).setText("");
+  }
 }
