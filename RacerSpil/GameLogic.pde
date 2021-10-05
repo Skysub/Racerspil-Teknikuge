@@ -1,5 +1,6 @@
 class GameLogic { //<>// //<>//
 
+  SQLite db;
   Bane bane;
   int mSec, collisionTime, baneDrawTime, miscTime, waitTime = 2500, waitTimer = 0;
 
@@ -33,7 +34,7 @@ class GameLogic { //<>// //<>//
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
-
+    db = new SQLite( thePApplet, "seeds.sqlite" );
     gameMenu = new Menu(thePApplet, seed);
     bane = new Bane(seed, maxBoosts, boostProbability);
     ordenBil();
@@ -120,6 +121,8 @@ class GameLogic { //<>// //<>//
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
+
+    HandleSeedDB(false); //Her skal en funktion være istedet for false, der er true hvis man vil gemme sit seed.
 
     //println("MiscTime: "+(millis()-miscTime));
   }
@@ -222,5 +225,24 @@ class GameLogic { //<>// //<>//
   void ordenBil() {
     int[] tt = bane.whereStart();
     car.placeCar(new PVector(tt[0]*160+40, tt[1]*160+200), tt[2]);
+  }
+
+  boolean checkDB() {
+    return db.connect(); //Er der fejl med databasen skal programmet lukkes
+  }
+
+  void HandleSeedDB(boolean g) {
+    String sql = "";
+    db.query( "SELECT seed FROM HS WHERE seed="+seed+";" );
+    if (g) {
+      if (db.next()) {
+        sql = "UPDATE HS SET time="+record+";";
+      } else {
+        sql = "INSERT INTO HS VALUES(seed,record,currentUsername);";
+      }
+    } else if (db.next()) {
+      record = db.getInt(2);
+    }
+    if (sql != "") db.execute(sql);
   }
 }

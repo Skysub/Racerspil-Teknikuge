@@ -1,4 +1,5 @@
 CREATE TABLE [HS] (seed integer NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,time integer NOT NULL,username text NOT NULL)
 
+INSERT INTO "HS" VALUES(0,65000,'mogus');
 
-
+UPDATE "HS" SET time=10;

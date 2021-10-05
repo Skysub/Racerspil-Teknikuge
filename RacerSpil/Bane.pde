@@ -1,4 +1,4 @@
-class Bane { //<>// //<>// //<>//
+class Bane { //<>// //<>// //<>// //<>//
   int[][][] bane, dBTS;
   Blok blok;
   int bIalt; //Antallet af blokke der er ialt, bruges til at lave debug tilesettet med alle blokkene

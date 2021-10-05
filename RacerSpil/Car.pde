@@ -1,4 +1,4 @@
-class Car { //<>// //<>// //<>// //<>// //<>//
+class Car { //<>// //<>// //<>// //<>// //<>// //<>//
   PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
 
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1, collisionTurnRate = 0.02f, collisionSpeedLoss = 0.30f;

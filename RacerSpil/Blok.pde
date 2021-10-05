@@ -51,7 +51,7 @@ class Blok {
     //Reverter til default
     stroke(20);
     strokeWeight(1);
-     //<>// //<>// //<>//
+     //<>// //<>// //<>// //<>//
   }
 
   int GetBlokIalt() {
