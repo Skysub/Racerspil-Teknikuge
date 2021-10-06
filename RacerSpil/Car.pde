@@ -40,48 +40,49 @@ class Car { //<>// //<>// //<>// //<>// //<>// //<>//
     // I am a sneak comment. I sneaked in your code. Sat on your processor. Ate your interrupt handler. Dispatched an ip packet to your mother.
   }
 
-  void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb, boolean round) {
+  void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb, boolean round, boolean cantStart) {
     carRetning = new PVector(carWidth/2f, 0);
     carRetning.rotate(theta+HALF_PI);
-    if (round) {
-      // Styrer controls
-      if ((hojre && venstre)||(!hojre && !venstre)) {
-        cDrej = 0;
-      } else if (hojre) {
-        cDrej = 2;
-      } else {
-        cDrej = 1;
+    
+      if (round && !cantStart) {
+        // Styrer controls
+        if ((hojre && venstre)||(!hojre && !venstre)) {
+          cDrej = 0;
+        } else if (hojre) {
+          cDrej = 2;
+        } else {
+          cDrej = 1;
+        }
+        if (op) {
+          accelerate = 1;
+        } else if (ned) {
+          accelerate = 2;
+        } else if (!op) {
+          accelerate = 0;
+        } 
+
+        //Sørger for at accelerationen vender i bilens retning
+        rotation = new PVector(cos(theta), sin(theta));
+        acc = rotation.mult(acceleration);
+
+        Turn(cDrej);
+
+        linearVel = mag(vel.x, vel.y); //Udregner den linæer hastighed og bakke hastighed
+        linearBackVel = mag(backVel.x, backVel.y);
+        Particles(linearVel, theta, givBoost);
+
+        if (linearVel > 0) speedUp.amp(linearVel/100);
+        if (linearBackVel > 0) speedUp.amp(linearBackVel/200);
+        if (playSpeedUp) speedUp.play();
+        if (speedUp.isPlaying()) playSpeedUp = false;
+        else playSpeedUp = true;
+
+        if (!ice) { //Om bilen kører på is eller ej
+          Drive(accelerate, givBoost);
+        } else DriveIce(accelerate);
       }
-      if (op) {
-        accelerate = 1;
-      } else if (ned) {
-        accelerate = 2;
-      } else if (!op) {
-        accelerate = 0;
-      } 
-
-      //Sørger for at accelerationen vender i bilens retning
-      rotation = new PVector(cos(theta), sin(theta));
-      acc = rotation.mult(acceleration);
-
-      Turn(cDrej);
-
-      linearVel = mag(vel.x, vel.y); //Udregner den linæer hastighed og bakke hastighed
-      linearBackVel = mag(backVel.x, backVel.y);
-      Particles(linearVel, theta, givBoost);
-
-      if (linearVel > 0) speedUp.amp(linearVel/100);
-      if (linearBackVel > 0) speedUp.amp(linearBackVel/200);
-      if (playSpeedUp) speedUp.play();
-      if (speedUp.isPlaying()) playSpeedUp = false;
-      else playSpeedUp = true;
-
-      if (!ice) { //Om bilen kører på is eller ej
-        Drive(accelerate, givBoost);
-      } else DriveIce(accelerate);
-    }
-    if (hDb)DrawCarHitbox();
-    else DrawCar();
+      if (hDb)DrawCarHitbox();
+      else DrawCar();
   }
 
   void placeCar(PVector nyPos, int rot) {
