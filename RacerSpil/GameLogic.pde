@@ -1,7 +1,8 @@
 class GameLogic { //<>// //<>//
 
+  SQLite db;
   Bane bane;
-  int mSec, collisionTime, baneDrawTime, miscTime;
+  int mSec, collisionTime, baneDrawTime, miscTime, waitTime = 2500, waitTimer = 0;
 
   boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false, m = false, mF = false, ctrl = false, s = false; //kun til taster
   boolean ice = false, givBoost = false, tileTest = false, menu = false, hitboxDebug = false, coolGraphics, seedMenu = false; //til andre bools
@@ -14,7 +15,7 @@ class GameLogic { //<>// //<>//
   int[] savedSeeds = {1, 3, 200, 69};
 
   //Til runde counter
-  int currentRound = 1, TotalRounds = 3;
+  int currentRound = 0, TotalRounds = 3;
 
   //Til time counter
   int record, raceTime = 0, raceTimeStart;
@@ -38,7 +39,7 @@ class GameLogic { //<>// //<>//
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
-
+    db = new SQLite( thePApplet, "seeds.sqlite" );
     gameMenu = new Menu(thePApplet, seed);
     manageSeeds = new SeedMenu();
     bane = new Bane(seed, maxBoosts, boostProbability);
@@ -53,19 +54,23 @@ class GameLogic { //<>// //<>//
 
     //laver en ny bane hvis seedet er ændret
     if (seed != seedOld || r) {
+      System.gc();
       seedOld = seed;
       bane.NyBane(seed);
       ordenBil();
       racing = false;
       currentRound = bane.startCollision(currentRound, true);
-      record = 0;
+      if (!r) record = 0;
+      waitTimer = 0;
     }
 
-    if (op && !racing) {
+    if (op && !racing && millis() > waitTimer + waitTime) {
       raceStart = true;
     }
 
     currentRound = bane.startCollision(currentRound, false);
+
+    if (currentRound < 0) currentRound = 0;
 
     //gør at man kan toggle hitboxes med h
     toggleTemp = toggle(h, hF, hitboxDebug);
@@ -98,10 +103,17 @@ class GameLogic { //<>// //<>//
     //println("BaneDrawTime: "+(millis()-baneDrawTime)); //print time it takes to draw bane
 
     collisionTime = millis();
-    car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest, givBoost);
+    if (car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest, givBoost) == -1) {
+      System.gc();
+      seedOld = seed;
+      bane.NyBane(seed);
+      ordenBil();
+      racing = false;
+      currentRound = bane.startCollision(currentRound, true);
+      if (!r) record = 0;
+      waitTimer = 0;
+    }
     //println("collision time: "+millis()-collisionTime); //printer tiden det tog a lave collision detection
-
-
 
     //println(1/((millis()-mSec)/1000f)); //printer framerate
     //println("Frametime: "+(millis()-mSec)); //printer frametime
@@ -123,6 +135,8 @@ class GameLogic { //<>// //<>//
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
+
+    HandleSeedDB(false); //Her skal en funktion være istedet for false, der er true hvis man vil gemme sit seed.
 
     //println("MiscTime: "+(millis()-miscTime));
 
@@ -175,7 +189,6 @@ class GameLogic { //<>// //<>//
     if (raceStart) {
       racing = true;
       raceTime = 0;
-      currentRound = 1;
       raceTimeStart = millis();
       raceStart = false;
     }
@@ -186,7 +199,9 @@ class GameLogic { //<>// //<>//
     //logic for når race er ovre
     if (racing && currentRound > TotalRounds) {
       racing = false;
+      ordenBil();
       currentRound = 0;
+      waitTimer = millis();
       if (raceTime < record) record = raceTime;
       else if (record == 0 && raceTime != 0) record = raceTime;
     }
@@ -230,5 +245,24 @@ class GameLogic { //<>// //<>//
   void ordenBil() {
     int[] tt = bane.whereStart();
     car.placeCar(new PVector(tt[0]*160+40, tt[1]*160+200), tt[2]);
+  }
+
+  boolean checkDB() {
+    return db.connect(); //Er der fejl med databasen skal programmet lukkes
+  }
+
+  void HandleSeedDB(boolean g) {
+    String sql = "";
+    db.query( "SELECT seed FROM HS WHERE seed="+seed+";" );
+    if (g) {
+      if (db.next()) {
+        sql = "UPDATE HS SET time="+record+";";
+      } else {
+        sql = "INSERT INTO HS VALUES(seed,record,currentUsername);";
+      }
+    } else if (db.next()) {
+      record = db.getInt(2);
+    }
+    if (sql != "") db.execute(sql);
   }
 }

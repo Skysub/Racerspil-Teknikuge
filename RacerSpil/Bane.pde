@@ -1,4 +1,4 @@
-class Bane { //<>// //<>// //<>//
+class Bane { //<>// //<>// //<>// //<>//
   int[][][] bane, dBTS;
   Blok blok;
   int bIalt; //Antallet af blokke der er ialt, bruges til at lave debug tilesettet med alle blokkene
@@ -9,7 +9,7 @@ class Bane { //<>// //<>// //<>//
   Boolean boosting;
   Boost[] boosts;
   PVector[] boostLocations;
-  PVector relativeCarPos, sted = new PVector(0, 0);
+  PVector relativeCarPos = new PVector (0, 0), sted = new PVector(0, 0);
   ;
   int lastStartBox = 0, currentStartBox = 0, lastLastStartBox = 0, medium = 0;
   boolean tick = true;
@@ -39,19 +39,55 @@ class Bane { //<>// //<>// //<>//
     popMatrix();
   }
 
-  int startCollision(int cR, boolean r) {
+  int startCollision(int currentRound, boolean r) {
 
     if (r) {      
       currentStartBox = 0;
-      lastStartBox = 0;
+      lastStartBox = 1;
       lastLastStartBox = 0;
       return 0;
     }
+    if (sted.x>11 || sted.x < 0 || sted.y < 0 || sted.y > 5) return 0;
 
+    /*
+    switch (cR) {
+     case 0:
+     if (bane[int(sted.x)][int(sted.y)][0] == 0) {
+     if (relativeCarPos.x < 40) {
+     currentStartBox = 0;
+     } else if (relativeCarPos.x > 60) {
+     currentStartBox = 2;
+     } else {
+     currentStartBox = 1;
+     }
+     }
+     break;
+     case 1:
+     if (bane[int(sted.x)][int(sted.y)][0] == 0) {
+     if (relativeCarPos.x < 40) {
+     currentStartBox = 0;
+     } else if (relativeCarPos.x > 60) {
+     currentStartBox = 2;
+     } else {
+     currentStartBox = 1;
+     }
+     }
+     break;
+     case 2:
+     break;
+     case 3:
+     break;
+     }
+     */
     if (bane[int(sted.x)][int(sted.y)][0] == 0) {
-      if (relativeCarPos.x < 64) {
+      PVector tempCarPos = new PVector(relativeCarPos.x, relativeCarPos.y);
+      tempCarPos.sub(80, 80);
+      tempCarPos.rotate(HALF_PI*bane[int(sted.x)][int(sted.y)][1]);
+      if (bane[int(sted.x)][int(sted.y)][1] == 1 || bane[int(sted.x)][int(sted.y)][1] == 3) tempCarPos.rotate(PI);
+      tempCarPos.add(80, 80);
+      if (tempCarPos.x < 40) {
         currentStartBox = 0;
-      } else if (relativeCarPos.x > 96) {
+      } else if (tempCarPos.x > 60) {
         currentStartBox = 2;
       } else {
         currentStartBox = 1;
@@ -64,22 +100,22 @@ class Bane { //<>// //<>// //<>//
     }
     medium = currentStartBox;
 
-
-    println(currentStartBox + " " + lastStartBox + " " + lastLastStartBox);
-    if (lastStartBox == 1 && currentStartBox == 0 && lastLastStartBox == 1) {
+    //println(currentStartBox + " " + lastStartBox + " " + lastLastStartBox);
+    if (lastStartBox == 0 && currentStartBox == 0 && lastLastStartBox == 1 && tick) {
       tick = false; 
-      return cR - 1;
+      return currentRound - 1;
     }
-    if (lastStartBox == 2 && currentStartBox == 2 && lastLastStartBox == 1) {
-      tick = true; 
-      return cR + 1;
+    if (lastStartBox == 2 && currentStartBox == 2 && lastLastStartBox == 1 && tick) {
+      tick = false; 
+      return currentRound + 1;
     }
-    return cR;
+    return currentRound;
   }
 
   float[] CalculateCollisions(PVector carPos, int carW, int carH, float carRot, boolean hDb) {
     relativeCarPos = new PVector(carPos.x % 160, ((carPos.y-120) % 160));
     sted = new PVector(floor(carPos.x/160), floor((((carPos.y)-120)/160)));
+    if (sted.x>11 || sted.x < 0 || sted.y < 0 || sted.y > 5) return new float[] {69420f};
     PVector basisRetning = new PVector(1, 0), b2 = new PVector(0, -1);
 
     PVector[][][] hitBoxes = blok.GetHitboxes(sted, bane);
@@ -500,6 +536,8 @@ class Bane { //<>// //<>// //<>//
   }
 
   boolean checkBoostCollisions() {
+    if (sted.x>11 || sted.x < 0 || sted.y < 0 || sted.y > 5) return false;
+    if (bane[int(sted.x)][int(sted.y)][0] == -1) return true;
     for (int i = 0; i < currentBoosts; i++) {
       if (boosts[i].CheckCollision(relativeCarPos) && bane[int(sted.x)][int(sted.y)][2] == 1) return true;
     }

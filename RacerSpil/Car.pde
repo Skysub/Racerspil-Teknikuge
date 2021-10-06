@@ -1,14 +1,14 @@
-class Car { //<>// //<>// //<>// //<>//
+class Car { //<>// //<>// //<>// //<>// //<>// //<>//
   PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
 
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1, collisionTurnRate = 0.02f, collisionSpeedLoss = 0.30f;
   int cDrej, accelerate, carWidth, carHeight, collisionPush = 1;
-  boolean ice, playSpeedUp = true, playBoostSFX = true;
+  boolean ice, playSpeedUp = true, playBoostSFX = true, playHitSFX = true;
 
 
   PImage carSprite;
   ParticleSystem ps;
-  SoundFile speedUp, boostSFX;
+  SoundFile speedUp, boostSFX, hitSFX;
 
 
   Car(PVector p, boolean i, float sr, float mv, float mbv, float sv, float bv, float mtv, float mtbv, float a, float ta, int carW, int carH) {
@@ -36,6 +36,8 @@ class Car { //<>// //<>// //<>// //<>//
     ps = new ParticleSystem(pos);
     speedUp = new SoundFile(RacerSpil.this, "speedUp.mp3");
     boostSFX = new SoundFile(RacerSpil.this, "boost.mp3");
+    hitSFX = new SoundFile(RacerSpil.this, "jembayHit.wav");
+    // I am a sneak comment. I sneaked in your code. Sat on your processor. Ate your interrupt handler. Dispatched an ip packet to your mother.
   }
 
   void Update(boolean hojre, boolean venstre, boolean op, boolean ned, boolean givBoost, boolean hDb, boolean round) {
@@ -68,11 +70,13 @@ class Car { //<>// //<>// //<>// //<>//
       linearBackVel = mag(backVel.x, backVel.y);
       Particles(linearVel, theta, givBoost);
 
-      speedUp.amp((linearVel/5)+0.0001f);
+      if (linearVel > 0) speedUp.amp(linearVel/100);
+      if (linearBackVel > 0) speedUp.amp(linearBackVel/200);
       if (playSpeedUp) speedUp.play();
       if (speedUp.isPlaying()) playSpeedUp = false;
       else playSpeedUp = true;
-      if (!ice) { //Om bieln kører på si eller ej
+
+      if (!ice) { //Om bilen kører på is eller ej
         Drive(accelerate, givBoost);
       } else DriveIce(accelerate);
     }
@@ -96,12 +100,18 @@ class Car { //<>// //<>// //<>// //<>//
     theta = rot*HALF_PI;
     acc = new PVector (0, 0);
     thetaVel = 0;
+
+    speedUp.stop();
   }
 
-  void Hit(float[] ret, boolean tT, boolean boost) {
+  int Hit(float[] ret, boolean tT, boolean boost) {
     //println(carRetning.y > 0);
     //println(carRetning.x > 0);
     //println(vel.mag());
+    if (ret[0] == 69420) {
+      placeCar(new PVector(500,500),0);
+      return -1;
+    }
     if (ret[0] != -1 && !tT) {
       vel.mult(1-collisionSpeedLoss);
       backVel.mult(1-collisionSpeedLoss);
@@ -111,6 +121,11 @@ class Car { //<>// //<>// //<>// //<>//
       int cP;
       if (vel.mag() > 5 || boost) cP = collisionPush*15;
       else cP = collisionPush;
+
+      hitSFX.amp(0.2);
+      if (playHitSFX && linearVel > 1.25 || playHitSFX && linearBackVel > 1.25) hitSFX.play();
+      if (hitSFX.isPlaying()) playHitSFX = false;
+      else playHitSFX = true;
 
       if (carRetning.y > 0) {
         switch (int(ret[1])) {
@@ -161,6 +176,7 @@ class Car { //<>// //<>// //<>// //<>//
         }
       }
     }
+    return 0;
   }
 
   void DrawCar() {
@@ -214,6 +230,7 @@ class Car { //<>// //<>// //<>// //<>//
 
       speedUp.stop();
       speedUp.amp(0.2);
+      boostSFX.amp(0.5);
       if (playBoostSFX) boostSFX.play();
       if (boostSFX.isPlaying()) playBoostSFX = false;
       else playBoostSFX = true;
@@ -289,6 +306,7 @@ class Car { //<>// //<>// //<>// //<>//
     return theta;
   }
 
+  //Laver partiklerne
   void Particles(float s, float t, boolean which) { //Laver partikelsystemet
     ps.addParticle(s, t, which);
     ps.run(pos);
