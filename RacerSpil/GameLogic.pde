@@ -1,13 +1,18 @@
 class GameLogic { //<>// //<>//
 
+  SQLite db;
   Bane bane;
   int mSec, collisionTime, baneDrawTime, miscTime, waitTime = 2500, waitTimer = 0, logInFix = 1;
 
-  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false, l = false, lF = false; //kun til taster
-  boolean ice = false, givBoost = false, tileTest = false, menu = false, loginScreenOpen = true, hitboxDebug = false, coolGraphics; //til andre bools
+  boolean hojre=false, venstre=false, op=false, ned=false, r=false, t=false, tF=false, space=false, tab=false, tabF=false, enter=false, h = false, hF = false, g = false, gF = false, l = false, lF = false, m = false, mF = false, ctrl = false, s = false; //kun til taster
+  boolean ice = false, givBoost = false, tileTest = false, menu = false, loginScreenOpen = true, hitboxDebug = false, coolGraphics, seedMenu = false; //til andre bools
 
   boolean[] toggleTemp; 
   PVector start;
+
+  //Til saved seeds og scores
+  float[] savedTime = {69.9, 100, 250, 10};
+  int[] savedSeeds = {1, 3, 200, 69};
 
   //Til runde counter
   int currentRound = 0, TotalRounds = 3;
@@ -30,6 +35,7 @@ class GameLogic { //<>// //<>//
   int seed = int(random(0, 9999));
   int seedOld = seed;
   Menu gameMenu;
+  SeedMenu manageSeeds;
 
   //Ting til login skærm
   LoginScreen loginScreen;
@@ -37,9 +43,11 @@ class GameLogic { //<>// //<>//
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
-
+    db = new SQLite( thePApplet, "seeds.sqlite" );
     gameMenu = new Menu(thePApplet, seed);
     loginScreen = new LoginScreen(thePApplet);
+    manageSeeds = new SeedMenu();
+
     bane = new Bane(seed, maxBoosts, boostProbability);
     ordenBil();
   }
@@ -67,6 +75,7 @@ class GameLogic { //<>// //<>//
     }
 
     currentRound = bane.startCollision(currentRound, false);
+
     if (currentRound < 0) currentRound = 0;
 
     //gør at man kan toggle hitboxes med h
@@ -84,10 +93,17 @@ class GameLogic { //<>// //<>//
     menu = toggleTemp[0];
     tabF = toggleTemp[1];
 
+
     //gør at man kan toggle log in skærmen
     toggleTemp = toggle(l, lF, loginScreenOpen);
     loginScreenOpen = toggleTemp[0];
     lF = toggleTemp[1];
+
+    //gør at man kan toggle seed menuen med s
+    toggleTemp = toggle(m, mF, seedMenu);
+    seedMenu = toggleTemp[0];
+    mF = toggleTemp[1];
+
 
     //gør at man kan toggle grafik med g
     toggleTemp = toggle(g, gF, coolGraphics);
@@ -100,10 +116,17 @@ class GameLogic { //<>// //<>//
     //println("BaneDrawTime: "+(millis()-baneDrawTime)); //print time it takes to draw bane
 
     collisionTime = millis();
-    car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest, givBoost);
+    if (car.Hit(bane.CalculateCollisions(car.GetPos(), carWidth, carHeight, car.GetRot(), hitboxDebug), tileTest, givBoost) == -1) {
+      System.gc();
+      seedOld = seed;
+      bane.NyBane(seed);
+      ordenBil();
+      racing = false;
+      currentRound = bane.startCollision(currentRound, true);
+      if (!r) record = 0;
+      waitTimer = 0;
+    }
     //println("collision time: "+millis()-collisionTime); //printer tiden det tog a lave collision detection
-
-
 
     //println(1/((millis()-mSec)/1000f)); //printer framerate
     //println("Frametime: "+(millis()-mSec)); //printer frametime
@@ -115,6 +138,8 @@ class GameLogic { //<>// //<>//
     DrawUI();
 
     if (menu) gameMenu.Update(space);
+
+    if (seedMenu) manageSeeds.Update();
     if (menu && enter) seed = int(gameMenu.textField.input());
 
     if (ort == 1 && loginScreenOpen) {
@@ -129,12 +154,17 @@ class GameLogic { //<>// //<>//
 
 
 
+
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
     DrawUI();
     if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
 
+    HandleSeedDB(false); //Her skal en funktion være istedet for false, der er true hvis man vil gemme sit seed.
+
     //println("MiscTime: "+(millis()-miscTime));
+
+    HandleSeedDB(ctrl && s && seedMenu);
   }
 
   void DrawUI() {
@@ -153,8 +183,9 @@ class GameLogic { //<>// //<>//
 
     textSize(25);
     text("Press TAB to open menu and view controls", 1335, 50);
+    text("Press M to manage saved seeds", 1335, 80);
     textSize(17);
-    text("Current seed: "+seed, 1335, 70);
+    text("Current seed: "+seed, 1335, 100);
   }
 
   //sørger for at controls virker
@@ -173,6 +204,10 @@ class GameLogic { //<>// //<>//
     if (k == 72) h = b;
     if (k == 71) g = b;
     if (k == 112) l = b;
+    if (k == 83) s = b;
+    if (k == 77) m = b;
+    if (k == 17) ctrl = b;
+
   }
 
   //a bit of stuff for the timer and logic for handling record time when starting a race
@@ -236,5 +271,24 @@ class GameLogic { //<>// //<>//
   void ordenBil() {
     int[] tt = bane.whereStart();
     car.placeCar(new PVector(tt[0]*160+40, tt[1]*160+200), tt[2]);
+  }
+
+  boolean checkDB() {
+    return db.connect(); //Er der fejl med databasen skal programmet lukkes
+  }
+
+  void HandleSeedDB(boolean g) {
+    String sql = "";
+    db.query( "SELECT seed FROM HS WHERE seed="+seed+";" );
+    if (g) {
+      if (db.next()) {
+        sql = "UPDATE HS SET time="+record+";";
+      } else {
+        sql = "INSERT INTO HS VALUES(seed,record,currentUsername);";
+      }
+    } else if (db.next()) {
+      record = db.getInt(2);
+    }
+    if (sql != "") db.execute(sql);
   }
 }

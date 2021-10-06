@@ -1,4 +1,4 @@
-class Bane { //<>// //<>// //<>//
+class Bane { //<>// //<>// //<>// //<>//
   int[][][] bane, dBTS;
   Blok blok;
   int bIalt; //Antallet af blokke der er ialt, bruges til at lave debug tilesettet med alle blokkene
@@ -47,6 +47,7 @@ class Bane { //<>// //<>// //<>//
       lastLastStartBox = 0;
       return 0;
     }
+    if (sted.x>11 || sted.x < 0 || sted.y < 0 || sted.y > 5) return 0;
 
     /*
     switch (cR) {
@@ -114,6 +115,7 @@ class Bane { //<>// //<>// //<>//
   float[] CalculateCollisions(PVector carPos, int carW, int carH, float carRot, boolean hDb) {
     relativeCarPos = new PVector(carPos.x % 160, ((carPos.y-120) % 160));
     sted = new PVector(floor(carPos.x/160), floor((((carPos.y)-120)/160)));
+    if (sted.x>11 || sted.x < 0 || sted.y < 0 || sted.y > 5) return new float[] {69420f};
     PVector basisRetning = new PVector(1, 0), b2 = new PVector(0, -1);
 
     PVector[][][] hitBoxes = blok.GetHitboxes(sted, bane);
@@ -534,6 +536,8 @@ class Bane { //<>// //<>// //<>//
   }
 
   boolean checkBoostCollisions() {
+    if (sted.x>11 || sted.x < 0 || sted.y < 0 || sted.y > 5) return false;
+    if (bane[int(sted.x)][int(sted.y)][0] == -1) return true;
     for (int i = 0; i < currentBoosts; i++) {
       if (boosts[i].CheckCollision(relativeCarPos) && bane[int(sted.x)][int(sted.y)][2] == 1) return true;
     }

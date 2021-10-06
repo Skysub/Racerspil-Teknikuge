@@ -1,4 +1,4 @@
-class Car { //<>// //<>// //<>// //<>// //<>//
+class Car { //<>// //<>// //<>// //<>// //<>// //<>//
   PVector pos, vel, acc, rotation, backVel, endOfCar, carRetning = new PVector(0, 0);
 
   float thetaVel, thetaAcc, linearVel, linearBackVel, theta, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, h = 1, collisionTurnRate = 0.02f, collisionSpeedLoss = 0.30f;
@@ -105,10 +105,14 @@ class Car { //<>// //<>// //<>// //<>// //<>//
     speedUp.stop();
   }
 
-  void Hit(float[] ret, boolean tT, boolean boost) {
+  int Hit(float[] ret, boolean tT, boolean boost) {
     //println(carRetning.y > 0);
     //println(carRetning.x > 0);
     //println(vel.mag());
+    if (ret[0] == 69420) {
+      placeCar(new PVector(500,500),0);
+      return -1;
+    }
     if (ret[0] != -1 && !tT) {
       vel.mult(1-collisionSpeedLoss);
       backVel.mult(1-collisionSpeedLoss);
@@ -173,6 +177,7 @@ class Car { //<>// //<>// //<>// //<>// //<>//
         }
       }
     }
+    return 0;
   }
 
   void DrawCar() {
