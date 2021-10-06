@@ -140,7 +140,7 @@ class GameLogic { //<>// //<>//
 
     //println("MiscTime: "+(millis()-miscTime));
 
-    saveSeed(ctrl && s && seedMenu);
+    HandleSeedDB(ctrl && s && seedMenu);
   }
 
   void DrawUI() {
