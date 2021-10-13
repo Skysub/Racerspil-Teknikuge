@@ -55,7 +55,7 @@ class GameLogic { //<>// //<>//
 
   void Update() {
     miscTime = millis();
-    //OrdnLogin();
+    OrdnLogin();
     imageMode(CORNER);
     if (coolGraphics)image(backdrop, 0, 120);
 
