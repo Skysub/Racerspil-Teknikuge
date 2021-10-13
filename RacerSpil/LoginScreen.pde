@@ -3,6 +3,7 @@ class LoginScreen {
   String enteredUsername, enteredPassword, topText;
   boolean canClose = false;
   int textAligner;
+  String[] logInData = new String[2];
 
 
   LoginScreen(PApplet thePApplet) {
@@ -12,7 +13,7 @@ class LoginScreen {
     textAligner = 0;
   }
 
-  void Update(boolean enter, boolean logIn, boolean signUp, int l) {
+  String[] Update(boolean enter, boolean logIn, boolean signUp, int l) {
     Draw();
     username.input(false);
     password.input(false);
@@ -31,7 +32,7 @@ class LoginScreen {
       canClose = true;
       textSize(20);
       fill(120, 120, 120);
-      text("Press F1 to close login screen", 850, 830);
+      text("Press Q to close login screen", 855, 830);
     }
 
     username.Update();
@@ -46,6 +47,12 @@ class LoginScreen {
         else if (canClose && topText == "Sign up") SignUp(enteredUsername, enteredPassword);
       }
     }
+    
+    logInData[0] = topText;
+    logInData[1] = enteredUsername;
+    logInData[2] = enteredPassword;
+    
+    return logInData;
   }
 
   void Draw() {
@@ -82,6 +89,6 @@ class LoginScreen {
 
   void SignUp(String un, String pw) {
     print(un, pw);
-    //Database stuff. Der skal være noget her der også gør at man så logger ind når den har oprettet navnet og koden i databsen
+    //Database stuff.
   }
 }

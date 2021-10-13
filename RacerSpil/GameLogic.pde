@@ -40,6 +40,7 @@ class GameLogic { //<>// //<>//
   //Ting til login skærm
   LoginScreen loginScreen;
   int ort = 1;
+  String[] logInData = new String[2];
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
@@ -149,8 +150,10 @@ class GameLogic { //<>// //<>//
     } else if (!loginScreenOpen) ort = 1;
     
     if (!loginScreen.canClose) loginScreenOpen = true;
-    if (loginScreenOpen) loginScreen.Update(enter, op, ned, logInFix);
+    if (loginScreenOpen) logInData = loginScreen.Update(enter, op, ned, logInFix);
     else logInFix++;
+    
+    if(logInData[1] == "bobby") print("hej");
 
 
 
@@ -203,7 +206,7 @@ class GameLogic { //<>// //<>//
     if (k == 66) givBoost = b;
     if (k == 72) h = b;
     if (k == 71) g = b;
-    if (k == 112) l = b;
+    if (k == 81) l = b;
     if (k == 83) s = b;
     if (k == 77) m = b;
     if (k == 17) ctrl = b;
