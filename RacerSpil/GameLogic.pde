@@ -1,4 +1,4 @@
-class GameLogic { //<>// //<>//
+class GameLogic { //<>// //<>// //<>//
 
   SQLite db;
   Bane bane;
@@ -41,6 +41,7 @@ class GameLogic { //<>// //<>//
   LoginScreen loginScreen;
   int ort = 1;
   String currentUsername = "";
+  String[] loginData = new String[3];
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
@@ -55,7 +56,7 @@ class GameLogic { //<>// //<>//
 
   void Update() {
     miscTime = millis();
-    OrdnLogin();
+    OrdnLogin(loginData);
     imageMode(CORNER);
     if (coolGraphics)image(backdrop, 0, 120);
 
@@ -150,9 +151,9 @@ class GameLogic { //<>// //<>//
     } else if (!loginScreenOpen) ort = 1;
 
     if (!loginScreen.canClose) loginScreenOpen = true;
-    if (loginScreenOpen) loginScreen.Update(enter, op, ned, logInFix);
+    if (loginScreenOpen) loginData = loginScreen.Update(enter, op, ned, logInFix);
     else logInFix++;
-    
+
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
@@ -292,8 +293,9 @@ class GameLogic { //<>// //<>//
 
   int OrdnLogin(String[] a) {
     String sql = "";
+    if (a[0] == null) return 4;
     db.query( "SELECT username FROM PW WHERE username='"+a[1]+"';" );
-    if (a[0] == "sign up") {
+    if (a[0] != "Log in") {
       if (!db.next()) {
         sql = "INSERT INTO PW VALUES('"+a[1]+"','"+a[2]+"');";
         db.execute(sql);
