@@ -152,9 +152,7 @@ class GameLogic { //<>// //<>//
     if (!loginScreen.canClose) loginScreenOpen = true;
     if (loginScreenOpen) loginScreen.Update(enter, op, ned, logInFix);
     else logInFix++;
-
-
-
+    
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
@@ -204,7 +202,7 @@ class GameLogic { //<>// //<>//
     if (k == 66) givBoost = b;
     if (k == 72) h = b;
     if (k == 71) g = b;
-    if (k == 112) l = b;
+    if (k == 81) l = b;
     if (k == 83) s = b;
     if (k == 77) m = b;
     if (k == 17) ctrl = b;
