@@ -277,39 +277,46 @@ class GameLogic { //<>// //<>// //<>//
 
   void HandleSeedDB(boolean g) {
     String sql = "";
-    db.query( "SELECT seed FROM HS WHERE seed="+seed+";" );
+    db.query( "SELECT seed FROM HS WHERE seed="+seed+" AND username='"+currentUsername+"';" );
     if (g) {
       if (db.next()) {
-        sql = "UPDATE HS SET time="+record+";";
+        sql = "UPDATE HS SET time="+record+" WHERE seed="+seed+" AND username='"+currentUsername+"';";
       } else { 
         sql = "INSERT INTO HS VALUES("+seed+","+record+",'"+currentUsername+"');";
       }
     } else if (db.next()) {
-      record = db.getInt(2);
+      db.query( "SELECT time FROM HS WHERE seed="+seed+" AND username='"+currentUsername+"';" );
+      record = db.getInt(1);
     }
     if (sql != "") db.execute(sql);
   }
 
   int OrdnLogin(String[] a) {
     String sql = "";
-    if (a[0] == null) return 4;
+    if (a[0] == null) return 4; //Hvis vi ikke skal logge ind eller signe up endnu
     db.query( "SELECT username FROM PW WHERE username='"+a[1]+"';" );
     if (a[0] != "Log in") {
       if (!db.next()) {
         sql = "INSERT INTO PW VALUES('"+a[1]+"','"+a[2]+"');";
         db.execute(sql);
         currentUsername = a[1];
-        return 0;
+        return 0;//Bruger succesfult oprettet og logget ind samtidig
       } else return 1; //Hvis brugernavnet allerede findes
     } else {
       if (db.next()) {
         db.query( "SELECT username FROM PW WHERE username='"+a[1]+"' AND password='"+a[2]+"';" );
         if (db.next()) { 
           currentUsername = a[1];
-          return 3;
+          return 3; //Bruger succesfult logget ind
         }
-      } else return 2;
+      } else return 2; //Ingen bruger med dette brugernavn
     }
-    return -1;
+    return -1; //Forkert password eller brugernavn
+  }
+
+  //Deletes all values from all tables
+  void ResetDB() {
+    db.execute("DELETE FROM HS");
+    db.execute("DELETE FROM PW");
   }
 }
