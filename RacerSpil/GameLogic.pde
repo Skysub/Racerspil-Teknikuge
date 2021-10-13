@@ -113,6 +113,7 @@ class GameLogic { //<>// //<>//
 
     baneDrawTime = millis();
     bane.Draw(tileTest, hitboxDebug, coolGraphics);
+    if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
     //println("BaneDrawTime: "+(millis()-baneDrawTime)); //print time it takes to draw bane
 
     collisionTime = millis();
@@ -139,7 +140,7 @@ class GameLogic { //<>// //<>//
 
     if (menu) gameMenu.Update(space);
 
-    if (seedMenu) manageSeeds.Update();
+    if (seedMenu) manageSeeds.Update(db, currentUsername);
     if (menu && enter) seed = int(gameMenu.textField.input());
 
     if (ort == 1 && loginScreenOpen) {
@@ -152,13 +153,9 @@ class GameLogic { //<>// //<>//
     if (loginScreenOpen) loginScreen.Update(enter, op, ned, logInFix);
     else logInFix++;
 
-
-
-
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 
     DrawUI();
-    if (tileTest) bane.Draw(tileTest, hitboxDebug, coolGraphics);
 
     HandleSeedDB(false); //Her skal en funktion være istedet for false, der er true hvis man vil gemme sit seed.
 
