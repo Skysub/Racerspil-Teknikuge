@@ -39,7 +39,7 @@ class GameLogic { //<>// //<>// //<>//
 
   //Ting til login skærm
   LoginScreen loginScreen;
-  int ort = 1;
+  int ort = 1, loginStatus = -1;
   String currentUsername = "";
   String[] loginData = new String[3];
 
@@ -56,7 +56,9 @@ class GameLogic { //<>// //<>// //<>//
 
   void Update() {
     miscTime = millis();
-    OrdnLogin(loginData);
+    
+    loginStatus = OrdnLogin(loginData);
+    
     imageMode(CORNER);
     if (coolGraphics)image(backdrop, 0, 120);
 
