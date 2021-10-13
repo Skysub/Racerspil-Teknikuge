@@ -40,7 +40,7 @@ class GameLogic { //<>// //<>//
   //Ting til login skærm
   LoginScreen loginScreen;
   int ort = 1;
-  String[] logInData = new String[2];
+  String[] logInData = new String[3];
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
@@ -152,11 +152,6 @@ class GameLogic { //<>// //<>//
     if (!loginScreen.canClose) loginScreenOpen = true;
     if (loginScreenOpen) logInData = loginScreen.Update(enter, op, ned, logInFix);
     else logInFix++;
-    
-    if(logInData[1] == "bobby") print("hej");
-
-
-
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 

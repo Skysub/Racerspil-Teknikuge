@@ -3,7 +3,7 @@ class LoginScreen {
   String enteredUsername, enteredPassword, topText;
   boolean canClose = false;
   int textAligner;
-  String[] logInData = new String[2];
+  String[] logInData = new String[3];
 
 
   LoginScreen(PApplet thePApplet) {
