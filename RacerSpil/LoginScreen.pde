@@ -47,13 +47,28 @@ class LoginScreen {
         else if (canClose && topText == "Sign up") SignUp(enteredUsername, enteredPassword);
       }
     }
-    
-    logInData[0] = topText;
-    logInData[1] = enteredUsername;
-    logInData[2] = enteredPassword;
-    
+
+    try {
+      MessageDigest md = MessageDigest.getInstance("SHA-256");
+      md.update(enteredPassword.getBytes());
+
+      byte[] byteList = md.digest();
+
+      StringBuffer hashedValueBuffer = new StringBuffer();
+      for (byte b : byteList)hashedValueBuffer.append(hex(b));
+
+      logInData[0] = topText;
+      logInData[1] = enteredUsername;
+      logInData[2] = hashedValueBuffer.toString();
+    } 
+    catch (Exception e) {
+      System.out.println("Exception: "+e);
+    }
+
     return logInData;
   }
+
+
 
   void Draw() {
     fill(180, 200, 220);
