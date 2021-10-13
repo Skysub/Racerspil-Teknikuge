@@ -1,4 +1,4 @@
-class GameLogic { //<>// //<>//
+class GameLogic { //<>// //<>// //<>//
 
   SQLite db;
   Bane bane;
@@ -40,6 +40,8 @@ class GameLogic { //<>// //<>//
   //Ting til login skærm
   LoginScreen loginScreen;
   int ort = 1;
+  String currentUsername = "";
+  String[] loginData = new String[3];
 
   GameLogic(PApplet thePApplet) {
     car = new Car(carPos, ice, startRotation, maxVel, maxBackVel, stopVel, bremseVel, maxThetaVel, maxThetaBackVel, acceleration, thetaAcc, carWidth, carHeight);
@@ -54,7 +56,7 @@ class GameLogic { //<>// //<>//
 
   void Update() {
     miscTime = millis();
-
+    OrdnLogin(loginData);
     imageMode(CORNER);
     if (coolGraphics)image(backdrop, 0, 120);
 
@@ -148,9 +150,9 @@ class GameLogic { //<>// //<>//
       loginScreen.password.openRemoveText();
       ort = 2;
     } else if (!loginScreenOpen) ort = 1;
-    
+
     if (!loginScreen.canClose) loginScreenOpen = true;
-    if (loginScreenOpen) loginScreen.Update(enter, op, ned, logInFix);
+    if (loginScreenOpen) loginData = loginScreen.Update(enter, op, ned, logInFix);
     else logInFix++;
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
@@ -200,11 +202,10 @@ class GameLogic { //<>// //<>//
     if (k == 66) givBoost = b;
     if (k == 72) h = b;
     if (k == 71) g = b;
-    if (k == 112) l = b;
+    if (k == 81) l = b;
     if (k == 83) s = b;
     if (k == 77) m = b;
     if (k == 17) ctrl = b;
-
   }
 
   //a bit of stuff for the timer and logic for handling record time when starting a race
@@ -280,12 +281,35 @@ class GameLogic { //<>// //<>//
     if (g) {
       if (db.next()) {
         sql = "UPDATE HS SET time="+record+";";
-      } else {
-        sql = "INSERT INTO HS VALUES(seed,record,currentUsername);";
+      } else { 
+        sql = "INSERT INTO HS VALUES("+seed+","+record+",'"+currentUsername+"');";
       }
     } else if (db.next()) {
       record = db.getInt(2);
     }
     if (sql != "") db.execute(sql);
+  }
+
+  int OrdnLogin(String[] a) {
+    String sql = "";
+    if (a[0] == null) return 4;
+    db.query( "SELECT username FROM PW WHERE username='"+a[1]+"';" );
+    if (a[0] != "Log in") {
+      if (!db.next()) {
+        sql = "INSERT INTO PW VALUES('"+a[1]+"','"+a[2]+"');";
+        db.execute(sql);
+        currentUsername = a[1];
+        return 0;
+      } else return 1; //Hvis brugernavnet allerede findes
+    } else {
+      if (db.next()) {
+        db.query( "SELECT username FROM PW WHERE username='"+a[1]+"' AND password='"+a[2]+"';" );
+        if (db.next()) { 
+          currentUsername = a[1];
+          return 3;
+        }
+      } else return 2;
+    }
+    return -1;
   }
 }
