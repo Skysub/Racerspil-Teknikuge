@@ -55,7 +55,7 @@ class GameLogic { //<>// //<>//
 
   void Update() {
     miscTime = millis();
-    OrdnLogin();
+    //OrdnLogin();
     imageMode(CORNER);
     if (coolGraphics)image(backdrop, 0, 120);
 
@@ -195,17 +195,17 @@ class GameLogic { //<>// //<>//
     if (k == 38) op = b;
     if (k == 40) ned = b;
     if (k == 82) r = b;
-    if (k == 84) t = b;
+    if (k == 84 && !loginScreenOpen) t = b;
     if (k == 32) space = b; 
     if (k == 9) tab = b;
     if (k == 10) enter = b;
     if (k == 66) givBoost = b;
-    if (k == 72) h = b;
-    if (k == 71) g = b;
+    if (k == 72 && !loginScreenOpen) h = b;
+    if (k == 71 && !loginScreenOpen) g = b;
     if (k == 81) l = b;
     if (k == 83) s = b;
-    if (k == 77) m = b;
-    if (k == 17) ctrl = b;
+    if (k == 77 && !loginScreenOpen) m = b;
+    if (k == 17 && !loginScreenOpen) ctrl = b;
   }
 
   //a bit of stuff for the timer and logic for handling record time when starting a race
