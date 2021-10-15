@@ -155,7 +155,11 @@ class GameLogic { //<>// //<>// //<>//
     } else if (!loginScreenOpen) ort = 1;
 
     if (!loginScreen.canClose) loginScreenOpen = true;
-    if (loginScreenOpen) loginData = loginScreen.Update(enter, op, ned, logInFix);
+    if (loginScreenOpen){ 
+      loginData = loginScreen.Update(enter, op, ned, logInFix, loginStatus);
+      loginStatus = OrdnLogin(loginData);
+      if(enter && loginStatus != -1 && loginStatus != 1 && loginStatus != 2 && loginStatus != 4) loginScreenOpen = false;
+    }
     else logInFix++;
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 

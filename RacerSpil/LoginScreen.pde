@@ -13,7 +13,7 @@ class LoginScreen {
     textAligner = 0;
   }
 
-  String[] Update(boolean enter, boolean logIn, boolean signUp, int l) {
+  String[] Update(boolean enter, boolean logIn, boolean signUp, int l, int status) {
     Draw();
     username.input(false);
     password.input(false);
@@ -33,7 +33,17 @@ class LoginScreen {
       textSize(20);
       fill(120, 120, 120);
       text("Press Q to close login screen", 855, 830);
-    }
+    } 
+
+    if (status == 1 || status == -1 || status == 2) canClose = false;
+    else canClose = true;
+    print(status);
+
+    textSize(20);
+    fill(250, 100, 100);
+    if (status == 1) text("This username is already in use", 855, 750);
+    if (status == -1) text("Wrong username or password", 855, 750);
+    if (status == 2) text("No user with this name exists", 855, 750);
 
     username.Update();
     password.Update();
