@@ -28,12 +28,12 @@ class SeedMenu {
     text("Press CTRL+S to save current seed (last "+maxDisplay+" saves are displayed).", 102.5, 250);
     fill(0, 0, 0);
     rect(90, 230, 520, 1);
-    rect(210, 270, 1, 730);
+    rect(410, 270, 1, 730);
     rect(90, 320, 520, 1);
 
     textSize(30);
-    text("Seed", 110, 315);
-    text("Best time", 250, 315);
+    text("Seed", 100, 315);
+    text("Best time", 440, 315);
 
     textSize(25);
 
@@ -68,13 +68,10 @@ class SeedMenu {
   //      displayCount++;
   //  }
   //}
-  while (db.next()) {
-      println("DB Username = "+db.getString("username")+"    currentUsername = "+currentUsername);
-      if (db.getString("username")==currentUsername) println("Usernames are identical!");
-      
+  while (db.next()) {  
       if (displayCount < maxDisplay) { //<>//
         text(db.getInt("seed"),100,315+(spacing-3)*(spacingCount+1));
-        text(convertTime(db.getInt("time")),240,315+(spacing-3)*(spacingCount+1));
+        text(convertTime(db.getInt("time")),440,315+(spacing-3)*(spacingCount+1));
         spacingCount++;
         displayCount++;
     }

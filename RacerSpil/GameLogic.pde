@@ -187,6 +187,8 @@ class GameLogic { //<>// //<>// //<>//
     text("Press M to manage saved seeds", 1335, 80);
     textSize(17);
     text("Current seed: "+seed, 1335, 100);
+    
+    if (currentUsername != "") text("Logged in as: "+currentUsername, 1600, 100);
   }
 
   //sørger for at controls virker
