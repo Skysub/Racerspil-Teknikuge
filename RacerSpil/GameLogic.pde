@@ -58,6 +58,7 @@ class GameLogic { //<>// //<>// //<>//
     miscTime = millis();
     
     loginStatus = OrdnLogin(loginData);
+    //println(loginStatus);
     
     imageMode(CORNER);
     if (coolGraphics)image(backdrop, 0, 120);

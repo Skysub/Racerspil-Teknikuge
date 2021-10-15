@@ -1,0 +1,6 @@
+-1: Forkert brugernavn eller password
+0: Bruger succesfuldt oprettet og logget ind
+1: Brugernavnet findes alerede
+2: Der findes ingen bruger med dette brugernavn
+3: Bruger succesfult logget ind
+4: Ikke klar til at tage stilling til noget endnu
