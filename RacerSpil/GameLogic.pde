@@ -49,7 +49,7 @@ class GameLogic { //<>// //<>// //<>// //<>//
     gameMenu = new Menu(thePApplet, seed);
     loginScreen = new LoginScreen(thePApplet);
     manageSeeds = new SeedMenu();
-
+    //ResetDB();
     bane = new Bane(seed, maxBoosts, boostProbability);
     ordenBil();
   }
@@ -325,9 +325,9 @@ class GameLogic { //<>// //<>// //<>// //<>//
     return -1; //Forkert password eller brugernavn
   }
 
-  //Deletes all values from all tables
+  //Deletes all values from all tables, doesnt work currently
   void ResetDB() {
-    db.execute("DELETE FROM HS");
-    db.execute("DELETE FROM PW");
+    db.execute("DELETE FROM HS;");
+    db.execute("DELETE FROM PW;");
   }
 }
