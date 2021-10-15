@@ -38,9 +38,9 @@ class Menu {
     textSize(20);
     text("←↑↓→ to steer", 910, 630);
     text("R to reset", 935, 670);
-    text("TAB to toggle menu", 890, 710);
-    text("Mute system audio to toggle sound", 825, 741);
+    text("G to toggle fancy graphics", 860, 710);
+    text("Mute system audio to toggle sound", 825, 750);
     text("ESC or Alt+F4 to close game", 855, 790);
-    text("F1 to open login screen", 870, 830);
+    text("Q to open login screen", 870, 830);
   }
 }
