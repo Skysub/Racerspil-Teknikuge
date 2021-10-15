@@ -1,4 +1,4 @@
-class GameLogic { //<>// //<>// //<>//
+class GameLogic { //<>// //<>// //<>// //<>//
 
   SQLite db;
   Bane bane;
@@ -56,10 +56,10 @@ class GameLogic { //<>// //<>// //<>//
 
   void Update() {
     miscTime = millis();
-    
-    loginStatus = OrdnLogin(loginData);
+
+    //loginStatus = OrdnLogin(loginData);
     //println(loginStatus);
-    
+
     imageMode(CORNER);
     if (coolGraphics)image(backdrop, 0, 120);
 
@@ -75,7 +75,7 @@ class GameLogic { //<>// //<>// //<>//
       waitTimer = 0;
     }
 
-    if (op && !racing && millis() > waitTimer + waitTime) {
+    if (!loginScreenOpen && op && !racing && millis() > waitTimer + waitTime) {
       raceStart = true;
     }
 
@@ -155,12 +155,14 @@ class GameLogic { //<>// //<>// //<>//
     } else if (!loginScreenOpen) ort = 1;
 
     if (!loginScreen.canClose) loginScreenOpen = true;
-    if (loginScreenOpen){ 
-      loginData = loginScreen.Update(enter, op, ned, logInFix, loginStatus);
+    if (loginScreenOpen) { 
       loginStatus = OrdnLogin(loginData);
-      if(enter && loginStatus != -1 && loginStatus != 1 && loginStatus != 2 && loginStatus != 4) loginScreenOpen = false;
-    }
-    else logInFix++;
+      loginData = loginScreen.Update(enter, op, ned, logInFix, loginStatus);
+
+      if (enter && loginStatus != -1 && loginStatus != 1 && loginStatus != 2 && loginStatus != 4) {
+        loginScreenOpen = false;
+      }
+    } else logInFix++;
 
     currentCarPos = car.GetPos(); //til når der skal tjekkes kollision med bilen 
 

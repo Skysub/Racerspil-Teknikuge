@@ -1,7 +1,7 @@
 class LoginScreen {
   TextFieldString username, password;
   String enteredUsername, enteredPassword, topText;
-  boolean canClose = false;
+  boolean canClose = false, newEnter = false;
   int textAligner;
   String[] logInData = new String[3];
 
@@ -35,19 +35,26 @@ class LoginScreen {
       text("Press Q to close login screen", 855, 830);
     } 
 
-    if (status == 1 || status == -1 || status == 2) canClose = false;
-    else canClose = true;
+    if (enter) newEnter = true;
+
+    if (status == 1 || status == -1 || status == 2 || status == 4) canClose = false;
+    else {
+      canClose = true;      
+      newEnter = false;
+    }
     print(status);
 
     textSize(20);
     fill(250, 100, 100);
+
     if (status == 1) text("This username is already in use", 855, 750);
     if (status == -1) text("Wrong username or password", 855, 750);
     if (status == 2) text("No user with this name exists", 855, 750);
 
+
     username.Update();
     password.Update();
-
+    print(password.tooShort+" ");
     if (enter) {
       enteredUsername = username.input(false);
       enteredPassword = password.input(false);
@@ -67,7 +74,11 @@ class LoginScreen {
       StringBuffer hashedValueBuffer = new StringBuffer();
       for (byte b : byteList)hashedValueBuffer.append(hex(b));
 
-      logInData[0] = topText;
+      if (newEnter && !password.tooShort)logInData[0] = topText;
+      else {
+        logInData[0] = null; 
+        newEnter = false;
+      }
       logInData[1] = enteredUsername;
       logInData[2] = hashedValueBuffer.toString();
     } 
